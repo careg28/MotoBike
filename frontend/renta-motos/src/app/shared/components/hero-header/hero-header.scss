@@ -1,0 +1,119 @@
+/* ==============================
+   HERO SECTION
+   ============================== */
+.hero {
+  
+  background: url('/hero-header.jpg') center/cover no-repeat;
+  color: var(--color-text-inv);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden; /* para el blur */
+}
+
+/* Imagen de fondo con blur */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url('/hero-header.jpg') center/cover no-repeat;
+  filter: blur(3px); /* 👈 ajusta el nivel de blur */
+  transform: scale(1.05); /* evita bordes visibles */
+  z-index: 0;
+}
+
+/* Overlay oscuro para contraste del texto */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(0,0,0,0.55) 0%,
+    rgba(0,0,0,0.25) 50%,
+    transparent 100%
+  );
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2; /* encima del blur y overlay */
+  max-width: 640px;
+  padding: var(--space-6);
+}
+
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  margin-bottom: var(--space-3);
+}
+
+.hero p {
+  font-size: 1.125rem;
+  margin-bottom: var(--space-6);
+}
+
+.hero h1, .hero p {
+  color: #fff;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.6);
+}
+
+/* ==============================
+   BOTÓN CTA CON EFECTO SHINE
+   ============================== */
+.btn-cta {
+  display: inline-block;
+  padding: 14px 28px;
+  font-weight: 600;
+  color: #000; 
+  background: var(--color-accent);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.btn-cta::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255,255,255,0.6),
+    transparent
+  );
+  transform: skewX(-20deg);
+}
+
+.btn-cta:hover::before {
+  animation: shine 1s forwards;
+}
+
+@keyframes shine {
+  100% { left: 125%; }
+}
+
+.btn-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+}
+
+/* ==============================
+   DESKTOP AJUSTES
+   ============================== */
+@media (min-width: 1024px) {
+  .hero {
+    aspect-ratio: auto;   /* dejamos de forzar 21:9 */
+    min-height: 50vh;     /* más compacto en pantallas grandes */
+  }
+}

@@ -1,0 +1,15 @@
+<section class="section section--alt">
+  <div class="container">
+    <h2 class="benefits__title">{{ 'benefits.title' | translate }}</h2>
+
+    <div class="benefits__grid">
+      <article class="benefit" *ngFor="let b of items">
+        <div class="benefit__icon" aria-hidden="true">
+          <i [class]="b.icon"></i>
+        </div>
+        <h3 class="benefit__title">{{ b.titleKey | translate }}</h3>
+        <p class="benefit__desc">{{ b.descKey | translate }}</p>
+      </article>
+    </div>
+  </div>
+</section>

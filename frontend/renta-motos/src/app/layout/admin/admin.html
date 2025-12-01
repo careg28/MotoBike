@@ -1,0 +1,49 @@
+<app-topbar title="Panel" (menu)="toggle()"></app-topbar>
+
+<div class="admin-shell">
+  <nav class="admin-sidebar" [class.open]="open()">
+
+    <!-- Grupo: Motos -->
+    <div class="nav-group">
+      <button class="nav-parent" (click)="toggleMotos()" [attr.aria-expanded]="openMotos()">
+        <span><i class="fa-solid fa-motorcycle"></i> Motos</span>
+        <span class="chev" [class.rot]="openMotos()">▾</span>
+      </button>
+      <div class="nav-children" [class.open]="openMotos()">
+        <a routerLink="/admin/motos" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+          (click)="close()">Listado</a>
+
+        <a routerLink="/admin/motos/nueva" routerLinkActive="active" (click)="close()">Agregar moto</a>
+      </div>
+    </div>
+
+    <!-- Grupo: Modelos -->
+    <div class="nav-group">
+      <button class="nav-parent" (click)="toggleModelos()" [attr.aria-expanded]="openModelos()">
+        <span><i class="fa-solid fa-sitemap"></i> Modelos</span>
+        <span class="chev" [class.rot]="openModelos()">▾</span>
+      </button>
+      <div class="nav-children" [class.open]="openModelos()">
+        <a routerLink="/admin/modelos" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+          (click)="close()">Listado</a>
+
+        <a routerLink="/admin/modelos/nuevo" routerLinkActive="active" (click)="close()">Nuevo</a>
+      </div>
+    </div>
+
+    <!-- Otros -->
+    <a routerLink="/admin/clientes" routerLinkActive="active" (click)="close()">
+      <i class="fa-solid fa-person"></i> Clientes
+    </a>
+    <a routerLink="/admin/reservas" routerLinkActive="active" (click)="close()">
+      <i class="fa-solid fa-calendar"></i> Reservas
+    </a>
+    <a routerLink="/admin/ajustes" routerLinkActive="active" (click)="close()">
+      <i class="fa-solid fa-gear"></i> Ajustes
+    </a>
+  </nav>
+
+  <main class="admin-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

@@ -1,0 +1,164 @@
+.auth-wrap {
+    min-height: calc(100dvh - 0px);
+    display: grid;
+    place-items: center;
+    padding: 24px 16px;
+    background:
+        radial-gradient(800px 400px at 50% -10%, rgba(255, 196, 0, .12), transparent 60%),
+        radial-gradient(600px 300px at 120% 10%, rgba(20, 184, 166, .12), transparent 60%),
+        var(--bg-alt, #F8F9FB);
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 800px;
+    border-radius: 16px;
+    background: #fff;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .05);
+}
+
+.brand {
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+.brand-logo {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+    margin: 6px auto 8px;
+}
+
+.brand-title {
+    font-family: Poppins, system-ui, sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.brand-sub {
+    font-family: Inter, system-ui, sans-serif;
+    font-size: 13px;
+    color: #6b7280;
+    margin-top: 4px;
+}
+
+.alert {
+    border-radius: 10px;
+    padding: 8px 10px;
+    font-size: 13px;
+    margin: 8px 0;
+}
+
+.alert.ok {
+    background: rgba(20, 184, 166, .10);
+    color: #0f766e;
+}
+
+.alert.error {
+    background: #ffe8e8;
+    color: #b42318;
+}
+
+.form {
+    display: grid;
+    gap: 10px;
+    margin-top: 6px;
+}
+
+.field {
+    display: grid;
+    gap: 6px;
+}
+
+.field-label {
+    font-size: 12px;
+    color: #111827;
+    font-weight: 600;
+}
+
+.field-input {
+    display: grid;
+    grid-template-columns: 28px 1fr auto;
+    align-items: center;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    background: #fff;
+    padding: 6px 8px;
+}
+
+.field-input:focus-within {
+    border-color: #000;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, .05);
+}
+
+.icon {
+    text-align: center;
+    opacity: .7;
+    font-size: 14px;
+}
+
+.field-input input {
+    border: 0;
+    outline: none;
+    font-size: 14px;
+    padding: 6px 8px;
+    background: transparent;
+}
+
+.ghost {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    font-size: 12px;
+    color: #111827;
+    padding: 4px 6px;
+    border-radius: 8px;
+}
+
+.ghost:hover {
+    background: #F8F9FB;
+}
+
+.hint.error {
+    color: #b42318;
+    font-size: 12px;
+}
+
+.w-full {
+    width: 100%;
+}
+
+.btn-primary {
+    /* ya la tienes global; refuerzo mínimo por si acaso */
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    border-radius: 12px;
+}
+
+.meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.link {
+    font-size: 13px;
+    color: #000;
+    text-decoration: none;
+    border-bottom: 1px dashed rgba(0, 0, 0, .25);
+}
+
+.link:hover {
+    border-bottom-color: #000;
+}
+
+.link.muted {
+    color: #6b7280;
+    border-bottom-color: rgba(107, 114, 128, .3);
+}

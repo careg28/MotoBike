@@ -1,0 +1,163 @@
+<div class="container mx-auto p-4 space-y-4">
+
+  <!-- Toolbar -->
+  <form class="toolbar card" (submit)="applyFilters(); $event.preventDefault()">
+    <input class="input" type="search" placeholder="Buscar marca o modelo…"
+           [value]="search()" (input)="onSearchInput($event)">
+
+    <select class="select" [value]="estado()" #sel (change)="onEstadoChange(sel.value)">
+      <option value="todos">Todos los estados</option>
+      <option value="disponible">Disponible</option>
+      <option value="reservada">Reservada</option>
+      <option value="mantenimiento">Mantenimiento</option>
+      <option value="retirada">Retirada</option>
+    </select>
+
+    <label class="check">
+      <input type="checkbox" [checked]="libresAhora()" #chk (change)="onLibresToggle(chk.checked)">
+      Solo libres ahora
+    </label>
+
+    <button class="btn-primary" type="submit" [disabled]="loading()">Filtrar</button>
+  </form>
+
+  <!-- Loading / vacío -->
+  @if (loading()) {
+    <div class="muted">Cargando…</div>
+  } @else if (!data().length) {
+    <div class="muted">No hay motos que coincidan.</div>
+  }
+
+  <!-- Cards (mobile-first) -->
+  <div class="cards">
+    @for (m of data(); track m.id) {
+      <div class="card moto">
+        <div class="media">
+          @if (m.img) {
+            <img [src]="m.img" [alt]="m.display">
+          } @else {
+            <div class="ph">Sin imagen</div>
+          }
+          @if (m.asignada) { <div class="lock">🔒</div> }
+        </div>
+
+        <div class="body">
+          <div class="row head">
+            <h3 class="title">{{ m.display }}</h3>
+            <span [class]="badgeClass(m.estado)">{{ m.estado }}</span>
+          </div>
+
+          <div class="row meta">
+            <span class="price">€{{ m.precio }} / día</span>
+            @if (m.asignada) { <small class="asig">Asignada ahora</small> }
+          </div>
+
+          <!-- Matrícula en mobile -->
+          <div class="row meta2">
+            <small class="plate">Matrícula: {{ m.matricula || '—' }}</small>
+          </div>
+
+          <div class="actions">
+            <button class="btn-primary outline" (click)="editar(m)">Editar</button>
+            <button class="btn-danger outline sm" (click)="askDelete(m)">Eliminar</button>
+            <button class="btn-primary" (click)="reservar(m)">Reservar</button>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Tabla (desktop) -->
+  <div class="table-wrap">
+    <table class="table">
+      <!-- Colgroup para alinear columnas -->
+      <colgroup>
+        <col />                    <!-- Modelo -->
+        <col style="width:140px;" /><!-- Matrícula -->
+        <col style="width:150px;" /><!-- Estado -->
+        <col style="width:120px;" /><!-- Asignada -->
+        <col style="width:120px;" /><!-- Precio/día -->
+        <col style="width:240px;" /><!-- Acciones -->
+      </colgroup>
+
+      <thead>
+        <tr>
+          <th>Modelo</th>
+          <th>Matrícula</th>
+          <th>Estado</th>
+          <th>Asignada</th>
+          <th class="num">Precio/día</th>
+          <th class="actions-col">Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (m of data(); track m.id) {
+          <tr>
+            <td class="modelo">
+              @if (m.img) { <img [src]="m.img" [alt]="m.display"> }
+              <div>
+                <div class="t">{{ m.display }}</div>
+                <div class="s">/motos/{{ m.slug }}</div>
+              </div>
+            </td>
+
+            <td class="plate">
+              {{ m.matricula || '—' }}
+            </td>
+
+            <td><span [class]="badgeClass(m.estado)">{{ m.estado }}</span></td>
+
+            <td>
+              @if (!m.asignada) {
+                <span class="chip gray">Libre</span>
+              } @else {
+                <span class="chip amber">Asignada</span>
+              }
+            </td>
+
+            <td class="num">€{{ m.precio }}</td>
+
+            <td class="actions-col">
+              <button class="btn-primary outline sm" (click)="editar(m)">Editar</button>
+              <button class="btn-danger outline" (click)="askDelete(m)">Eliminar</button>
+              <button class="btn-primary sm" (click)="reservar(m)">Asignar</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+@if (toDelete()) {
+  <div class="modal-backdrop" (click)="cancelDelete()"></div>
+  <div class="modal">
+    <div class="modal-card">
+      <h3>Eliminar moto</h3>
+      <p>
+        ¿Seguro que quieres eliminar
+        <strong>{{ toDelete()!.display }}</strong>
+        @if (toDelete()!.matricula) { ({{ toDelete()!.matricula }}) }
+        ?
+      </p>
+
+      <!-- Toggle “definitivo” -->
+      <label class="hard-row">
+        <input type="checkbox"
+               [checked]="hardDelete()"
+               (change)="hardDelete.set(($any($event.target)).checked)">
+        Eliminar definitivamente (saltarse papelera)
+      </label>
+
+      @if (deleteError()) { <div class="alert error">{{ deleteError() }}</div> }
+
+      <div class="modal-actions">
+        <button class="btn-primary outline" type="button" (click)="cancelDelete()" [disabled]="deleting()">Cancelar</button>
+        <button class="btn-danger" type="button" (click)="confirmDelete()" [disabled]="deleting()">
+          {{ deleting() ? 'Eliminando…' : (hardDelete() ? 'Sí, eliminar DEFINITIVO' : 'Sí, enviar a papelera') }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

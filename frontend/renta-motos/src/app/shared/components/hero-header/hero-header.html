@@ -1,0 +1,11 @@
+<section class="hero">
+  <div class="hero-content">
+    <h1>{{ 'hero.title' | translate }}</h1>
+    <p>{{ 'hero.subtitle' | translate }}</p>
+    <a class="btn-primary btn-lg"
+       routerLink="/modelos"
+       [attr.aria-label]="'hero.cta' | translate">
+      {{ 'hero.cta' | translate }}
+    </a>
+  </div>
+</section>

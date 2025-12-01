@@ -1,0 +1,125 @@
+<div class="container mx-auto p-4 space-y-4">
+
+  <!-- Toolbar -->
+  <form class="toolbar card" (submit)="applyFilters(); $event.preventDefault()">
+    <input class="input" type="search" placeholder="Buscar marca o nombre…"
+           [value]="search()" (input)="onSearchInput($event)" aria-label="Buscar modelos">
+
+    <select class="select" [value]="perPage()" #sel
+            (change)="perPage.set(sel.value === 'all' ? 'all' : +sel.value); applyFilters()"
+            aria-label="Elementos por página">
+      <option value="10">10 por página</option>
+      <option value="25">25 por página</option>
+      <option value="50">50 por página</option>
+      <option value="all">Todos</option>
+    </select>
+
+    <button class="btn btn-primary" type="submit">Aplicar</button>
+    <span class="flex-1"></span>
+    <button class="btn btn-success" type="button" (click)="nuevo()">+ Nuevo modelo</button>
+  </form>
+
+  <!-- Alertas -->
+  @if (error()) { <div class="alert error">{{ error() }}</div> }
+  @if (loading()) { <div class="card">Cargando…</div> }
+
+  <!-- ===== Desktop: tabla ===== -->
+  @if (!loading() && items().length === 0) {
+    <div class="card">No hay resultados.</div>
+  } @else if (!loading()) {
+
+    <div class="desktop-only">
+      <div class="card table-outer">
+        <div class="table-scroll" role="region" aria-label="Listado de modelos" tabindex="0">
+          <table class="table table-min">
+            <colgroup>
+              <col style="width:64px" />
+              <col style="width:160px" />
+              <col style="width:160px" />
+              <col style="width:140px" />
+              <col style="width:140px" />
+              <col style="width:140px" />
+              <col style="width:110px" />
+              <col style="width:220px" />
+            </colgroup>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Marca</th>
+                <th>Nombre</th>
+                <th>Categoría</th>
+                <th class="num">Precio base</th>
+                <th class="num">Depósito</th>
+                <th>Imágenes</th>
+                <th class="actions">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (m of items(); track trackById($index, m)) {
+                <tr>
+                  <td>{{ m.id }}</td>
+                  <td>{{ m.marca }}</td>
+                  <td>{{ m.nombre }}</td>
+                  <td>{{ m.categoria }}</td>
+                  <td class="num">{{ m.precio_base }}</td>
+                  <td class="num">{{ m.deposito_sugerido || '—' }}</td>
+                  <td>{{ (m.imagenes?.length || 0) }}</td>
+                  <td class="actions">
+                    <a class="btn btn-primary outline sm" [routerLink]="['/admin/modelos/editar', m.slug]">Editar</a>
+                    <button class="btn btn-danger sm" (click)="pedirBorrado(m)">Eliminar</button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Móvil: cards ===== -->
+    <div class="mobile-only">
+      @for (m of items(); track m.id) {
+        <div class="card row-card">
+          <div class="row-line"><span>ID</span><b>{{ m.id }}</b></div>
+          <div class="row-line"><span>Marca</span><b>{{ m.marca }}</b></div>
+          <div class="row-line"><span>Nombre</span><b>{{ m.nombre }}</b></div>
+          <div class="row-line"><span>Categoría</span><b>{{ m.categoria }}</b></div>
+          <div class="row-line"><span>Precio base</span><b>{{ m.precio_base }}</b></div>
+          <div class="row-line"><span>Depósito</span><b>{{ m.deposito_sugerido || '—' }}</b></div>
+          <div class="row-line"><span>Imágenes</span><b>{{ (m.imagenes?.length || 0) }}</b></div>
+          <div class="row-actions">
+            <a class="btn btn-primary outline grow" [routerLink]="['/admin/modelos/editar', m.slug]">Editar</a>
+            <button class="btn btn-danger grow" (click)="pedirBorrado(m)">Eliminar</button>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Paginación -->
+    @if (data() && data()!.last_page > 1) {
+      <div class="pagination">
+        <button class="btn outline" (click)="goToPage(page()-1)" [disabled]="page()<=1">«</button>
+        <span>Página {{ page() }} de {{ data()!.last_page }}</span>
+        <button class="btn outline" (click)="goToPage(page()+1)" [disabled]="page()>=data()!.last_page">»</button>
+      </div>
+    }
+  }
+
+  <!-- Modal de confirmación -->
+  @if (toDelete()) {
+    <div class="modal-backdrop" (click)="cancelarBorrado()"></div>
+    <div class="modal card">
+      <h3>Confirmar borrado</h3>
+      <p>¿Eliminar el modelo <b>{{ toDelete()!.marca }} {{ toDelete()!.nombre }}</b>?</p>
+
+      @if (deleteErr()) { <div class="alert error">{{ deleteErr() }}</div> }
+
+      <div class="modal-actions">
+        <button class="btn btn-primary outline" type="button" (click)="cancelarBorrado()" [disabled]="deleting()">Cancelar</button>
+        <button class="btn btn-danger" type="button" (click)="confirmarBorrado()" [disabled]="deleting()">
+          {{ deleting() ? 'Eliminando…' : 'Sí, eliminar' }}
+        </button>
+      </div>
+    </div>
+  }
+</div>

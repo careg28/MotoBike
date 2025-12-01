@@ -1,0 +1,84 @@
+<section class="section is-alt">
+  <div class="container">
+    <header class="mp__head">
+      <h1 class="mp__title">Nuestros modelos</h1> <!-- antes decía 125cc -->
+      <p class="mp__subtitle">Consumo, velocidad, capacidad y todo lo que necesitas saber para elegir.</p>
+    </header>
+
+    <!-- ... filtros ... -->
+
+    <div class="mp__list">
+      <article class="mp__item card" *ngFor="let m of models(); trackBy: trackBySlug">
+        <a [routerLink]="modelLink(m)" class="mp__img">
+          <img [src]="m.img || '/models/placeholder.jpg'" [alt]="m.name" loading="lazy" />
+          <span class="badge">{{ m.tag }}</span>
+          <span class="badge badge--out" *ngIf="m.in_stock === false">Sin stock</span>
+        </a>
+
+        <div class="mp__info">
+          <div class="mp__top">
+            <h2 class="mp__name">{{ m.name }}</h2>
+            <div class="mp__price"><strong>{{ m.price }}€</strong> / día</div>
+          </div>
+
+          <ul class="mp__badges" *ngIf="m.badges?.length">
+            <li *ngFor="let b of m.badges">{{ b }}</li>
+          </ul>
+
+          <dl class="mp__specs">
+            <div><dt>Motor</dt><dd>{{ m.specs?.motor || '—' }}</dd></div>
+            <div><dt>Consumo</dt><dd>{{ m.specs?.consumo || '—' }}</dd></div>
+            <div><dt>Velocidad máx.</dt><dd>{{ m.specs?.velocidad || '—' }}</dd></div>
+            <div><dt>Depósito</dt><dd>{{ m.specs?.deposito || '—' }}</dd></div>
+            <div><dt>Asientos</dt><dd>{{ m.specs?.asiento || '—' }}</dd></div>
+            <div *ngIf="m.specs?.baul"><dt>Baúl</dt><dd>{{ m.specs?.baul }}</dd></div>
+            <div *ngIf="m.specs?.frenos"><dt>Frenos</dt><dd>{{ m.specs?.frenos }}</dd></div>
+            <div *ngIf="m.specs?.peso"><dt>Peso</dt><dd>{{ m.specs?.peso }}</dd></div>
+          </dl>
+
+          <div class="mp__actions">
+            <a
+              [routerLink]="m.in_stock ? reserveLink(m) : null"
+              class="btn-primary"
+              [class.btn-disabled]="m.in_stock === false"
+              [attr.aria-disabled]="m.in_stock === false ? 'true' : null"
+              (click)="m.in_stock ? null : sinStock()"
+            >Reservar</a>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <!-- la comparativa también usa models() -->
+    <div class="mp__table card">
+      <h3 class="mp__table-title">Comparativa rápida</h3>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Modelo</th>
+              <th>Consumo</th>
+              <th>Velocidad</th>
+              <th>Depósito</th>
+              <th>Frenos</th>
+              <th>Baúl</th>
+              <th>Precio/día</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let m of models()">
+              <td>{{ m.name }}</td>
+              <td>{{ m.specs?.consumo || '—' }}</td>
+              <td>{{ m.specs?.velocidad || '—' }}</td>
+              <td>{{ m.specs?.deposito || '—' }}</td>
+              <td>{{ m.specs?.frenos || '—' }}</td>
+              <td>{{ m.specs?.baul || '—' }}</td>
+              <td>{{ m.price }}€</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</section>

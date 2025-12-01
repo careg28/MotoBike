@@ -1,0 +1,52 @@
+<section class="section is-alt">
+  <div class="container">
+    <header class="rp-head">
+  <div class="rp-eyebrow">
+    <i class="fa-solid fa-location-dot"></i> Valencia
+  </div>
+
+  <h1 class="rp-title">
+    Rutas recomendadas por <span>Valencia</span>
+  </h1>
+
+  <p class="rp-sub">
+    4 rutas, 4 paradas cada una. Cultura, mar y buenas paradas para tomar algo.
+  </p>
+</header>
+
+    <div class="rp__grid">
+      <article class="rp__card card" *ngFor="let r of routes; trackBy: trackById">
+        <div class="rp__img">
+          <img [src]="r.image" [alt]="r.title" loading="lazy" />
+          <ul class="rp__tags" *ngIf="r.tags?.length">
+            <li *ngFor="let t of r.tags">{{ t }}</li>
+          </ul>
+        </div>
+
+        <div class="rp__body">
+          <h2 class="rp__name">{{ r.title }}</h2>
+          <p class="rp__desc">{{ r.description }}</p>
+
+          <ol class="rp__stops" aria-label="Paradas de la ruta">
+            <li *ngFor="let s of r.stops; let i = index">
+              <span class="num">{{ i + 1 }}</span>
+              <div class="stop">
+                <strong>{{ s.name }}</strong>
+                <small *ngIf="s.note">{{ s.note }}</small>
+              </div>
+            </li>
+          </ol>
+
+          <div class="rp__actions">
+            <button class="btn-primary" type="button" (click)="startRoute(r)">
+              Comenzar esta ruta
+            </button>
+            <a class="rp__mapslink" [href]="buildMapsLink(r)" target="_blank" rel="noopener">
+              Abrir en Maps
+            </a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>

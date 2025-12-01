@@ -1,0 +1,64 @@
+<header class="app-header">
+  <div class="container header-inner">
+    <!-- Logo -->
+    <a class="logo" routerLink="/" (click)="closeMenu()">
+      <img src="/logo.png" alt="Rent Moto Valencia" class="header-logo" />
+    </a>
+
+    <!-- Selector de idioma (siempre visible junto al logo) -->
+   <div class="lang" (click)="$event.stopPropagation()">
+  <button class="lang__btn"
+          type="button"
+          aria-haspopup="menu"
+          [attr.aria-expanded]="openLang"
+          (click)="toggleLang()">
+    <img class="flag-img" [src]="current.flagSrc" alt="" aria-hidden="true">
+    <span class="code">{{ current.name.toUpperCase() }}</span>
+    <i class="fa-solid fa-chevron-down chevron" aria-hidden="true"></i>
+    <span class="sr-only">Cambiar idioma</span>
+  </button>
+
+  <ul class="lang__menu" *ngIf="openLang" role="menu">
+    <li *ngFor="let l of langs"
+        class="lang__item"
+        role="menuitemradio"
+        [attr.aria-checked]="l.code === current.code"
+        [class.active]="l.code === current.code"
+        (click)="setLang(l.code)">
+      <img class="flag-img" [src]="l.flagSrc" alt="" aria-hidden="true">
+      <span class="name">{{ l.name }}</span>
+      <span class="code">{{ l.code.toUpperCase() }}</span>
+     
+    </li>
+  </ul>
+</div>
+
+    <!-- Botón hamburguesa -->
+    <button
+      class="hamburger"
+      type="button"
+      aria-label="Abrir menú"
+      [attr.aria-expanded]="menuOpen"
+      aria-controls="primary-nav"
+      (click)="toggleMenu()">
+      <span class="line"></span>
+      <span class="line"></span>
+      <span class="line"></span>
+    </button>
+  </div>
+
+  <!-- Menú colapsable -->
+  <nav id="primary-nav" class="nav-panel" [class.open]="menuOpen" (click)="$event.stopPropagation()">
+    <ul>
+      <li><a routerLink="/" (click)="closeMenu()">{{ 'nav.home'   | translate }}</a></li>
+      <li><a routerLink="/modelos" (click)="closeMenu()">{{ 'nav.models' | translate }}</a></li>
+      <li><a routerLink="/tarifas" (click)="closeMenu()">{{ 'nav.rates'  | translate }}</a></li>
+      <li><a routerLink="/rutas"   (click)="closeMenu()">{{ 'nav.routes' | translate }}</a></li>
+      <li class="cta">
+        <a class="btn-primary btn-sm" routerLink="/modelos" (click)="closeMenu()">
+          {{ 'nav.book' | translate }}
+        </a>
+      </li>
+    </ul>
+  </nav>
+</header>

@@ -1,0 +1,91 @@
+{
+    "nav": {
+        "home": "Start",
+        "models": "Modelle",
+        "rates": "Preise",
+        "routes": "Routen",
+        "book": "Jetzt buchen"
+    },
+    "hero": {
+        "title": "Freiheit auf zwei Rädern",
+        "subtitle": "Miete dein Motorrad in Minuten. Versicherung inklusive und 24/7-Support.",
+        "cta": "Jetzt buchen"
+    },
+    "benefits": {
+    "title": "Warum wir?",
+    "items": {
+      "fast": {
+        "title": "In Minuten buchen",
+        "desc": "Wähle dein Motorrad und bestätige deine Buchung schnell und einfach online."
+      },
+      "insurance": {
+        "title": "Versicherung inklusive",
+        "desc": "Alle unsere Motorräder haben Versicherung und 24/7-Pannenhilfe."
+      },
+      "fleet": {
+        "title": "Motorräder in einwandfreiem Zustand",
+        "desc": "Eine Flotte, regelmäßig geprüft und gewartet – für deine Sicherheit."
+      },
+      "location": {
+        "title": "Zentrale Lage in Valencia",
+        "desc": "Hol dein Motorrad im Herzen der Stadt ab – nah an allem, was du brauchst."
+      }
+    }
+    },
+    "how": {
+    "title": "So funktioniert’s",
+    "steps": {
+      "date":  { "title": "1. Datum wählen",     "text": "In 2 Minuten per Handy buchen." },
+      "model": { "title": "2. Motorrad wählen",  "text": "125er-Modelle – ideal für Stadt und Strand." },
+      "ride":  { "title": "3. Los geht’s!",      "text": "Schnelle Übergabe, Helm inklusive – fertig." }
+    }
+  },
+    "cta": {
+    "badge": "Lieferung nach Hause",
+    "title": "Bereit für dein Motorrad in Valencia?",
+    "text": "Abholung in unserem Shop <strong>oder</strong> wir liefern es zu deinem Hotel, Apartment oder Treffpunkt.",
+    "bullets": {
+      "insurance": "Versicherung inklusive",
+      "fast": "In 2 Minuten buchen",
+      "city125": "125cc – bereit für die Stadt"
+    },
+    "button": "Verfügbarkeit prüfen",
+    "sub": "Flexible Stornierung · Sichere Zahlung",
+    "imageAlt": "Stadt der Künste und Wissenschaften in Valencia"
+  },
+  "contact": {
+    "title": "Kontakt",
+    "form": {
+      "name": { "label": "Name", "placeholder": "Dein Name" },
+      "email": { "label": "E-Mail", "placeholder": "du@beispiel.de" },
+      "message": { "label": "Nachricht", "placeholder": "Sag uns, was du brauchst" },
+      "submit": "Nachricht senden"
+    },
+    "map": {
+      "open": "In Google Maps öffnen"
+    }
+  },
+   "footer": {
+    "brand": {
+      "logoAlt": "Logo von Rent Moto Valencia",
+      "tagline": "Dein Motorradverleih in Valencia: einfach, schnell und sicher."
+    },
+    "nav": {
+      "title": "Navigation",
+      "home": "Start",
+      "models": "Modelle",
+      "routes": "Routen",
+      "contact": "Kontakt"
+    },
+    "contact": {
+      "title": "Kontakt",
+      "address": "Calle de prueba 123, Valencia"
+    },
+    "social": {
+      "title": "Folge uns"
+    },
+    "bottom": {
+      "copy": "© {{year}} Rent Moto Valencia · Alle Rechte vorbehalten"
+    }
+  }
+}

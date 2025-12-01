@@ -1,0 +1,29 @@
+<section class="section section--white">
+  <div class="container">
+    <div class="mf__head">
+      <h2 class="mf__title">Modelos destacados</h2>
+      <a [routerLink]="['/modelos']" class="mf__all">Ver todos</a>
+    </div>
+
+    <div class="mf__grid">
+      <article class="mf__card" *ngFor="let m of models()">
+        <a
+          [routerLink]="modelLink(m)"
+          class="mf__img-wrap"
+          [attr.aria-label]="'Ver ' + m.name">
+          <img [src]="m.img || '/models/placeholder.jpg'" [alt]="m.name">
+          <span class="mf__badge">{{ m.tag }}</span>
+        </a>
+
+        <div class="mf__body">
+          <h3 class="mf__name">{{ m.name }}</h3>
+          <p class="mf__price"><strong>{{ m.price }}€</strong> / día</p>
+          <div class="mf__actions">
+            <a [routerLink]="modelLink(m)" class="mf__link">Detalles</a>
+            <a [routerLink]="reserveLink(m)" class="btn-primary btn-sm">Reservar</a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>

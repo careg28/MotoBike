@@ -1,0 +1,35 @@
+<section class="wide-cta section">
+  <div class="container">
+    <div class="cta card">
+      <div class="cta__left">
+        <div class="cta__badge">
+          <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+          {{ 'cta.badge' | translate }}
+        </div>
+
+        <h2 class="cta__title">{{ 'cta.title' | translate }}</h2>
+
+        
+        <p class="cta__text" [innerHTML]="'cta.text' | translate"></p>
+
+        <ul class="cta__bullets">
+          <li><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> {{ 'cta.bullets.insurance' | translate }}</li>
+          <li><i class="fa-solid fa-clock" aria-hidden="true"></i> {{ 'cta.bullets.fast' | translate }}</li>
+          <li><i class="fa-solid fa-motorcycle" aria-hidden="true"></i> {{ 'cta.bullets.city125' | translate }}</li>
+        </ul>
+
+        <button class="btn-primary cta__button" type="button" routerLink="/modelos">
+          {{ 'cta.button' | translate }}
+        </button>
+
+        <small class="cta__sub">{{ 'cta.sub' | translate }}</small>
+      </div>
+
+      <div class="cta__right">
+        <img src="/58.jpg"
+             class="cta__image"
+             [attr.alt]="'cta.imageAlt' | translate">
+      </div>
+    </div>
+  </div>
+</section>

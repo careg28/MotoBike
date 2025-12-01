@@ -1,0 +1,113 @@
+.mf__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-6);
+}
+
+.mf__title {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(1.25rem, 3.5vw, 1.75rem);
+}
+
+.mf__all {
+  font-weight: 600;
+  color: var(--color-primary);
+  border-bottom: 2px solid currentColor;
+}
+
+.mf__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+
+  @media (min-width: 600px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-8);
+  }
+}
+
+.mf__card {
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, .12);
+    border-color: color-mix(in srgb, var(--color-accent) 35%, #E5E7EB);
+  }
+}
+
+.mf__img-wrap {
+  position: relative;
+  display: block;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transform: scale(1.02);
+    transition: transform .25s ease;
+  }
+
+  .mf__badge {
+    position: absolute;
+    left: var(--space-3);
+    top: var(--space-3);
+    background: rgba(255, 196, 0, .95);
+    color: #000;
+    font-weight: 700;
+    padding: 6px 10px;
+    border-radius: 999px;
+    box-shadow: var(--shadow);
+    font-size: .75rem;
+  }
+}
+
+.mf__card:hover .mf__img-wrap img {
+  transform: scale(1.07);
+}
+
+.mf__body {
+  padding: var(--space-4);
+  display: grid;
+  gap: var(--space-3);
+}
+
+.mf__name {
+  font-weight: 700;
+}
+
+.mf__price {
+  color: #4B5563;
+
+  strong {
+    color: var(--color-primary);
+    font-size: 1.125rem;
+  }
+}
+
+.mf__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mf__link {
+  font-weight: 600;
+  color: var(--color-accent-2);
+}
+

@@ -1,0 +1,79 @@
+.contact {
+  background: var(--color-bg);
+  padding: clamp(40px, 6vw, 80px) 0;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+
+  @media (min-width: 992px) {
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+  }
+}
+
+.contact-form {
+  padding: 24px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+
+  label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    font-size: 0.95rem;
+  }
+
+  input, textarea {
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+  }
+
+  input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--color-accent-2);
+    box-shadow: 0 0 0 2px rgba(20,184,166,.2);
+  }
+}
+
+.info-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    i { color: var(--color-accent-2); }
+    a { color: #222; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  }
+}
+
+.map-wrap {
+  position: relative;
+}
+
+.map {
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.08);
+}
+
+.btn-map {
+  margin-top: 12px;
+  display: inline-block;
+  text-align: center;
+}

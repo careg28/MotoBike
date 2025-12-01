@@ -1,0 +1,76 @@
+ <div class="container" *ngIf="ready(); else loadingTpl">
+    <ng-container *ngIf="modelo() as m; else errorTpl">
+
+      <!-- Cabecera modelo -->
+      <header class="head">
+        <h1 class="title">{{ m.marca | titlecase }} {{ m.nombre | titlecase }}</h1>
+        <div class="sub">
+          <span class="chip" *ngIf="m.categoria">{{ m.categoria }}</span>
+          <span class="price">{{ m.precio_base }}€ <small>/ día</small></span>
+        </div>
+      </header>
+
+      <div class="grid">
+        <!-- Calendario -->
+        <section class="card">
+          <h2 class="sec">Selecciona fechas</h2>
+          <app-calendar-disponibilidad
+            [slug]="m.slug"
+            (rangeChange)="onRange($event)">
+          </app-calendar-disponibilidad>
+
+          <div class="range" *ngIf="rangeText()">
+            <b>Rango:</b> {{ rangeText() }}
+          </div>
+        
+        </section>
+
+        <!-- Formulario -->
+        <section class="card">
+          <h2 class="sec">Tus datos</h2>
+
+          <form (ngSubmit)="submit()" #f="ngForm" novalidate>
+            <div class="field">
+              <label>Nombre y apellidos *</label>
+              <input type="text" [(ngModel)]="form.nombre" name="nombre" required />
+            </div>
+
+            <div class="field">
+              <label>Email *</label>
+              <input type="email" [(ngModel)]="form.email" name="email" required />
+            </div>
+
+            <div class="field">
+              <label>Teléfono</label>
+              <input type="tel" [(ngModel)]="form.tel" name="tel" />
+            </div>
+
+            <div class="field">
+              <label>Notas</label>
+              <textarea rows="3" [(ngModel)]="form.notas" name="notas" placeholder="Horario de recogida, dudas, etc."></textarea>
+            </div>
+
+            <div class="actions">
+              <button class="btn" type="submit" [disabled]="submitting()">
+                {{ submitting() ? 'Enviando…' : 'Solicitar reserva' }}
+              </button>
+            </div>
+
+            <p class="err" *ngIf="error()">{{ error() }}</p>
+            <p class="ok" *ngIf="ok()">
+              ¡Hecho! Código de reserva <b>{{ ok() }}</b>. Te contactaremos para confirmar.
+            </p>
+          </form>
+        </section>
+      </div>
+
+    </ng-container>
+  </div>
+
+  <ng-template #loadingTpl>
+    <div class="container"><p>Cargando…</p></div>
+  </ng-template>
+
+  <ng-template #errorTpl>
+    <div class="container"><p class="err">No se pudo cargar el modelo.</p></div>
+  </ng-template>

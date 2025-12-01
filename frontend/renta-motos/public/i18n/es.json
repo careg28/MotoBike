@@ -1,0 +1,91 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "models": "Modelos",
+    "rates": "Tarifas",
+    "routes": "Rutas",
+    "book": "Reservar"
+  },
+  "hero": {
+    "title": "Libertad sobre dos ruedas",
+    "subtitle": "Alquila tu moto en minutos. Seguro incluido y asistencia 24/7.",
+    "cta": "Reserva ahora"
+  },
+ "benefits": {
+    "title": "¿Por qué elegirnos?",
+    "items": {
+      "fast": {
+        "title": "Reserva en minutos",
+        "desc": "Elige tu moto y confirma tu reserva online de forma rápida y sencilla."
+      },
+      "insurance": {
+        "title": "Seguro incluido",
+        "desc": "Todas nuestras motos cuentan con seguro y asistencia en carretera 24/7."
+      },
+      "fleet": {
+        "title": "Motos en perfecto estado",
+        "desc": "Flota de motos revisada y mantenida regularmente para tu seguridad."
+      },
+      "location": {
+        "title": "Ubicación céntrica en Valencia",
+        "desc": "Recoge tu moto en el corazón de la ciudad, cerca de todo lo que necesitas."
+      }
+    }
+  },
+   "how": {
+    "title": "Cómo funciona",
+    "steps": {
+      "date":  { "title": "1. Elige fecha",  "text": "Reserva en 2 minutos desde tu móvil." },
+      "model": { "title": "2. Elige moto",   "text": "Modelos 125cc ideales para ciudad y playa." },
+      "ride":  { "title": "3. ¡A rodar!",    "text": "Entrega rápida, casco incluido y listo." }
+    }
+  },
+   "cta": {
+    "badge": "Entrega a domicilio",
+    "title": "¿Listo para tu moto en Valencia?",
+    "text": "Recoge en nuestro local <strong>o</strong> te la llevamos a tu hotel, apartamento o punto de encuentro.",
+    "bullets": {
+      "insurance": "Seguro incluido",
+      "fast": "Reserva en 2 minutos",
+      "city125": "125cc listas para la ciudad"
+    },
+    "button": "Comprobar disponibilidad",
+    "sub": "Cancelación flexible · Pago seguro",
+    "imageAlt": "Ciudad de las Artes y las Ciencias en Valencia"
+  },
+   "contact": {
+    "title": "Contacto",
+    "form": {
+      "name": { "label": "Nombre", "placeholder": "Tu nombre" },
+      "email": { "label": "Correo", "placeholder": "tucorreo@ejemplo.com" },
+      "message": { "label": "Mensaje", "placeholder": "Cuéntanos qué necesitas" },
+      "submit": "Enviar mensaje"
+    },
+    "map": {
+      "open": "Abrir en Google Maps"
+    }
+  },
+  "footer": {
+    "brand": {
+      "logoAlt": "Logo de Rent Moto Valencia",
+      "tagline": "Tu moto de alquiler en Valencia: fácil, rápido y seguro."
+    },
+    "nav": {
+      "title": "Navegación",
+      "home": "Inicio",
+      "models": "Modelos",
+      "routes": "Rutas",
+      "contact": "Contacto"
+    },
+    "contact": {
+      "title": "Contacto",
+      "address": "Calle de prueba 123, Valencia"
+    },
+    "social": {
+      "title": "Síguenos"
+    },
+    "bottom": {
+      "copy": "© {{year}} Rent Moto Valencia · Todos los derechos reservados"
+    }
+  }
+}

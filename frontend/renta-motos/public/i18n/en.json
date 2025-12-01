@@ -1,0 +1,91 @@
+{
+    "nav": {
+        "home": "Home",
+        "models": "Models",
+        "rates": "Rates",
+        "routes": "Routes",
+        "book": "Book now"
+    },
+    "hero": {
+        "title": "Freedom on two wheels",
+        "subtitle": "Rent your motorbike in minutes. Insurance included and 24/7 assistance.",
+        "cta": "Book now"
+    },
+  "benefits": {
+    "title": "Why choose us?",
+    "items": {
+      "fast": {
+        "title": "Book in minutes",
+        "desc": "Choose your bike and confirm your booking online quickly and easily."
+      },
+      "insurance": {
+        "title": "Insurance included",
+        "desc": "All our bikes include insurance and 24/7 roadside assistance."
+      },
+      "fleet": {
+        "title": "Bikes in perfect condition",
+        "desc": "A fleet checked and regularly maintained for your safety."
+      },
+      "location": {
+        "title": "Central location in Valencia",
+        "desc": "Pick up your bike in the heart of the city, close to everything you need."
+      }
+    }
+  },
+  "how": {
+    "title": "How it works",
+    "steps": {
+      "date":  { "title": "1. Pick a date",   "text": "Book in 2 minutes from your phone." },
+      "model": { "title": "2. Choose a bike", "text": "125cc models ideal for city and beach." },
+      "ride":  { "title": "3. Let’s ride!",   "text": "Fast pickup, helmet included—you’re set." }
+    }
+  },
+  "cta": {
+    "badge": "Home delivery",
+    "title": "Ready for your bike in Valencia?",
+    "text": "Pick up at our shop <strong>or</strong> we deliver it to your hotel, apartment, or meeting point.",
+    "bullets": {
+      "insurance": "Insurance included",
+      "fast": "Book in 2 minutes",
+      "city125": "125cc ready for the city"
+    },
+    "button": "Check availability",
+    "sub": "Flexible cancellation · Secure payment",
+    "imageAlt": "City of Arts and Sciences in Valencia"
+  },
+   "contact": {
+    "title": "Contact",
+    "form": {
+      "name": { "label": "Name", "placeholder": "Your name" },
+      "email": { "label": "Email", "placeholder": "you@example.com" },
+      "message": { "label": "Message", "placeholder": "Tell us what you need" },
+      "submit": "Send message"
+    },
+    "map": {
+      "open": "Open in Google Maps"
+    }
+  },
+   "footer": {
+    "brand": {
+      "logoAlt": "Rent Moto Valencia logo",
+      "tagline": "Your motorbike rental in Valencia: easy, fast and safe."
+    },
+    "nav": {
+      "title": "Navigation",
+      "home": "Home",
+      "models": "Models",
+      "routes": "Routes",
+      "contact": "Contact"
+    },
+    "contact": {
+      "title": "Contact",
+      "address": "Calle de prueba 123, Valencia"
+    },
+    "social": {
+      "title": "Follow us"
+    },
+    "bottom": {
+      "copy": "© {{year}} Rent Moto Valencia · All rights reserved"
+    }
+  }
+}

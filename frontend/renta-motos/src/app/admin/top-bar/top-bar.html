@@ -1,0 +1,38 @@
+<header class="topbar" (click)="closeProfile()">
+  <div class="left">
+    <button class="icon-btn" (click)="$event.stopPropagation(); toggleMenu()" aria-label="Abrir menú">
+      ☰
+    </button>
+
+    <div class="brand">
+      <img src="/logo.png" alt="" class="logo" />
+      <div class="titulos">
+        <span class="title">Feos Motos</span>
+        <span class="subtitle">Admin</span>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="right" (click)="$event.stopPropagation()">
+    <button class="icon-btn bell" aria-label="Notificaciones">🔔<span class="dot"></span></button>
+
+    <div class="user" [class.open]="profileOpen()">
+      <button class="user-btn" (click)="toggleProfile()" aria-label="Abrir perfil">
+        <span class="avatar">{{ initials() }}</span>
+        <span class="user-meta">
+          <b>({{ auth.currentUser()?.name || 'Usuario' }}) </b>
+          <small>{{ auth.currentUser()?.email }}</small>
+        </span>
+        <span class="chev">▾</span>
+      </button>
+
+      <div class="menu">
+        <a class="item" href="#" (click)="$event.preventDefault()">Mi perfil</a>
+        <a class="item" href="#" (click)="$event.preventDefault()">Ajustes</a>
+        <hr>
+        <button class="item danger" (click)="logout()">Cerrar sesión</button>
+      </div>
+    </div>
+  </div>
+</header>

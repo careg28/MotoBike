@@ -1,0 +1,145 @@
+.wide-cta {
+  background: #fff; 
+  padding: clamp(32px, 6vw, 80px) 0;
+}
+
+.cta {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+  align-items: center;
+
+  @media (min-width: 992px) {
+    grid-template-columns: 2fr 1fr; /* texto a la izquierda, acción a la derecha */
+    gap: clamp(24px, 4vw, 48px);
+  }
+}
+
+.cta__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(20,184,166,.12); 
+  color: var(--color-accent-2);
+  margin-bottom: 8px;
+
+  i { font-size: 1rem; }
+}
+
+.cta__title {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(1.25rem, 2.2vw, 2rem);
+  margin: 6px 0 6px;
+}
+
+.cta__text {
+  font-family: 'Inter', sans-serif;
+  color: #444;
+  margin: 0 0 10px;
+}
+
+.cta__bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 14px;
+  color: #2a2a2a;
+  font-size: 0.95rem;
+
+  li { display: flex; align-items: center; gap: 8px; }
+  i { color: var(--color-accent-2); }
+  
+  @media (min-width: 768px) { grid-template-columns: repeat(3, auto); }
+}
+
+.cta__right {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  text-align: center;
+  gap: 10px;
+
+  @media (min-width: 992px) {
+    align-items: flex-end;
+    text-align: right;
+  }
+}
+
+.cta__button {
+  width: 100%;
+  padding-inline: 20px;
+  height: 48px;
+  font-size: 1rem;
+
+  @media (min-width: 480px) { width: max-content; }
+}
+
+.cta__sub {
+  color: #666;
+}
+
+/*  botón de WhatsApp secundario */
+.cta__whatsapp {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #25D3661a; /* sutil */
+  color: #128C7E;
+
+  i { font-size: 1.1rem; }
+}
+
+/* Variante sticky para móvil */
+.wide-cta.is-sticky {
+  position: sticky;
+  bottom: 0;
+  z-index: 50;
+  padding: 8px 0;
+  background: linear-gradient(to top, rgba(248,249,251,0.92), rgba(248,249,251,0.92));
+  backdrop-filter: blur(6px);
+
+  .cta {
+    box-shadow: 0 8px 30px rgba(0,0,0,.06);
+  }
+}
+
+.wide-cta {
+  background: #fff;
+  padding: clamp(32px, 6vw, 80px) 0;
+}
+
+.cta {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  align-items: center;
+
+  @media (min-width: 992px) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.cta__left {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cta__image {
+  width: 100%;
+  height: auto;
+  border-radius: 20px;
+  object-fit: cover;
+  box-shadow: 0 8px 24px rgba(0,0,0,.08);
+}

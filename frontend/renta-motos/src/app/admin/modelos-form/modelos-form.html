@@ -1,0 +1,143 @@
+<div class="container mx-auto p-4">
+  <div class="card form-card">
+    <h1>{{ editing() ? 'Editar modelo' : 'Agregar modelo' }}</h1>
+    <p class="muted">Plantilla reutilizable (marca, nombre, specs, imágenes…).</p>
+
+    <div *ngIf="error()" class="alert error">{{ error() }}</div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+
+      <!-- Datos básicos -->
+      <section class="grid">
+        <label>
+          <span>Marca *</span>
+          <input type="text" formControlName="marca" placeholder="Honda, SYM, Vespa">
+        </label>
+
+        <label>
+          <span>Nombre *</span>
+          <input type="text" formControlName="nombre" placeholder="PCX 125, Symphony, Primavera">
+        </label>
+
+        <label class="slug">
+          <span>Slug *</span>
+          <div class="slug-row">
+            <input type="text" formControlName="slug" placeholder="honda-pcx-125">
+            <button class="ghost" type="button" (click)="autoSlug()">Generar</button>
+          </div>
+        </label>
+
+        <label>
+          <span>Categoría *</span>
+          <select formControlName="categoria">
+            <option *ngFor="let c of categorias" [value]="c">{{ c }}</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Precio base (€) *</span>
+          <input type="number" step="0.01" formControlName="precio_base" placeholder="30">
+        </label>
+
+        <label>
+          <span>Depósito sugerido (€)</span>
+          <input type="number" step="0.01" formControlName="deposito_sugerido" placeholder="150">
+        </label>
+      </section>
+
+      <section>
+        <label>
+          <span>Descripción</span>
+          <textarea formControlName="descripcion" rows="3" placeholder="Texto público del modelo…"></textarea>
+        </label>
+      </section>
+
+      <!-- Imágenes -->
+      <section>
+        <h3>Imágenes</h3>
+
+        <div formArrayName="imagenes" class="imgs selected">
+          <div class="img-row" *ngFor="let c of imagenesFA.controls; let i = index">
+            <img *ngIf="c.value" [src]="c.value" alt="img" class="thumb">
+            <input [formControlName]="i" placeholder="/storage/motos/archivo.jpg">
+            <button type="button" class="ghost danger" (click)="removeImg(i)">Eliminar</button>
+          </div>
+          <button type="button" class="ghost" (click)="addImg()">+ Campo manual (opcional)</button>
+        </div>
+
+        <div class="uploader">
+          <label class="ghost">
+            Subir imágenes…
+            <input type="file" multiple accept="image/*" (change)="onUploadFiles($event)" hidden>
+          </label>
+        </div>
+
+        <div class="gallery-bar">
+          <input class="input" type="search" placeholder="Buscar en galería…"
+                 [value]="mediaSearch()" (input)="onMediaSearchInput($event)">
+          <button class="ghost" type="button" (click)="loadMedia(1)" [disabled]="mediaLoading()">Refrescar</button>
+        </div>
+
+        <div class="gallery" [class.loading]="mediaLoading()">
+          <div class="item" *ngFor="let m of mediaList()">
+            <img [src]="m.url" [alt]="m.original_name">
+            <div class="name">{{ m.original_name }}</div>
+            <button type="button" class="btn-primary sm" (click)="onPickFromGallery(m)">Agregar</button>
+          </div>
+        </div>
+
+        <div class="pager" *ngIf="mediaLastPage() > 1">
+          <button class="ghost" type="button"
+                  (click)="loadMedia(mediaPage() - 1)"
+                  [disabled]="mediaPage() <= 1">Anterior</button>
+          <span>Página {{ mediaPage() }} / {{ mediaLastPage() }}</span>
+          <button class="ghost" type="button"
+                  (click)="loadMedia(mediaPage() + 1)"
+                  [disabled]="mediaPage() >= mediaLastPage()">Siguiente</button>
+        </div>
+      </section>
+
+      <!-- Especificaciones -->
+      <section formGroupName="specs">
+        <h3>Especificaciones (fijas)</h3>
+        <div class="grid">
+          <label><span>Motor</span>     <input formControlName="motor"     placeholder="125 cc"></label>
+          <label><span>Consumo</span>   <input formControlName="consumo"   placeholder="2,1 L/100 km"></label>
+          <label><span>Velocidad</span> <input formControlName="velocidad" placeholder="95 km/h"></label>
+          <label><span>Depósito</span>  <input formControlName="deposito"  placeholder="7 L"></label>
+          <label><span>Asiento</span>   <input formControlName="asiento"   placeholder="2 plazas"></label>
+          <label><span>Baúl</span>      <input formControlName="baul"      placeholder="Sí (30 L) / No"></label>
+          <label><span>Frenos</span>    <input formControlName="frenos"    placeholder="ABS / CBS"></label>
+          <label><span>Peso</span>      <input formControlName="peso"      placeholder="130 kg"></label>
+        </div>
+      </section>
+
+      <!-- Especificaciones extra (pares) -->
+      <section>
+        <h3>Datos adicionales (pares clave/valor)</h3>
+        <div formArrayName="specsExtra" class="kv-list">
+          <div class="kv-row" *ngFor="let g of specsExtraFA.controls; let i = index" [formGroupName]="i">
+            <input formControlName="key"   placeholder="p.ej. ruedas" />
+            <input formControlName="value" placeholder="p.ej. 12 pulgadas" />
+            <button type="button" class="ghost danger" (click)="removeSpecExtra(i)">✕</button>
+          </div>
+        </div>
+        <button type="button" class="ghost" (click)="addSpecExtra()">+ Añadir dato</button>
+      </section>
+
+      <section>
+        <label><span>Badges</span>
+          <input formControlName="badges" placeholder="Económica, Fácil de manejar">
+        </label>
+      </section>
+
+      <div class="actions">
+        <a class="btn-primary outline" routerLink="/admin/motos">Cancelar</a>
+        <button class="btn-primary" type="submit" [disabled]="saving()">
+          {{ saving() ? 'Guardando…' : (editing() ? 'Guardar cambios' : 'Guardar modelo') }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+

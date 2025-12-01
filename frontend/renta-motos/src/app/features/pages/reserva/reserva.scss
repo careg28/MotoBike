@@ -1,0 +1,112 @@
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.title {
+    margin: 0;
+    font-size: clamp(1.4rem, 2.4vw, 2rem);
+}
+
+.sub {
+    display: flex;
+    gap: .75rem;
+    align-items: center;
+}
+
+.chip {
+    background: #eef;
+    color: #224;
+    padding: .25rem .5rem;
+    border-radius: .5rem;
+    font-size: .85rem;
+}
+
+.price {
+    font-weight: 600;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+@media (min-width: 900px) {
+    .grid {
+        grid-template-columns: 1.2fr .8fr;
+    }
+}
+
+.card {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .04);
+}
+
+.sec {
+    margin: .25rem 0 1rem;
+    font-size: 1.1rem;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+    margin-bottom: .75rem;
+}
+
+input,
+textarea {
+    width: 100%;
+    padding: .6rem .7rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font: inherit;
+}
+
+.actions {
+    margin-top: .75rem;
+}
+
+.btn {
+    background: #111;
+    color: #fff;
+    border: 0;
+    border-radius: 10px;
+    padding: .7rem 1rem;
+    cursor: pointer;
+}
+
+.btn[disabled] {
+    opacity: .6;
+    cursor: default;
+}
+
+.range {
+    margin-top: .5rem;
+}
+
+.hint {
+    color: #666;
+    font-size: .85rem;
+}
+
+.err {
+    color: #b00020;
+}
+
+.ok {
+    color: #0a7a35;
+}

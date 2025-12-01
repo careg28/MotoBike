@@ -1,0 +1,166 @@
+/* ==============================
+   RESET & BASE
+   ============================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--color-text);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+  outline: none;
+  background: none;
+}
+
+/* ==============================
+   TOKENS DE DISEÑO (variables)
+   ============================== */
+:root {
+  --color-bg: #F8F9FB;
+  --color-bg-dark: #0B0B0C;
+
+  --color-text: #0B0B0C;
+  --color-text-inv: #FFFFFF;
+
+  --color-primary: #000000;
+  --color-accent: #FFC400;
+  --color-accent-2: #14B8A6;
+
+  --radius: 12px;
+  --shadow: 0 8px 24px rgba(0,0,0,.08);
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+}
+
+/* ==============================
+   TIPOGRAFÍA GLOBAL
+   ============================== */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+p {
+  margin-bottom: var(--space-3);
+  color: var(--color-text);
+}
+
+/* ==============================
+   UTILIDADES
+   ============================== */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+}
+
+/* ==============================
+   BOTONES (global reutilizable)
+   ============================== */
+.btn-primary {
+  display: inline-block;
+  padding: 12px 24px;
+  font-weight: 600;
+  color: #000; /* texto negro sobre amarillo */
+  background: var(--color-accent);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform .2s ease, box-shadow .2s ease;
+  text-align: center;
+  white-space: nowrap;
+
+  /* efecto shine */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,.6), transparent);
+    transform: skewX(-20deg);
+  }
+  &:hover::before { animation: shine 1s forwards; }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,.25);
+  }
+  &:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow);
+  }
+  &:focus-visible {
+    outline: 3px solid var(--color-accent-2);
+    outline-offset: 2px;
+  }
+}
+
+@keyframes shine { 100% { left: 125%; } }
+
+/* Tamaños */
+.btn-sm { padding: 8px 16px; font-size: .875rem; }
+.btn-lg { padding: 14px 28px; font-size: 1.125rem; }
+
+/* ==============================
+   CARDS
+   ============================== */
+.card {
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: var(--space-4);
+}
+.dark .card {
+  background: #111318;
+  border-color: #1F232B;
+}
+
+
+/* ===== Secciones full-bleed (alternar fondos) ===== */
+.section {
+  padding-block: clamp(32px, 6vw, 80px);
+}
+
+.section--alt {
+  background: #F3F4F6; /* gris muy claro para contrastar con blanco */
+}
+
+.section--white {
+  background: #FFFFFF;
+}
+
+/* Opcional: separador sutil entre secciones */
+.section--alt + .section--white,
+.section--white + .section--alt {
+  border-top: 1px solid #E5E7EB;
+}

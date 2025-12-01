@@ -1,0 +1,40 @@
+<div class="cal card">
+  <div class="cal__head">
+    <button type="button" class="btn outline" (click)="prevMonth()" aria-label="Mes anterior">‹</button>
+    <div class="cal__title">{{ monthName() }}</div>
+    <button type="button" class="btn outline" (click)="nextMonth()" aria-label="Mes siguiente">›</button>
+    <span class="flex-1"></span>
+    <button type="button" class="btn outline" (click)="today()">Hoy</button>
+  </div>
+
+  <div class="cal__grid">
+    <div class="cal__dow">L</div><div class="cal__dow">M</div><div class="cal__dow">X</div>
+    <div class="cal__dow">J</div><div class="cal__dow">V</div><div class="cal__dow">S</div><div class="cal__dow">D</div>
+
+    <ng-container *ngFor="let c of grid().cells; trackBy: trackByIso">
+      <button
+        type="button"
+        class="cal__cell"
+        [class.muted]="!c.inMonth"
+        [class.na]="!c.available"
+        [class.start]="isStart(c.iso)"
+        [class.end]="isEnd(c.iso)"
+        [class.inrange]="inRange(c.iso)"
+        (click)="pick(c)"
+        [attr.aria-label]="c.iso + (c.available ? '' : ' no disponible')"
+      >
+        <span class="cal__num">{{ c.date.getDate() }}</span>
+      </button>
+    </ng-container>
+  </div>
+
+  <div class="cal__legend">
+    <span class="dot ok"></span> Disponible
+    <span class="dot no"></span> No disponible
+    <span class="dot sel"></span> Seleccionado
+  </div>
+
+  <div class="cal__foot" *ngIf="error()">
+    <div class="alert error">{{ error() }}</div>
+  </div>
+</div>

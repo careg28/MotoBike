@@ -1,0 +1,54 @@
+<div class="auth-wrap">
+  <div class="auth-card card">
+    <!-- Logo / título -->
+    <div class="brand">
+      <img src="/logo.png" alt="Marca" class="brand-logo" />
+      <h1 class="brand-title">Panel de administración</h1>
+      <p class="brand-sub">Accede con tu cuenta para gestionar flota y reservas</p>
+    </div>
+
+    <!-- Errores / estado -->
+    <div *ngIf="status() === 'error'" class="alert error">
+      {{ errorMsg() }}
+    </div>
+    <div *ngIf="status() === 'ok'" class="alert ok">
+      Sesión iniciada correctamente.
+    </div>
+
+    <!-- Formulario -->
+    <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+      <label class="field">
+        <span class="field-label">Email</span>
+        <div class="field-input">
+          <span class="icon">✉️</span>
+          <input type="email" placeholder="tú@correo.com" formControlName="email" />
+        </div>
+        <small class="hint error" *ngIf="form.controls.email.touched && form.controls.email.invalid">
+          Introduce un email válido.
+        </small>
+      </label>
+
+      <label class="field">
+        <span class="field-label">Contraseña</span>
+        <div class="field-input">
+          <span class="icon">🔒</span>
+          <input [type]="showPass() ? 'text' : 'password'" placeholder="••••••••" formControlName="password" />
+          <button type="button" class="ghost" (click)="togglePass()" aria-label="Mostrar/ocultar contraseña">
+            {{ showPass() ? 'Ocultar' : 'Mostrar' }}
+          </button>
+        </div>
+        <small class="hint error" *ngIf="form.controls.password.touched && form.controls.password.invalid">
+          La contraseña es obligatoria (mín. 4 caracteres).
+        </small>
+      </label>
+
+      <button class="btn-primary w-full" type="submit" [disabled]="form.invalid || status() === 'loading'">
+        {{ status() === 'loading' ? 'Entrando…' : 'Entrar' }}
+      </button>
+
+      <div class="meta">
+        <a routerLink="/" class="link">← Volver a la web</a>
+      </div>
+    </form>
+  </div>
+</div>
