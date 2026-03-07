@@ -14,6 +14,7 @@ export interface Modelo {
   badges?: string[];
   imagenes?: string[];
   descripcion?: string | null;
+  
 }
 
 @Injectable({ providedIn: 'root' })
@@ -51,4 +52,26 @@ export class ModeloApi {
   remove(id: number) {
     return this.http.delete<{ deleted: boolean }>(`${this.base}/${id}`);
   }
+  
+  adminList(opts: { search?: string; per_page?: number } = {}) {
+  let params = new HttpParams();
+  Object.entries({ per_page: 20, ...opts }).forEach(([k, v]) => {
+    if (v !== undefined && v !== null && v !== '') params = params.set(k, String(v));
+  });
+  return this.http.get<{ data: Modelo[]; current_page: number; last_page: number }>(
+    `${this.base}/admin-list`,
+    { params }
+  );
+}
+availability(slug: string, from: string, to: string) {
+  return this.http.get<{
+    modelo_id: number;
+    stock: number;
+    from: string; to: string;
+    days: Record<string, { booked: number; available: number; is_available: boolean }>;
+  }>(`${environment.apiUrl}/modelos/${slug}/availability`, {
+    params: { from, to },
+  });
+}
+  
 }

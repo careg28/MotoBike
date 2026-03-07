@@ -42,28 +42,43 @@ export class ModelosList {
     this.load();
   }
 
+  
+
   trackById = (_: number, m: Modelo) => m.id;
 
-  load() {
-    this.loading.set(true);
-    this.error.set(null);
+ load() {
+  this.loading.set(true);
+  this.error.set(null);
 
-    this.svc.list({
-      search: this.search(),
-      page:   this.page(),
-      per_page: this.perPage(),
-    }).subscribe({
-      next: (res) => {
-        this.data.set(res);
-        this.items.set(res.data || []);
-        this.loading.set(false);
-      },
-      error: (err) => {
-        this.loading.set(false);
-        this.error.set(err?.error?.message || 'No se pudo cargar el listado.');
-      }
-    });
-  }
+  const pp = this.perPage();
+  this.api.adminList({
+    search:   this.search(),
+    per_page: pp === 'all' ? undefined : pp,  // evita pasar 'all' si tu servicio no lo tipa
+  }).subscribe({
+    next: (res) => {
+      // Adaptamos al tipo Paginated<Modelo>
+      const adapted = {
+        data: res.data ?? [],
+        current_page: res.current_page ?? 1,
+        last_page: res.last_page ?? 1,
+        // rellenos mínimos para cuadrar el tipo:
+        per_page: typeof pp === 'number' ? pp : (res.data?.length ?? 0),
+        total: res.data?.length ?? 0,
+        from: res.data && res.data.length ? 1 : 0,
+        to: res.data?.length ?? 0,
+        links: [],
+      } as unknown as Paginated<Modelo>;
+
+      this.data.set(adapted);
+      this.items.set(adapted.data);
+      this.loading.set(false);
+    },
+    error: (err) => {
+      this.loading.set(false);
+      this.error.set(err?.error?.message || 'No se pudo cargar el listado.');
+    }
+  });
+}
 
   // toolbar
   onSearchInput(ev: Event) {
@@ -85,6 +100,8 @@ export class ModelosList {
       this.load();
     }
   }
+
+  
 
   // acciones
   nuevo() {

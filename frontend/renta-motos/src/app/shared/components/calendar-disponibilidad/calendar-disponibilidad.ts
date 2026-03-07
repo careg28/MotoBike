@@ -1,14 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output, computed, effect, inject, signal } from '@angular/core';
+import {
+  Component, EventEmitter, Input, Output,
+  computed, inject, signal, OnChanges, SimpleChanges, OnInit
+} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { environment } from '../../../enviroments/enviroment';
 
 type AvailabilityMap = Record<string, { booked: number; available: number; is_available: boolean }>;
 
 function pad(n: number) { return n < 10 ? `0${n}` : `${n}`; }
-// YYYY-MM-DD en hora local (evita desfases de timezone)
 function toISODateLocal(d: Date) {
-  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 }
 function addDays(d: Date, days: number) {
   const x = new Date(d.getFullYear(), d.getMonth(), d.getDate());
@@ -19,71 +22,93 @@ function addDays(d: Date, days: number) {
 @Component({
   selector: 'app-calendar-disponibilidad',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './calendar-disponibilidad.html',
   styleUrl: './calendar-disponibilidad.scss'
 })
-export class CalendarDisponibilidad {
+export class CalendarDisponibilidad implements OnInit, OnChanges {
   private http = inject(HttpClient);
+  private translate = inject(TranslateService);
 
-  /** slug del modelo (obligatorio) */
   @Input({ required: true }) slug!: string;
 
-  /** Emite cuando el usuario selecciona un rango válido [inicio, fin) */
+  /** si el padre incrementa esto → recargamos */
+  @Input() refreshKey: number | string | null = null;
+
   @Output() rangeChange = new EventEmitter<{ start: string; end: string }>();
 
-  /** mes/año que se muestran */
-  viewDate = signal(new Date()); // hoy
-
-  /** mapa de disponibilidad devuelta por la API */
-  daysMap = signal<AvailabilityMap>({});
-
-  /** selección del usuario */
+  viewDate = signal(new Date());
+  daysMap  = signal<AvailabilityMap>({});
   startSel = signal<Date | null>(null);
   endSel   = signal<Date | null>(null);
 
-  /** estado de carga / error */
+  startIso = computed(() => this.startSel() ? toISODateLocal(this.startSel()!) : null);
+  endIso   = computed(() => this.endSel()   ? toISODateLocal(this.endSel()!)   : null);
+
   loading = signal(false);
   error   = signal<string | null>(null);
 
-  /** labels */
-  monthName = computed(() =>
-    this.viewDate().toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })
-  );
+  monthName = computed(() => {
+    const lang = this.translate.currentLang || this.translate.defaultLang || 'es';
+    return this.viewDate().toLocaleDateString(lang, { month: 'long', year: 'numeric' });
+  });
 
-  /** grid de 6 semanas (42 celdas), empezando en lunes */
   grid = computed(() => {
     const v = this.viewDate();
     const first = new Date(v.getFullYear(), v.getMonth(), 1);
-    const last  = new Date(v.getFullYear(), v.getMonth() + 1, 0);
-    // Ajustar a lunes (0=domingo, 1=lunes...)
-    const startOffset = (first.getDay() + 6) % 7; // días a retroceder hasta lunes
+
+    const startOffset = (first.getDay() + 6) % 7; // lunes
     const gridStart = addDays(first, -startOffset);
-    const cells: { date: Date; iso: string; inMonth: boolean; available: boolean; qty: number }[] = [];
+
+    const map = this.daysMap();
+    const cells: {
+      date: Date;
+      iso: string;
+      inMonth: boolean;
+      available: boolean;
+      qty: number;
+    }[] = [];
+
     for (let i = 0; i < 42; i++) {
       const d = addDays(gridStart, i);
       const iso = toISODateLocal(d);
-      const av = this.daysMap()[iso];
+      const av = map[iso];
       cells.push({
         date: d,
         iso,
         inMonth: d.getMonth() === v.getMonth(),
-        available: av ? !!av.is_available : false,
-        qty: av ? av.available : 0
+        available: !!(av && av.is_available && (av.available ?? 0) > 0),
+        qty: av ? (av.available ?? 0) : 0
       });
     }
-    return { cells, first, last };
+
+    return { cells };
   });
 
   ngOnInit() {
     this.loadMonth();
-    // si cambia el mes, vuelve a cargar
-    effect(() => { this.viewDate(); this.loadMonth(); });
   }
 
-  /** Carga disponibilidad del mes visible */
+  ngOnChanges(changes: SimpleChanges) {
+    // cuando cambie el modelo o el refreshKey -> recargar
+    if (changes['slug'] || changes['refreshKey']) {
+      if (this.slug) {
+        this.startSel.set(null);
+        this.endSel.set(null);
+        this.loadMonth();
+      }
+    }
+  }
+
+  dayAriaLabel(c: { iso: string; available: boolean }) {
+    return c.available
+      ? c.iso
+      : `${c.iso} ${this.translate.instant('calendar.unavailableSuffix')}`;
+  }
+
   private loadMonth() {
     if (!this.slug) return;
+
     this.loading.set(true);
     this.error.set(null);
 
@@ -100,7 +125,8 @@ export class CalendarDisponibilidad {
         this.loading.set(false);
       },
       error: () => {
-        this.error.set('No se pudo cargar la disponibilidad.');
+        this.daysMap.set({});
+        this.error.set(this.translate.instant('calendar.loadError'));
         this.loading.set(false);
       }
     });
@@ -109,23 +135,33 @@ export class CalendarDisponibilidad {
   prevMonth() {
     const v = this.viewDate();
     this.viewDate.set(new Date(v.getFullYear(), v.getMonth() - 1, 1));
+    this.startSel.set(null);
+    this.endSel.set(null);
+    this.loadMonth(); // ✅ fuerza request
   }
+
   nextMonth() {
     const v = this.viewDate();
     this.viewDate.set(new Date(v.getFullYear(), v.getMonth() + 1, 1));
+    this.startSel.set(null);
+    this.endSel.set(null);
+    this.loadMonth(); // ✅ fuerza request
   }
+
   today() {
     const t = new Date();
     this.viewDate.set(new Date(t.getFullYear(), t.getMonth(), 1));
+    this.startSel.set(null);
+    this.endSel.set(null);
+    this.loadMonth(); // ✅ fuerza request
   }
 
-  /** Selección de rango: clic1 = inicio; clic2 = fin (validado) */
   pick(cell: { date: Date; iso: string; available: boolean; inMonth: boolean }) {
-    if (!cell.available) return; // no seleccionar días bloqueados
+    if (!cell.inMonth || !cell.available) return;
+
     const s = this.startSel();
     const e = this.endSel();
 
-    // si ya había rango, empezar de cero
     if (s && e) {
       this.startSel.set(cell.date);
       this.endSel.set(null);
@@ -137,40 +173,38 @@ export class CalendarDisponibilidad {
       return;
     }
 
-    // si s existe y la nueva fecha es anterior o igual, reinicia start
     if (cell.date <= s) {
       this.startSel.set(cell.date);
       this.endSel.set(null);
       return;
     }
 
-    // validar que TODO el rango [s, cell) esté disponible
+    // validar rango completo [s, cell)
     let ok = true;
     let d = new Date(s.getFullYear(), s.getMonth(), s.getDate());
+    const map = this.daysMap();
+
     while (d < cell.date) {
       const iso = toISODateLocal(d);
-      const av = this.daysMap()[iso];
+      const av = map[iso];
       if (!av || !av.is_available || (av.available ?? 0) <= 0) { ok = false; break; }
       d = addDays(d, 1);
     }
     if (!ok) return;
 
-    // rango válido
     this.endSel.set(cell.date);
     this.rangeChange.emit({
       start: toISODateLocal(s),
-      end:   toISODateLocal(cell.date) // ojo: este día es el "checkout" exclusivo
+      end: toISODateLocal(cell.date),
     });
   }
 
-  /** estilos de selección */
-  isStart(iso: string) { const s = this.startSel(); return !!s && iso === toISODateLocal(s); }
-  isEnd(iso: string)   { const e = this.endSel();   return !!e && iso === toISODateLocal(e); }
+  isStart(iso: string) { return !!this.startIso() && iso === this.startIso(); }
+  isEnd(iso: string)   { return !!this.endIso()   && iso === this.endIso(); }
   inRange(iso: string) {
-    const s = this.startSel(); const e = this.endSel();
-    if (!s || !e) return false;
-    const x = new Date(iso);
-    return x > s && x < e;
+    const a = this.startIso(); const b = this.endIso();
+    if (!a || !b) return false;
+    return iso > a && iso < b;
   }
 
   trackByIso = (_: number, c: any) => c.iso;

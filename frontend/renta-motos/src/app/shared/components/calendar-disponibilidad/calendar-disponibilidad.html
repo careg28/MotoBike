@@ -1,37 +1,58 @@
 <div class="cal card">
   <div class="cal__head">
-    <button type="button" class="btn outline" (click)="prevMonth()" aria-label="Mes anterior">‹</button>
+    <button type="button"
+            class="btn outline"
+            (click)="prevMonth()"
+            [attr.aria-label]="'calendar.prevMonth' | translate">‹</button>
+
     <div class="cal__title">{{ monthName() }}</div>
-    <button type="button" class="btn outline" (click)="nextMonth()" aria-label="Mes siguiente">›</button>
+
+    <button type="button"
+            class="btn outline"
+            (click)="nextMonth()"
+            [attr.aria-label]="'calendar.nextMonth' | translate">›</button>
+
     <span class="flex-1"></span>
-    <button type="button" class="btn outline" (click)="today()">Hoy</button>
+
+    <button type="button" class="btn outline" (click)="today()">
+      {{ 'calendar.today' | translate }}
+    </button>
   </div>
 
   <div class="cal__grid">
-    <div class="cal__dow">L</div><div class="cal__dow">M</div><div class="cal__dow">X</div>
-    <div class="cal__dow">J</div><div class="cal__dow">V</div><div class="cal__dow">S</div><div class="cal__dow">D</div>
+    <div class="cal__dow">{{ 'calendar.dow.mon' | translate }}</div>
+    <div class="cal__dow">{{ 'calendar.dow.tue' | translate }}</div>
+    <div class="cal__dow">{{ 'calendar.dow.wed' | translate }}</div>
+    <div class="cal__dow">{{ 'calendar.dow.thu' | translate }}</div>
+    <div class="cal__dow">{{ 'calendar.dow.fri' | translate }}</div>
+    <div class="cal__dow">{{ 'calendar.dow.sat' | translate }}</div>
+    <div class="cal__dow">{{ 'calendar.dow.sun' | translate }}</div>
 
     <ng-container *ngFor="let c of grid().cells; trackBy: trackByIso">
       <button
         type="button"
         class="cal__cell"
         [class.muted]="!c.inMonth"
-        [class.na]="!c.available"
+        [class.na]="c.inMonth && !c.available"
         [class.start]="isStart(c.iso)"
         [class.end]="isEnd(c.iso)"
         [class.inrange]="inRange(c.iso)"
         (click)="pick(c)"
-        [attr.aria-label]="c.iso + (c.available ? '' : ' no disponible')"
+        [disabled]="!c.inMonth || !c.available"
+        [attr.aria-disabled]="!c.inMonth || !c.available ? true : null"
+        [attr.aria-label]="dayAriaLabel(c)"
+        [title]="c.available ? c.iso : ('calendar.unavailable' | translate)"
       >
         <span class="cal__num">{{ c.date.getDate() }}</span>
+        <!-- si quieres mostrar qty: <small *ngIf="c.qty">{{ c.qty }}</small> -->
       </button>
     </ng-container>
   </div>
 
   <div class="cal__legend">
-    <span class="dot ok"></span> Disponible
-    <span class="dot no"></span> No disponible
-    <span class="dot sel"></span> Seleccionado
+    <span class="dot ok"></span> {{ 'calendar.legend.available' | translate }}
+    <span class="dot no"></span> {{ 'calendar.legend.unavailable' | translate }}
+    <span class="dot sel"></span> {{ 'calendar.legend.selected' | translate }}
   </div>
 
   <div class="cal__foot" *ngIf="error()">

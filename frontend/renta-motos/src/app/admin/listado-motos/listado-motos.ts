@@ -2,12 +2,9 @@ import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { MotoApi } from '../../core/moto-api';
-
 import type { AdminMotoDto } from '../../core/models/admin-moto.dto'; // ⬅️ sin .ts
 import { AdminMotoVM, Estado } from '../../core/mappers/admin-moto.vm';
 import { mapAdminMotos, fromCatalogMoto } from '../../core/mappers/admin-moto.mapper';
-
-import { MODELS as CATALOG } from '../../features/models/models.data';
 
 @Component({
   selector: 'app-listado-motos',
@@ -39,30 +36,30 @@ export class ListadoMotos {
   }
 
   load() {
-    this.loading.set(true);
-    const params: any = { per_page: 'all' };
+  this.loading.set(true);
+  const params: any = { per_page: 'all' };
 
-    const q = this.search().trim();
-    if (q) params.search = q;
+  const q = this.search().trim();
+  if (q) params.search = q;
 
-    const est = this.estado();
-    if (est !== 'todos') params.estado = est;
+  const est = this.estado();
+  if (est !== 'todos') params.estado = est;
 
-    if (this.libresAhora()) params.asignada = 0;
+  if (this.libresAhora()) params.asignada = 0;
 
-    this.api.list(params).subscribe({
-      next: (r: any) => {
-        const items: AdminMotoDto[] = Array.isArray(r) ? r : (r?.data ?? []);
-        const vms = items.length ? mapAdminMotos(items) : CATALOG.map(fromCatalogMoto);
-        this.data.set(vms);
-        this.loading.set(false);
-      },
-      error: () => {
-        this.data.set(CATALOG.map(fromCatalogMoto));
-        this.loading.set(false);
-      },
-    });
-  }
+  this.api.list(params).subscribe({
+    next: (r: any) => {
+      const items: AdminMotoDto[] = Array.isArray(r) ? r : (r?.data ?? []);
+      const vms = items.length ? mapAdminMotos(items) : []; // ✅ sin fallback
+      this.data.set(vms);
+      this.loading.set(false);
+    },
+    error: () => {
+      this.data.set([]); // ✅ sin fallback en error
+      this.loading.set(false);
+    },
+  });
+}
 
   badgeClass(e: Estado) {
     switch (e) {

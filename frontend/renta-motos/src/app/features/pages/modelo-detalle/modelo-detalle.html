@@ -7,17 +7,30 @@
         <h1 class="title">{{ nombreLargo() }}</h1>
         <div class="sub">
           <span class="chip" *ngIf="m.categoria">{{ m.categoria }}</span>
-          <!-- Si en el futuro añades 'in_stock' en /modelos/{slug}, puedes mostrar badge de stock aquí -->
         </div>
       </div>
 
       <div class="hero__right">
-        <div class="price"><b>{{ m.precio_base }}€</b> <span>/ día</span></div>
-        <div class="deposito" *ngIf="m.deposito_sugerido">Depósito sugerido: {{ m.deposito_sugerido }}€</div>
+        <div class="price">
+          <b>{{ m.precio_base }}€</b> <span>/ {{ 'modelDetail.day' | translate }}</span>
+        </div>
+
+        <div class="deposito" *ngIf="m.deposito_sugerido">
+          {{ 'modelDetail.suggestedDeposit' | translate }}: {{ m.deposito_sugerido }}€
+        </div>
+
         <div class="cta">
-          <a class="btn-primary" [routerLink]="reservarLink()">Reservar</a>
-          <a class="btn outline" [href]="whatsappHref()" target="_blank" rel="noopener">WhatsApp</a>
-          <a class="btn outline" href="tel:+34XXXXXXXXX">Llamar</a>
+          <a class="btn-primary" [routerLink]="reservarLink()">
+            {{ 'modelDetail.reserve' | translate }}
+          </a>
+
+          <a class="btn outline" [href]="whatsappHref()" target="_blank" rel="noopener">
+            {{ 'modelDetail.whatsapp' | translate }}
+          </a>
+
+          <a class="btn outline" href="tel:+34XXXXXXXXX">
+            {{ 'modelDetail.call' | translate }}
+          </a>
         </div>
       </div>
     </header>
@@ -27,9 +40,13 @@
       <div class="gallery__main" *ngIf="mainImg()">
         <img [src]="mainImg()!" [alt]="nombreLargo()">
       </div>
+
       <div class="thumbs" *ngIf="gallery().length > 1">
-        <button class="thumb" *ngFor="let url of gallery(); let i = index; trackBy: trackUrl"
-                [class.active]="i===selIdx()" (click)="selectImg(i)">
+        <button class="thumb"
+                *ngFor="let url of gallery(); let i = index; trackBy: trackUrl"
+                [class.active]="i===selIdx()"
+                (click)="selectImg(i)"
+                [attr.aria-label]="'modelDetail.viewImage' | translate:{ index: (i+1) }">
           <img [src]="url" [alt]="nombreLargo() + ' ' + (i+1)">
         </button>
       </div>
@@ -38,40 +55,44 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
       <!-- Especificaciones -->
       <section class="card col-span-2">
-        <h2 class="sec-title">Especificaciones</h2>
+        <h2 class="sec-title">{{ 'modelDetail.specsTitle' | translate }}</h2>
+
         <dl class="specs">
           <div *ngFor="let kv of (m.specs | keyvalue)">
-            <dt>{{ kv.key | titlecase }}</dt>
+            <dt>{{ specLabel(kv.key) }}</dt>
             <dd>{{ kv.value }}</dd>
           </div>
+
           <div *ngIf="m.badges?.length" class="badges">
             <span class="badge" *ngFor="let b of m.badges">{{ b }}</span>
           </div>
         </dl>
       </section>
 
-      <!-- Información útil (texto fijo que puedes cambiar luego) -->
+      <!-- Información -->
       <aside class="card">
-        <h2 class="sec-title">Información</h2>
+        <h2 class="sec-title">{{ 'modelDetail.infoTitle' | translate }}</h2>
+
         <ul class="info">
-          <li>Incluye casco(s) básico(s)</li>
-          <li>Kilometraje razonable diario</li>
-          <li>Seguro a terceros incluido</li>
-          <li>Fianza reembolsable</li>
+          <li>{{ 'modelDetail.info.helmet' | translate }}</li>
+          <li>{{ 'modelDetail.info.mileage' | translate }}</li>
+          <li>{{ 'modelDetail.info.insurance' | translate }}</li>
+          <li>{{ 'modelDetail.info.deposit' | translate }}</li>
         </ul>
-        <p class="hint">* Las condiciones pueden variar según fechas y disponibilidad.</p>
+
+        <p class="hint">{{ 'modelDetail.infoHint' | translate }}</p>
       </aside>
     </div>
 
-    <!-- Descripción larga desde el admin -->
+    <!-- Descripción -->
     <section class="card">
-      <h2 class="sec-title">Descripción</h2>
-      <div class="desc" [innerHTML]="m.descripcion || 'Próximamente…'"></div>
+      <h2 class="sec-title">{{ 'modelDetail.descriptionTitle' | translate }}</h2>
+      <div class="desc" [innerHTML]="m.descripcion || ('modelDetail.comingSoon' | translate)"></div>
     </section>
 
   </ng-container>
 
   <ng-template #errTpl>
-    <div class="card">No se pudo cargar el modelo.</div>
+    <div class="card">{{ err() || ('modelDetail.loadError' | translate) }}</div>
   </ng-template>
 </div>

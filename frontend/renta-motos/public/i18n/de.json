@@ -1,17 +1,20 @@
 {
-    "nav": {
-        "home": "Start",
-        "models": "Modelle",
-        "rates": "Preise",
-        "routes": "Routen",
-        "book": "Jetzt buchen"
-    },
-    "hero": {
-        "title": "Freiheit auf zwei Rädern",
-        "subtitle": "Miete dein Motorrad in Minuten. Versicherung inklusive und 24/7-Support.",
-        "cta": "Jetzt buchen"
-    },
-    "benefits": {
+  "nav": {
+    "home": "Start",
+    "models": "Modelle",
+    "rates": "Preise",
+    "routes": "Routen",
+    "book": "Jetzt buchen",
+    "seguimiento": "Meine Reservierung"
+  },
+
+  "hero": {
+    "title": "Freiheit auf zwei Rädern",
+    "subtitle": "Miete dein Motorrad in Minuten. Versicherung inklusive und 24/7-Support.",
+    "cta": "Jetzt buchen"
+  },
+
+  "benefits": {
     "title": "Warum wir?",
     "items": {
       "fast": {
@@ -31,16 +34,27 @@
         "desc": "Hol dein Motorrad im Herzen der Stadt ab – nah an allem, was du brauchst."
       }
     }
-    },
-    "how": {
+  },
+
+  "how": {
     "title": "So funktioniert’s",
     "steps": {
-      "date":  { "title": "1. Datum wählen",     "text": "In 2 Minuten per Handy buchen." },
-      "model": { "title": "2. Motorrad wählen",  "text": "125er-Modelle – ideal für Stadt und Strand." },
-      "ride":  { "title": "3. Los geht’s!",      "text": "Schnelle Übergabe, Helm inklusive – fertig." }
+      "date": {
+        "title": "1. Datum wählen",
+        "text": "In 2 Minuten per Handy buchen."
+      },
+      "model": {
+        "title": "2. Motorrad wählen",
+        "text": "125er-Modelle – ideal für Stadt und Strand."
+      },
+      "ride": {
+        "title": "3. Los geht’s!",
+        "text": "Schnelle Übergabe, Helm inklusive – fertig."
+      }
     }
   },
-    "cta": {
+
+  "cta": {
     "badge": "Lieferung nach Hause",
     "title": "Bereit für dein Motorrad in Valencia?",
     "text": "Abholung in unserem Shop <strong>oder</strong> wir liefern es zu deinem Hotel, Apartment oder Treffpunkt.",
@@ -53,19 +67,40 @@
     "sub": "Flexible Stornierung · Sichere Zahlung",
     "imageAlt": "Stadt der Künste und Wissenschaften in Valencia"
   },
+
+  "modelsFeatured": {
+    "title": "Ausgewählte Modelle",
+    "viewAll": "Alle anzeigen",
+    "day": "Tag",
+    "details": "Details",
+    "reserve": "Jetzt buchen",
+    "loadError": "Ausgewählte Modelle konnten nicht geladen werden.",
+    "ariaViewModel": "{{name}} ansehen"
+  },
+
   "contact": {
     "title": "Kontakt",
     "form": {
-      "name": { "label": "Name", "placeholder": "Dein Name" },
-      "email": { "label": "E-Mail", "placeholder": "du@beispiel.de" },
-      "message": { "label": "Nachricht", "placeholder": "Sag uns, was du brauchst" },
+      "name": {
+        "label": "Name",
+        "placeholder": "Dein Name"
+      },
+      "email": {
+        "label": "E-Mail",
+        "placeholder": "du@beispiel.de"
+      },
+      "message": {
+        "label": "Nachricht",
+        "placeholder": "Sag uns, was du brauchst"
+      },
       "submit": "Nachricht senden"
     },
     "map": {
       "open": "In Google Maps öffnen"
     }
   },
-   "footer": {
+
+  "footer": {
     "brand": {
       "logoAlt": "Logo von Rent Moto Valencia",
       "tagline": "Dein Motorradverleih in Valencia: einfach, schnell und sicher."
@@ -87,5 +122,174 @@
     "bottom": {
       "copy": "© {{year}} Rent Moto Valencia · Alle Rechte vorbehalten"
     }
+  },
+  "modelsPage": {
+  "title": "Unsere Modelle",
+  "subtitle": "Verbrauch, Höchstgeschwindigkeit, Kapazität und alles, was du zur Auswahl wissen musst.",
+  "day": "Tag",
+  "reserve": "Jetzt buchen",
+  "outOfStock": "Nicht auf Lager",
+  "loadError": "Der Katalog konnte nicht geladen werden.",
+  "stockAlert": "Von diesem Modell haben wir derzeit keine Motorräder mehr. Bald wieder verfügbar.",
+  "specs": {
+    "motor": "Motor",
+    "consumption": "Verbrauch",
+    "maxSpeed": "Höchstgeschwindigkeit",
+    "tank": "Tank",
+    "seats": "Sitze",
+    "topCase": "Topcase",
+    "brakes": "Bremsen",
+    "weight": "Gewicht"
+  },
+  "compare": {
+    "title": "Schneller Vergleich",
+    "model": "Modell",
+    "consumption": "Verbrauch",
+    "speed": "Geschwindigkeit",
+    "tank": "Tank",
+    "brakes": "Bremsen",
+    "topCase": "Topcase",
+    "pricePerDay": "Preis/Tag"
   }
+},
+"modelDetail": {
+  "day": "Tag",
+  "suggestedDeposit": "Empfohlene Kaution",
+  "reserve": "Jetzt buchen",
+  "whatsapp": "WhatsApp",
+  "call": "Anrufen",
+  "viewImage": "Bild {{index}} ansehen",
+  "specsTitle": "Spezifikationen",
+  "infoTitle": "Informationen",
+  "info": {
+    "helmet": "Basis-Helm(e) inklusive",
+    "mileage": "Angemessene Tageskilometer",
+    "insurance": "Haftpflichtversicherung inklusive",
+    "deposit": "Rückerstattbare Kaution"
+  },
+  "infoHint": "* Bedingungen können je nach Datum und Verfügbarkeit variieren.",
+  "descriptionTitle": "Beschreibung",
+  "comingSoon": "Demnächst…",
+  "loadError": "Das Modell konnte nicht geladen werden.",
+  "whatsappMessage": "Ich möchte Informationen zu {{name}}"
+},
+"modelSpecs": {
+  "motor": "Motor",
+  "consumption": "Verbrauch",
+  "speed": "Geschwindigkeit",
+  "tank": "Tank",
+  "seats": "Sitzplätze",
+  "topCase": "Topcase",
+  "brakes": "Bremsen",
+  "weight": "Gewicht"
+},
+"reservePage": {
+  "day": "Tag",
+  "selectDates": "Daten auswählen",
+  "range": "Zeitraum",
+  "yourDetails": "Deine Daten",
+  "sending": "Wird gesendet…",
+  "submit": "Reservierung anfragen",
+  "loading": "Wird geladen…",
+  "loadModelError": "Das Modell konnte nicht geladen werden.",
+  "success": "Erledigt! Reservierungscode <b>{{code}}</b>. Wir kontaktieren dich zur Bestätigung.",
+  "form": {
+    "fullName": "Vor- und Nachname",
+    "email": "E-Mail",
+    "phone": "Telefon",
+    "notes": "Notizen",
+    "notesPlaceholder": "Abholzeit, Fragen usw."
+  },
+  "errors": {
+    "modelNotLoaded": "Modell nicht geladen.",
+    "selectRange": "Bitte wähle einen Zeitraum aus.",
+    "nameEmailRequired": "Name und E-Mail sind erforderlich.",
+    "createFailed": "Die Reservierung konnte nicht erstellt werden."
+  }
+},
+"calendar": {
+  "prevMonth": "Vorheriger Monat",
+  "nextMonth": "Nächster Monat",
+  "today": "Heute",
+  "unavailable": "Nicht verfügbar",
+  "unavailableSuffix": "nicht verfügbar",
+  "loadError": "Die Verfügbarkeit konnte nicht geladen werden.",
+  "dow": {
+    "mon": "Mo",
+    "tue": "Di",
+    "wed": "Mi",
+    "thu": "Do",
+    "fri": "Fr",
+    "sat": "Sa",
+    "sun": "So"
+  },
+  "legend": {
+    "available": "Verfügbar",
+    "unavailable": "Nicht verfügbar",
+    "selected": "Ausgewählt"
+  }
+},
+"tracking": {
+  "title": "Meine Reservierung",
+  "subtitle": "Gib deinen Code ein, um Status und Details zu sehen.",
+
+  "search": {
+    "label": "Reservierungscode",
+    "placeholder": "z. B. FEOS-8K2P3",
+    "button": "Suchen",
+    "loading": "Suche…",
+    "hint": "Wenn du deine Reservierung nicht findest, prüfe die Bestätigungs-E-Mail oder schreibe uns."
+  },
+
+  "result": {
+    "codeLabel": "Code",
+    "model": "Modell",
+    "dates": "Daten",
+    "amount": "Betrag",
+    "assignedBike": "Zugewiesenes Motorrad"
+  },
+
+  "status": {
+    "paid": "Bestätigt (bezahlt)",
+    "assigned": "Bestätigt (Motorrad zugewiesen)",
+    "hold": "In Prüfung",
+    "canceled": "Storniert",
+    "expired": "Abgelaufen"
+  },
+
+  "statusHelp": {
+    "title": "Was bedeutet der Status?",
+    "holdTitle": "Ausstehend / Hold",
+    "holdText": "eingegangen, wird geprüft.",
+    "paidTitle": "Bezahlt",
+    "paidText": "Zahlung bestätigt.",
+    "assignedTitle": "Zugewiesen",
+    "assignedText": "Motorrad zugewiesen und bereit.",
+    "canceledTitle": "Storniert/Abgelaufen",
+    "canceledText": "wird nicht durchgeführt."
+  },
+
+  "help": {
+    "title": "Brauchst du Hilfe?",
+    "text": "Für Änderungen oder Stornierungen kontaktiere uns per WhatsApp oder Telefon. Halte deinen Code bereit: <b>#{{code}}</b>.",
+    "whatsapp": "WhatsApp",
+    "call": "Anrufen"
+  },
+
+  "faq": {
+    "title": "Schnelle Fragen",
+    "q1": "Wie storniere ich?",
+    "a1": "Schreib uns bei WhatsApp, wir regeln das mit dir.",
+    "q2": "Wann wird das Motorrad zugewiesen?",
+    "a2": "Nachdem wir Zahlung und Verfügbarkeit für deinen Zeitraum geprüft haben."
+  },
+
+  "empty": "Gib oben deinen Code ein, um deine Reservierung zu sehen.",
+
+  "errors": {
+    "enterCode": "Gib deinen Reservierungscode ein.",
+    "notFound": "Reservierung nicht gefunden. Bitte überprüfe den Code."
+  }
+}
+
 }

@@ -52,6 +52,7 @@
                 <th class="num">Depósito</th>
                 <th>Imágenes</th>
                 <th class="actions">Acciones</th>
+                <th class="num">Unidades</th>
               </tr>
             </thead>
             <tbody>
@@ -68,6 +69,7 @@
                     <a class="btn btn-primary outline sm" [routerLink]="['/admin/modelos/editar', m.slug]">Editar</a>
                     <button class="btn btn-danger sm" (click)="pedirBorrado(m)">Eliminar</button>
                   </td>
+                  <td class="num">{{ m.motos_disponibles ?? 0 }} / {{ m.motos_total ?? 0 }}</td>
                 </tr>
               }
             </tbody>
@@ -87,6 +89,9 @@
           <div class="row-line"><span>Precio base</span><b>{{ m.precio_base }}</b></div>
           <div class="row-line"><span>Depósito</span><b>{{ m.deposito_sugerido || '—' }}</b></div>
           <div class="row-line"><span>Imágenes</span><b>{{ (m.imagenes?.length || 0) }}</b></div>
+          <div class="row-line"><span>Unidades</span>
+            <b>{{ m.motos_disponibles ?? 0 }} / {{ m.motos_total ?? 0 }}</b>
+          </div>
           <div class="row-actions">
             <a class="btn btn-primary outline grow" [routerLink]="['/admin/modelos/editar', m.slug]">Editar</a>
             <button class="btn btn-danger grow" (click)="pedirBorrado(m)">Eliminar</button>

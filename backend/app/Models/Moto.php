@@ -14,7 +14,7 @@ class Moto extends Model
         'slug','marca','modelo','anio','matricula','vin','color',
         'categoria','estado','precio_dia','deposito','kilometraje',
         'ubicacion','imagenes','specs','badges','tag','notas',
-        'modelo_id', // <-- añade esto para poder asignarla a un modelo
+        'modelo_id', 
     ];
 
     protected $casts = [

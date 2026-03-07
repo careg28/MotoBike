@@ -1,0 +1,125 @@
+<section class="section is-alt">
+  <div class="container">
+    <header class="head">
+      <h1 class="title">{{ 'tracking.title' | translate }}</h1>
+      <p class="sub">{{ 'tracking.subtitle' | translate }}</p>
+    </header>
+
+    <!-- Buscador -->
+    <div class="card search">
+      <form class="search__row" (ngSubmit)="buscar()" #f="ngForm" novalidate>
+        <div class="field">
+          <label for="code">{{ 'tracking.search.label' | translate }}</label>
+          <input
+            id="code"
+            type="text"
+            name="code"
+            [ngModel]="code()"
+            (ngModelChange)="code.set($event)"
+            [attr.placeholder]="'tracking.search.placeholder' | translate"
+            autocomplete="off"
+            required
+          />
+        </div>
+
+        <button class="btn-primary" type="submit" [disabled]="loading() || !code().trim()">
+          {{ loading() ? ('tracking.search.loading' | translate) : ('tracking.search.button' | translate) }}
+        </button>
+      </form>
+
+      <p class="hint">{{ 'tracking.search.hint' | translate }}</p>
+
+      <div class="alert error" *ngIf="error()">{{ error() }}</div>
+    </div>
+
+    <!-- Resultado -->
+    <ng-container *ngIf="reserva() as r">
+      <div class="grid">
+        <!-- Card detalles -->
+        <div class="card info">
+          <div class="info__top">
+            <div class="code">
+              <div class="code__label">{{ 'tracking.result.codeLabel' | translate }}</div>
+              <div class="code__value">#{{ r.codigo }}</div>
+            </div>
+
+            <span [class]="estadoClass()">
+              {{ estadoLabel() }}
+            </span>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="rows">
+            <div class="row">
+              <span>{{ 'tracking.result.model' | translate }}</span>
+              <b>{{ r.modelo?.marca }} {{ r.modelo?.nombre }}</b>
+            </div>
+
+            <div class="row">
+              <span>{{ 'tracking.result.dates' | translate }}</span>
+              <b>{{ fmtFecha(r.fecha_inicio) }} → {{ fmtFecha(r.fecha_fin) }}</b>
+            </div>
+
+            <div class="row" *ngIf="r.precio_total !== null && r.precio_total !== undefined">
+              <span>{{ 'tracking.result.amount' | translate }}</span>
+              <b>{{ r.precio_total }} {{ r.moneda || 'EUR' }}</b>
+            </div>
+
+            <div class="row" *ngIf="r.moto?.matricula || r.moto?.slug">
+              <span>{{ 'tracking.result.assignedBike' | translate }}</span>
+              <b>{{ r.moto?.matricula || r.moto?.slug }}</b>
+            </div>
+          </div>
+
+          <div class="note">
+            <div class="note__title">{{ 'tracking.statusHelp.title' | translate }}</div>
+            <ul class="note__list">
+              <li><b>{{ 'tracking.statusHelp.holdTitle' | translate }}:</b> {{ 'tracking.statusHelp.holdText' | translate }}</li>
+              <li><b>{{ 'tracking.statusHelp.paidTitle' | translate }}:</b> {{ 'tracking.statusHelp.paidText' | translate }}</li>
+              <li><b>{{ 'tracking.statusHelp.assignedTitle' | translate }}:</b> {{ 'tracking.statusHelp.assignedText' | translate }}</li>
+              <li><b>{{ 'tracking.statusHelp.canceledTitle' | translate }}:</b> {{ 'tracking.statusHelp.canceledText' | translate }}</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Card contacto -->
+        <div class="card contact">
+          <h2 class="contact__title">{{ 'tracking.help.title' | translate }}</h2>
+          <p class="contact__text">
+            {{ 'tracking.help.text' | translate:{ code: r.codigo } }}
+          </p>
+
+          <div class="contact__actions">
+            <a class="btn-primary" href="https://wa.me/34TU_NUMERO" target="_blank" rel="noopener">
+              {{ 'tracking.help.whatsapp' | translate }}
+            </a>
+            <a class="btn-primary outline" href="tel:+34TU_NUMERO">
+              {{ 'tracking.help.call' | translate }}
+            </a>
+          </div>
+
+          <div class="faq">
+            <div class="faq__title">{{ 'tracking.faq.title' | translate }}</div>
+
+            <div class="faq__item">
+              <b>{{ 'tracking.faq.q1' | translate }}</b>
+              <p>{{ 'tracking.faq.a1' | translate }}</p>
+            </div>
+
+            <div class="faq__item">
+              <b>{{ 'tracking.faq.q2' | translate }}</b>
+              <p>{{ 'tracking.faq.a2' | translate }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Estado vacío -->
+    <div class="card empty" *ngIf="!reserva() && !loading()">
+      <div class="empty__icon">🔎</div>
+      <div class="empty__text">{{ 'tracking.empty' | translate }}</div>
+    </div>
+  </div>
+</section>

@@ -29,6 +29,14 @@ Route::post('/reservas', [ReservaController::class, 'store']);
 Route::get('/reservas/lookup/{codigo}', [ReservaController::class, 'lookup']);
 Route::post('/reservas/{codigo}/cancel', [ReservaController::class, 'cancelByCode']);
 
+Route::prefix('public')->group(function () {
+    // Tracking / seguimiento
+    Route::get('/reservas/lookup/{codigo}', [ReservaController::class, 'lookup']);
+
+    
+});
+
+
 /*
 |--------------------------------------------------------------------------
 | Auth (público)
@@ -64,17 +72,19 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/media/{id}', [MediaController::class, 'destroy']);
 
     // Modelos (admin)
+    Route::get('/modelos/admin-list', [ModeloController::class, 'adminList']);          // <-- FIJA primero
+    Route::get('/modelos/{slug}/availability', [ModeloController::class, 'availability']); // <-- FIJA también
     Route::get   ('/modelos',        [ModeloController::class, 'index']);
     Route::get   ('/modelos/{slug}', [ModeloController::class, 'show']);
     Route::post  ('/modelos',        [ModeloController::class, 'store']);
     Route::put   ('/modelos/{id}',   [ModeloController::class, 'update']);
     Route::delete('/modelos/{id}',   [ModeloController::class, 'destroy']);
-    Route::get('/modelos/{slug}/availability', [ModeloController::class, 'availability']);
 
     // Reservas (admin)
     Route::get   ('/reservas',            [ReservaController::class, 'index']);
     Route::get   ('/reservas/{reserva}',  [ReservaController::class, 'show']);
     Route::patch ('/reservas/{reserva}',  [ReservaController::class, 'update']);
     Route::delete('/reservas/{reserva}',  [ReservaController::class, 'destroy']);
+    Route::get('/reservas/{reserva}/motos-libres', [ReservaController::class, 'motosLibres']);
     
 });

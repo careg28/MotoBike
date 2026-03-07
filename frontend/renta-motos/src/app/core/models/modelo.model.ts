@@ -12,4 +12,6 @@ export interface Modelo {
   descripcion?: string | null;
   created_at?: string;
   updated_at?: string;
+    motos_total?: number;
+  motos_disponibles?: number;
 }

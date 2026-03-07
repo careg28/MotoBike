@@ -7,6 +7,7 @@ use App\Models\Reserva;
 use Illuminate\Http\Request;
 use App\Models\Modelo;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
 
 // ✅ agrega UNA de estas dos (elige una y usa esa en el código):
 use Carbon\Carbon;  
@@ -125,7 +126,6 @@ class ReservaController extends Controller
         $data['moneda'] = $data['moneda'] ?? 'EUR';
 
         // ahora sí, crear
-        $reserva = Reserva::create($data)->load(['modelo', 'moto']);
 
         $reserva = Reserva::create($data)->load(['modelo', 'moto']);
 
@@ -194,26 +194,52 @@ class ReservaController extends Controller
 
     // PATCH /api/reservas/{reserva}
     public function update(Request $req, Reserva $reserva)
-    {
-        $data = $req->validate([
-            'estado'            => ['sometimes', 'in:hold,paid,assigned,canceled,expired'],
-            'moto_id'           => ['nullable', 'exists:motos,id'],
-            'payment_intent_id' => ['nullable', 'string', 'max:255'],
-            'payment_status'    => ['nullable', 'string', 'max:255'],
-            'notas'             => ['nullable', 'string'],
-        ]);
+{
+    $data = $req->validate([
+        'estado'            => ['sometimes', 'in:hold,paid,assigned,canceled,expired'],
+        'moto_id'           => ['nullable', 'exists:motos,id'],
+        'payment_intent_id' => ['nullable', 'string', 'max:255'],
+        'payment_status'    => ['nullable', 'string', 'max:255'],
+        'notas'             => ['nullable', 'string'],
+    ]);
+
+    DB::transaction(function () use ($reserva, $data) {
+        $prevMotoId = $reserva->moto_id;
+        $prevEstado = $reserva->estado;
 
         $reserva->fill($data)->save();
 
-        return response()->json($reserva->load(['modelo', 'moto']));
-    }
+        // Si cambió la moto, intentamos liberar la anterior (si procede)
+        if ($prevMotoId && $prevMotoId !== $reserva->moto_id) {
+            $this->maybeLiberateMoto($prevMotoId);
+        }
 
+        // Si queda "assigned" y tiene moto -> marcar moto como reservada
+        if ($reserva->estado === Reserva::ESTADO_ASSIGNED && $reserva->moto_id) {
+            \App\Models\Moto::where('id', $reserva->moto_id)->update(['estado' => 'reservada']);
+        }
+
+        // Si pasa a canceled/expired -> liberar moto si no hay otra reserva bloqueante
+        if (in_array($reserva->estado, [Reserva::ESTADO_CANCELED, Reserva::ESTADO_EXPIRED], true)) {
+            if ($reserva->moto_id) {
+                $this->maybeLiberateMoto($reserva->moto_id);
+            }
+        }
+    });
+
+    return response()->json($reserva->load(['modelo', 'moto']));
+}
     // DELETE /api/reservas/{reserva}
     public function destroy(Reserva $reserva)
-    {
-        $reserva->delete();
-        return response()->noContent();
+{
+    $motoId = $reserva->moto_id;
+    $reserva->delete();
+
+    if ($motoId) {
+        $this->maybeLiberateMoto($motoId);
     }
+    return response()->noContent();
+}
 
 
     //metodos adicionales
@@ -325,5 +351,54 @@ public function cancelByCode(Request $request, string $codigo)
             'marca' => $r->modelo->marca, 'nombre' => $r->modelo->nombre
         ]
     ]);
+}
+//motos libres para mostrar en el admin
+public function motosLibres(Reserva $reserva)
+{
+    // rango [inicio, fin) exclusivo
+    $inicio = $reserva->fecha_inicio->startOfDay();
+    $fin    = $reserva->fecha_fin->startOfDay();
+
+    $bloqueantes = [
+        \App\Models\Reserva::ESTADO_PAID,
+        \App\Models\Reserva::ESTADO_ASSIGNED,
+        // compat (si aún existen)
+        'pendiente','confirmada','recogida',
+    ];
+
+    $motos = \App\Models\Moto::query()
+        ->where('modelo_id', $reserva->modelo_id)
+        ->whereNotIn('estado', ['mantenimiento','retirada','baja','inactiva'])
+        ->whereDoesntHave('reservas', function ($q) use ($inicio, $fin, $bloqueantes) {
+            $q->whereIn('estado', $bloqueantes)
+              ->where('fecha_inicio', '<', $fin)
+              ->where('fecha_fin',    '>', $inicio);
+        })
+        ->orderBy('id', 'asc')
+        ->get(['id','slug','matricula','color','estado']);
+
+    return response()->json(['data' => $motos]);
+}
+
+private function maybeLiberateMoto(int $motoId): void
+{
+    // Estados que bloquean inventario para una moto concreta
+    $bloqueantes = [
+        \App\Models\Reserva::ESTADO_ASSIGNED,
+        \App\Models\Reserva::ESTADO_PAID,
+        // por compatibilidad si aún existen:
+        'pendiente', 'confirmada', 'recogida',
+    ];
+
+    // ¿Queda alguna reserva vigente/futura que bloquee la moto?
+    $hayOtra = \App\Models\Reserva::query()
+        ->where('moto_id', $motoId)
+        ->whereIn('estado', $bloqueantes)
+        ->whereDate('fecha_fin', '>', now()->toDateString()) // aún no terminó
+        ->exists();
+
+    if (!$hayOtra) {
+        \App\Models\Moto::where('id', $motoId)->update(['estado' => 'disponible']);
+    }
 }
 }

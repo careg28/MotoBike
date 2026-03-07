@@ -1,16 +1,19 @@
 {
-    "nav": {
-        "home": "Home",
-        "models": "Models",
-        "rates": "Rates",
-        "routes": "Routes",
-        "book": "Book now"
-    },
-    "hero": {
-        "title": "Freedom on two wheels",
-        "subtitle": "Rent your motorbike in minutes. Insurance included and 24/7 assistance.",
-        "cta": "Book now"
-    },
+  "nav": {
+    "home": "Home",
+    "models": "Models",
+    "rates": "Rates",
+    "routes": "Routes",
+    "book": "Book now",
+    "seguimiento": "My reservation"
+  },
+
+  "hero": {
+    "title": "Freedom on two wheels",
+    "subtitle": "Rent your motorbike in minutes. Insurance included and 24/7 assistance.",
+    "cta": "Book now"
+  },
+
   "benefits": {
     "title": "Why choose us?",
     "items": {
@@ -32,14 +35,25 @@
       }
     }
   },
+
   "how": {
     "title": "How it works",
     "steps": {
-      "date":  { "title": "1. Pick a date",   "text": "Book in 2 minutes from your phone." },
-      "model": { "title": "2. Choose a bike", "text": "125cc models ideal for city and beach." },
-      "ride":  { "title": "3. Let’s ride!",   "text": "Fast pickup, helmet included—you’re set." }
+      "date": {
+        "title": "1. Pick a date",
+        "text": "Book in 2 minutes from your phone."
+      },
+      "model": {
+        "title": "2. Choose a bike",
+        "text": "125cc models ideal for city and beach."
+      },
+      "ride": {
+        "title": "3. Let’s ride!",
+        "text": "Fast pickup, helmet included—you’re set."
+      }
     }
   },
+
   "cta": {
     "badge": "Home delivery",
     "title": "Ready for your bike in Valencia?",
@@ -53,19 +67,40 @@
     "sub": "Flexible cancellation · Secure payment",
     "imageAlt": "City of Arts and Sciences in Valencia"
   },
-   "contact": {
+
+  "modelsFeatured": {
+    "title": "Featured models",
+    "viewAll": "View all",
+    "day": "day",
+    "details": "Details",
+    "reserve": "Book now",
+    "loadError": "Unable to load featured models.",
+    "ariaViewModel": "View {{name}}"
+  },
+
+  "contact": {
     "title": "Contact",
     "form": {
-      "name": { "label": "Name", "placeholder": "Your name" },
-      "email": { "label": "Email", "placeholder": "you@example.com" },
-      "message": { "label": "Message", "placeholder": "Tell us what you need" },
+      "name": {
+        "label": "Name",
+        "placeholder": "Your name"
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "you@example.com"
+      },
+      "message": {
+        "label": "Message",
+        "placeholder": "Tell us what you need"
+      },
       "submit": "Send message"
     },
     "map": {
       "open": "Open in Google Maps"
     }
   },
-   "footer": {
+
+  "footer": {
     "brand": {
       "logoAlt": "Rent Moto Valencia logo",
       "tagline": "Your motorbike rental in Valencia: easy, fast and safe."
@@ -87,5 +122,174 @@
     "bottom": {
       "copy": "© {{year}} Rent Moto Valencia · All rights reserved"
     }
+  },
+  "modelsPage": {
+  "title": "Our models",
+  "subtitle": "Fuel consumption, top speed, capacity, and everything you need to choose.",
+  "day": "day",
+  "reserve": "Book now",
+  "outOfStock": "Out of stock",
+  "loadError": "Unable to load the catalog.",
+  "stockAlert": "We don’t have any more bikes of this model. They will be available soon.",
+  "specs": {
+    "motor": "Engine",
+    "consumption": "Consumption",
+    "maxSpeed": "Top speed",
+    "tank": "Tank",
+    "seats": "Seats",
+    "topCase": "Top case",
+    "brakes": "Brakes",
+    "weight": "Weight"
+  },
+  "compare": {
+    "title": "Quick comparison",
+    "model": "Model",
+    "consumption": "Consumption",
+    "speed": "Speed",
+    "tank": "Tank",
+    "brakes": "Brakes",
+    "topCase": "Top case",
+    "pricePerDay": "Price/day"
   }
+},
+"modelDetail": {
+  "day": "day",
+  "suggestedDeposit": "Suggested deposit",
+  "reserve": "Book now",
+  "whatsapp": "WhatsApp",
+  "call": "Call",
+  "viewImage": "View image {{index}}",
+  "specsTitle": "Specifications",
+  "infoTitle": "Information",
+  "info": {
+    "helmet": "Basic helmet(s) included",
+    "mileage": "Reasonable daily mileage",
+    "insurance": "Third-party insurance included",
+    "deposit": "Refundable deposit"
+  },
+  "infoHint": "* Terms may vary depending on dates and availability.",
+  "descriptionTitle": "Description",
+  "comingSoon": "Coming soon…",
+  "loadError": "Unable to load the model.",
+  "whatsappMessage": "I want information about {{name}}"
+},
+"modelSpecs": {
+  "motor": "Engine",
+  "consumption": "Consumption",
+  "speed": "Speed",
+  "tank": "Tank",
+  "seats": "Seats",
+  "topCase": "Top case",
+  "brakes": "Brakes",
+  "weight": "Weight"
+},
+"reservePage": {
+  "day": "day",
+  "selectDates": "Select dates",
+  "range": "Range",
+  "yourDetails": "Your details",
+  "sending": "Sending…",
+  "submit": "Request booking",
+  "loading": "Loading…",
+  "loadModelError": "Unable to load the model.",
+  "success": "Done! Reservation code <b>{{code}}</b>. We’ll contact you to confirm.",
+  "form": {
+    "fullName": "Full name",
+    "email": "Email",
+    "phone": "Phone",
+    "notes": "Notes",
+    "notesPlaceholder": "Pickup time, questions, etc."
+  },
+  "errors": {
+    "modelNotLoaded": "Model not loaded.",
+    "selectRange": "Please select a date range.",
+    "nameEmailRequired": "Name and email are required.",
+    "createFailed": "Unable to create the booking."
+  }
+},
+"calendar": {
+  "prevMonth": "Previous month",
+  "nextMonth": "Next month",
+  "today": "Today",
+  "unavailable": "Unavailable",
+  "unavailableSuffix": "unavailable",
+  "loadError": "Unable to load availability.",
+  "dow": {
+    "mon": "M",
+    "tue": "T",
+    "wed": "W",
+    "thu": "T",
+    "fri": "F",
+    "sat": "S",
+    "sun": "S"
+  },
+  "legend": {
+    "available": "Available",
+    "unavailable": "Unavailable",
+    "selected": "Selected"
+  }
+},
+"tracking": {
+  "title": "My reservation",
+  "subtitle": "Enter your code to see the status and details.",
+
+  "search": {
+    "label": "Reservation code",
+    "placeholder": "e.g. FEOS-8K2P3",
+    "button": "Search",
+    "loading": "Searching…",
+    "hint": "If you can’t find your reservation, check the confirmation email or message us."
+  },
+
+  "result": {
+    "codeLabel": "Code",
+    "model": "Model",
+    "dates": "Dates",
+    "amount": "Amount",
+    "assignedBike": "Assigned bike"
+  },
+
+  "status": {
+    "paid": "Approved (paid)",
+    "assigned": "Approved (bike assigned)",
+    "hold": "Pending review",
+    "canceled": "Canceled",
+    "expired": "Expired"
+  },
+
+  "statusHelp": {
+    "title": "What does the status mean?",
+    "holdTitle": "Pending / Hold",
+    "holdText": "received, under review.",
+    "paidTitle": "Paid",
+    "paidText": "payment confirmed.",
+    "assignedTitle": "Assigned",
+    "assignedText": "bike assigned and ready.",
+    "canceledTitle": "Canceled/Expired",
+    "canceledText": "won’t be fulfilled."
+  },
+
+  "help": {
+    "title": "Need help?",
+    "text": "For changes or cancellations, contact us via WhatsApp or phone. Keep your code handy: <b>#{{code}}</b>.",
+    "whatsapp": "WhatsApp",
+    "call": "Call"
+  },
+
+  "faq": {
+    "title": "Quick questions",
+    "q1": "How do I cancel?",
+    "a1": "Message us on WhatsApp and we’ll handle it with you.",
+    "q2": "When is the bike assigned?",
+    "a2": "After we verify payment and availability for your selected dates."
+  },
+
+  "empty": "Enter your code above to view your reservation.",
+
+  "errors": {
+    "enterCode": "Enter your reservation code.",
+    "notFound": "Reservation not found. Please check the code."
+  }
+}
+
 }

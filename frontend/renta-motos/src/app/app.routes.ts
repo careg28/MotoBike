@@ -27,6 +27,8 @@ export const routes: Routes = [
       { path: 'modelos/:slug', loadComponent: () => import('./features/pages/modelo-detalle/modelo-detalle').then(m => m.ModeloDetalle) },
       { path: 'login', component: Login, canActivate: [guestGuard] },
       { path: 'reservar/:slug', loadComponent: () => import('./features/pages/reserva/reserva').then(m => m.Reserva) },
+       // ✅ Seguimiento de reserva (público)
+    { path: 'seguimiento', loadComponent: () => import('./features/pages/seguimiento/seguimiento').then(m => m.SeguimientoReserva) },
     ]
   },
 
@@ -44,6 +46,7 @@ export const routes: Routes = [
       { path: 'modelos', component: ModelosList },
       { path: 'modelos/nuevo',  loadComponent: () => import('./admin/modelos-form/modelos-form').then(m => m.ModelosForm) },
       { path: 'modelos/editar/:slug', loadComponent: () => import('./admin/modelos-form/modelos-form').then(m => m.ModelosForm) },
+      { path: 'reservas', loadComponent: () => import('./admin/reservas-list/reservas-list').then(m => m.ReservasList) }
       
       // { path: 'clientes', loadComponent: ... }
       // { path: 'reservas', loadComponent: ... }

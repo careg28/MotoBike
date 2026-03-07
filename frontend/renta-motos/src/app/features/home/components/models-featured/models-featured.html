@@ -1,8 +1,11 @@
 <section class="section section--white">
   <div class="container">
     <div class="mf__head">
-      <h2 class="mf__title">Modelos destacados</h2>
-      <a [routerLink]="['/modelos']" class="mf__all">Ver todos</a>
+      <h2 class="mf__title">{{ 'modelsFeatured.title' | translate }}</h2>
+
+      <a [routerLink]="['/modelos']" class="mf__all">
+        {{ 'modelsFeatured.viewAll' | translate }}
+      </a>
     </div>
 
     <div class="mf__grid">
@@ -10,20 +13,33 @@
         <a
           [routerLink]="modelLink(m)"
           class="mf__img-wrap"
-          [attr.aria-label]="'Ver ' + m.name">
+          [attr.aria-label]="'modelsFeatured.ariaViewModel' | translate:{ name: m.name }"
+        >
           <img [src]="m.img || '/models/placeholder.jpg'" [alt]="m.name">
           <span class="mf__badge">{{ m.tag }}</span>
         </a>
 
         <div class="mf__body">
           <h3 class="mf__name">{{ m.name }}</h3>
-          <p class="mf__price"><strong>{{ m.price }}€</strong> / día</p>
+
+          <p class="mf__price">
+            <strong>{{ m.price }}€</strong> / {{ 'modelsFeatured.day' | translate }}
+          </p>
+
           <div class="mf__actions">
-            <a [routerLink]="modelLink(m)" class="mf__link">Detalles</a>
-            <a [routerLink]="reserveLink(m)" class="btn-primary btn-sm">Reservar</a>
+            <a [routerLink]="modelLink(m)" class="mf__link">
+              {{ 'modelsFeatured.details' | translate }}
+            </a>
+
+            <a [routerLink]="reserveLink(m)" class="btn-primary btn-sm">
+              {{ 'modelsFeatured.reserve' | translate }}
+            </a>
           </div>
         </div>
       </article>
     </div>
+
+    <!-- Si quieres mostrar error traducido -->
+    <p *ngIf="error()" class="mf__error">{{ error() }}</p>
   </div>
 </section>
