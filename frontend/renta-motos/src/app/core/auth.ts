@@ -29,11 +29,15 @@ export class Auth {
     );
   }
 
-  logout() {
-    const t = this.token;
-    if (t) this.http.post(`${environment.apiUrl}/logout`, {}).subscribe({ next:()=>{}, error:()=>{} });
+  clearSession() {
     localStorage.removeItem(this.TOKEN_KEY);
     this.isAuthenticated$.next(false);
     this.currentUser.set(null);
+  }
+
+  logout() {
+    const t = this.token;
+    if (t) this.http.post(`${environment.apiUrl}/logout`, {}).subscribe({ next:()=>{}, error:()=>{} });
+    this.clearSession();
   }
 }

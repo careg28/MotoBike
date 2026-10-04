@@ -1,109 +1,115 @@
 {
+  "bookingPause": {
+  "title": "We will be back soon!",
+  "message": "Bookings are temporarily paused. We will be back soon. Thank you for your patience!",
+  "back": "Back to home",
+  "label": "Bookings temporarily paused"
+},
   "nav": {
     "home": "Home",
     "models": "Models",
     "rates": "Rates",
     "routes": "Routes",
-    "book": "Book now",
-    "seguimiento": "My reservation"
+    "book": "Book",
+    "seguimiento": "My booking"
   },
-
   "hero": {
     "title": "Freedom on two wheels",
-    "subtitle": "Rent your motorbike in minutes. Insurance included and 24/7 assistance.",
+    "subtitle": "Rent your scooter in minutes. Insurance included and 24/7 assistance.",
     "cta": "Book now"
   },
-
   "benefits": {
     "title": "Why choose us?",
     "items": {
       "fast": {
         "title": "Book in minutes",
-        "desc": "Choose your bike and confirm your booking online quickly and easily."
+        "desc": "Choose your scooter and confirm your booking online quickly and easily."
       },
       "insurance": {
         "title": "Insurance included",
-        "desc": "All our bikes include insurance and 24/7 roadside assistance."
+        "desc": "All our scooters include insurance and 24/7 roadside assistance."
       },
       "fleet": {
-        "title": "Bikes in perfect condition",
-        "desc": "A fleet checked and regularly maintained for your safety."
+        "title": "Scooters in perfect condition",
+        "desc": "Our fleet is regularly checked and maintained for your safety."
       },
       "location": {
         "title": "Central location in Valencia",
-        "desc": "Pick up your bike in the heart of the city, close to everything you need."
+        "desc": "Pick up your scooter in the heart of the city, close to everything you need."
       }
     }
   },
-
   "how": {
     "title": "How it works",
     "steps": {
       "date": {
-        "title": "1. Pick a date",
+        "title": "1. Choose dates",
         "text": "Book in 2 minutes from your phone."
       },
       "model": {
-        "title": "2. Choose a bike",
-        "text": "125cc models ideal for city and beach."
+        "title": "2. Choose a scooter",
+        "text": "125cc models perfect for the city and the beach."
       },
       "ride": {
         "title": "3. Let’s ride!",
-        "text": "Fast pickup, helmet included—you’re set."
+        "text": "Fast pickup, helmet included and ready to go."
       }
     }
   },
-
   "cta": {
     "badge": "Home delivery",
-    "title": "Ready for your bike in Valencia?",
-    "text": "Pick up at our shop <strong>or</strong> we deliver it to your hotel, apartment, or meeting point.",
+    "title": "Ready for your scooter in Valencia?",
+    "text": "Pick it up at our shop <strong>or</strong> we deliver it to your hotel, apartment or meeting point.",
     "bullets": {
       "insurance": "Insurance included",
       "fast": "Book in 2 minutes",
-      "city125": "125cc ready for the city"
+      "city125": "125cc perfect for the city"
     },
     "button": "Check availability",
     "sub": "Flexible cancellation · Secure payment",
     "imageAlt": "City of Arts and Sciences in Valencia"
   },
-
   "modelsFeatured": {
     "title": "Featured models",
     "viewAll": "View all",
     "day": "day",
     "details": "Details",
-    "reserve": "Book now",
-    "loadError": "Unable to load featured models.",
+    "reserve": "Book",
+    "loadError": "Could not load the featured models.",
     "ariaViewModel": "View {{name}}"
   },
-
   "contact": {
     "title": "Contact",
     "form": {
       "name": {
         "label": "Name",
-        "placeholder": "Your name"
+        "placeholder": "Your name",
+        "required": "Name is required"
       },
       "email": {
         "label": "Email",
-        "placeholder": "you@example.com"
+        "placeholder": "your@email.com",
+        "required": "Email is required",
+        "invalid": "Please enter a valid email address"
       },
       "message": {
         "label": "Message",
-        "placeholder": "Tell us what you need"
+        "placeholder": "Tell us what you need",
+        "required": "Message is required"
       },
-      "submit": "Send message"
+      "submit": "Send message",
+      "sending": "Sending...",
+      "success": "Message sent successfully",
+      "error": "The message could not be sent. Please try again."
     },
     "map": {
       "open": "Open in Google Maps"
     }
   },
-
   "footer": {
     "brand": {
       "logoAlt": "Rent Moto Valencia logo",
-      "tagline": "Your motorbike rental in Valencia: easy, fast and safe."
+      "tagline": "Your scooter rental in Valencia: easy, fast and safe."
     },
     "nav": {
       "title": "Navigation",
@@ -112,9 +118,14 @@
       "routes": "Routes",
       "contact": "Contact"
     },
+    "legal": {
+      "title": "Legal",
+      "terms": "Terms and conditions",
+      "cookies": "Cookie policy"
+    },
     "contact": {
       "title": "Contact",
-      "address": "Calle de prueba 123, Valencia"
+      "address": "Calle del Doctor Olóriz & Avinguda Dr. Peset Aleixandre, La Saidia, 46009 Valencia"
     },
     "social": {
       "title": "Follow us"
@@ -124,172 +135,251 @@
     }
   },
   "modelsPage": {
-  "title": "Our models",
-  "subtitle": "Fuel consumption, top speed, capacity, and everything you need to choose.",
-  "day": "day",
-  "reserve": "Book now",
-  "outOfStock": "Out of stock",
-  "loadError": "Unable to load the catalog.",
-  "stockAlert": "We don’t have any more bikes of this model. They will be available soon.",
-  "specs": {
+    "title": "Our models",
+    "subtitle": "Consumption, speed, capacity and everything you need to know to choose.",
+    "day": "day",
+    "reserve": "Book",
+    "outOfStock": "Out of stock",
+    "loadError": "Could not load the catalog.",
+    "stockAlert": "We have no more scooters of this model. They will be available soon.",
+    "specs": {
+      "motor": "Engine",
+      "consumption": "Consumption",
+      "maxSpeed": "Max speed",
+      "tank": "Tank",
+      "seats": "Seats",
+      "topCase": "Top case",
+      "brakes": "Brakes",
+      "weight": "Weight"
+    },
+    "compare": {
+      "title": "Quick comparison",
+      "model": "Model",
+      "consumption": "Consumption",
+      "speed": "Speed",
+      "tank": "Tank",
+      "brakes": "Brakes",
+      "topCase": "Top case",
+      "pricePerDay": "Price/day"
+    }
+  },
+  "modelDetail": {
+    "day": "day",
+    "suggestedDeposit": "Suggested deposit",
+    "reserve": "Book",
+    "whatsapp": "WhatsApp",
+    "call": "Call",
+    "viewImage": "View image {{index}}",
+    "specsTitle": "Specifications",
+    "infoTitle": "Information",
+    "info": {
+      "helmet": "Basic helmet(s) included",
+      "mileage": "Reasonable daily mileage",
+      "insurance": "Third-party insurance included",
+      "deposit": "Refundable deposit"
+    },
+    "infoHint": "* Conditions may vary depending on dates and availability.",
+    "descriptionTitle": "Description",
+    "comingSoon": "Coming soon…",
+    "loadError": "Could not load the model.",
+    "whatsappMessage": "I want information about {{name}}"
+  },
+  "modelSpecs": {
     "motor": "Engine",
     "consumption": "Consumption",
-    "maxSpeed": "Top speed",
+    "speed": "Speed",
     "tank": "Tank",
-    "seats": "Seats",
+    "seats": "Seat",
     "topCase": "Top case",
     "brakes": "Brakes",
     "weight": "Weight"
   },
-  "compare": {
-    "title": "Quick comparison",
-    "model": "Model",
-    "consumption": "Consumption",
-    "speed": "Speed",
-    "tank": "Tank",
-    "brakes": "Brakes",
-    "topCase": "Top case",
-    "pricePerDay": "Price/day"
-  }
-},
-"modelDetail": {
-  "day": "day",
-  "suggestedDeposit": "Suggested deposit",
-  "reserve": "Book now",
-  "whatsapp": "WhatsApp",
-  "call": "Call",
-  "viewImage": "View image {{index}}",
-  "specsTitle": "Specifications",
-  "infoTitle": "Information",
-  "info": {
-    "helmet": "Basic helmet(s) included",
-    "mileage": "Reasonable daily mileage",
-    "insurance": "Third-party insurance included",
-    "deposit": "Refundable deposit"
+  "reservePage": {
+    "day": "day",
+    "selectDates": "Select dates",
+    "range": "Range",
+    "yourDetails": "Your details",
+    "sending": "Sending…",
+    "submit": "Request booking",
+    "loading": "Loading…",
+    "loadModelError": "Could not load the model.",
+    "loadingReservationData": "Loading reservation data...",
+    "success": "Done! Booking code {{code}}. We will contact you to confirm.",
+    "form": {
+      "fullName": "Full name",
+      "email": "Email",
+      "phone": "Phone",
+      "documentId": "ID/NIE/Passport",
+      "nationality": "Nationality",
+      "originAddress": "Address in your home country",
+      "stayAddress": "Address where you are staying",
+      "notes": "Notes",
+      "notesPlaceholder": "Pickup time, questions, etc."
+    },
+    "errors": {
+      "modelNotLoaded": "Model not loaded.",
+      "selectRange": "Select a date range.",
+      "nameEmailRequired": "Name and email are required.",
+      "allFieldsRequired": "You must complete all required fields.",
+      "createFailed": "Could not create the booking."
+    }
   },
-  "infoHint": "* Terms may vary depending on dates and availability.",
-  "descriptionTitle": "Description",
-  "comingSoon": "Coming soon…",
-  "loadError": "Unable to load the model.",
-  "whatsappMessage": "I want information about {{name}}"
-},
-"modelSpecs": {
-  "motor": "Engine",
-  "consumption": "Consumption",
-  "speed": "Speed",
-  "tank": "Tank",
-  "seats": "Seats",
-  "topCase": "Top case",
-  "brakes": "Brakes",
-  "weight": "Weight"
-},
-"reservePage": {
-  "day": "day",
-  "selectDates": "Select dates",
-  "range": "Range",
-  "yourDetails": "Your details",
-  "sending": "Sending…",
-  "submit": "Request booking",
-  "loading": "Loading…",
-  "loadModelError": "Unable to load the model.",
-  "success": "Done! Reservation code <b>{{code}}</b>. We’ll contact you to confirm.",
-  "form": {
-    "fullName": "Full name",
-    "email": "Email",
-    "phone": "Phone",
-    "notes": "Notes",
-    "notesPlaceholder": "Pickup time, questions, etc."
-  },
-  "errors": {
-    "modelNotLoaded": "Model not loaded.",
-    "selectRange": "Please select a date range.",
-    "nameEmailRequired": "Name and email are required.",
-    "createFailed": "Unable to create the booking."
-  }
-},
-"calendar": {
-  "prevMonth": "Previous month",
-  "nextMonth": "Next month",
-  "today": "Today",
-  "unavailable": "Unavailable",
-  "unavailableSuffix": "unavailable",
-  "loadError": "Unable to load availability.",
-  "dow": {
-    "mon": "M",
-    "tue": "T",
-    "wed": "W",
-    "thu": "T",
-    "fri": "F",
-    "sat": "S",
-    "sun": "S"
-  },
-  "legend": {
-    "available": "Available",
+  "calendar": {
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "today": "Today",
     "unavailable": "Unavailable",
-    "selected": "Selected"
-  }
-},
-"tracking": {
-  "title": "My reservation",
-  "subtitle": "Enter your code to see the status and details.",
-
-  "search": {
-    "label": "Reservation code",
-    "placeholder": "e.g. FEOS-8K2P3",
-    "button": "Search",
-    "loading": "Searching…",
-    "hint": "If you can’t find your reservation, check the confirmation email or message us."
+    "unavailableSuffix": "unavailable",
+    "loadError": "Could not load availability.",
+    "rangeUnavailable": "There is no availability for the full selected range.",
+    "dow": {
+      "mon": "M",
+      "tue": "T",
+      "wed": "W",
+      "thu": "T",
+      "fri": "F",
+      "sat": "S",
+      "sun": "S"
+    },
+    "legend": {
+      "available": "Available",
+      "unavailable": "Unavailable",
+      "selected": "Selected"
+    }
   },
-
-  "result": {
-    "codeLabel": "Code",
+  "payment": {
+    "successTitle": "Payment successful",
+    "successText": "Your reservation has been confirmed and only 20% has been charged through Stripe. You will receive an email with the full breakdown.",
+    "backHome": "Back to homepage",
+    "cancelTitle": "Payment cancelled",
+    "cancelText": "The payment was not completed. You can try again whenever you want.",
+    "retry": "Try again",
+    "loading": "Loading reservation data...",
+    "bookingCode": "Booking code",
     "model": "Model",
     "dates": "Dates",
-    "amount": "Amount",
-    "assignedBike": "Assigned bike"
+    "totalPaid": "Paid online",
+    "totalAmount": "Total amount",
+    "remainingAtDelivery": "Due at delivery",
+    "securityDeposit": "Refundable deposit",
+    "securityDepositHelp": "The 300 EUR deposit is paid in person and returned when the scooter is handed back in the agreed condition.",
+    "pickupAddress": "Pickup address",
+    "pickupReference": "Reference point",
+    "deliveryType": "Delivery type",
+    "deliveryCost": "Delivery cost"
   },
-
-  "status": {
-    "paid": "Approved (paid)",
-    "assigned": "Approved (bike assigned)",
-    "hold": "Pending review",
-    "canceled": "Canceled",
-    "expired": "Expired"
+  "reservation": {
+    "minDays": "Minimum booking is 2 days.",
+    "invalidPostal": "We do not deliver to that postal code.",
+    "deliveryAddressRequired": "You must provide an address and postal code for home delivery.",
+    "deliveryType": "Delivery type",
+    "pickup": "Store pickup",
+    "delivery": "Home delivery",
+    "deliveryAddress": "Delivery address",
+    "postalCode": "Postal code",
+    "deliveryHelp": "Home delivery is only available for allowed postal codes.",
+    "rentalSubtotal": "Rental subtotal",
+    "deliveryCost": "Home delivery",
+    "storePickup": "Store pickup",
+    "estimatedTotal": "Estimated total",
+    "deliveryAddressPlaceholder": "Street, number, floor...",
+    "postalCodePlaceholder": "20001",
+    "instructionsTitle": "How the booking works",
+    "step1": "Select available dates in the calendar.",
+    "step2": "Enter your contact details.",
+    "step3": "Choose store pickup or home delivery.",
+    "step4": "Confirm your booking and you will receive a code by email.",
+    "needHelp": "Need help?",
+    "contactHelpText": "If you have any questions about the booking, you can contact us and we will respond as soon as possible.",
+    "bookingIntro": "Complete the request and we will open WhatsApp with your booking summary so you can confirm it directly with us.",
+    "securePayment": "WhatsApp confirmation",
+    "highlightDownPaymentTitle": "Direct booking",
+    "highlightDownPaymentText": "You send the request and we receive all details instantly on WhatsApp.",
+    "highlightRemainingTitle": "Manual confirmation",
+    "highlightRemainingText": "We review availability with you and close the rental details on WhatsApp.",
+    "highlightDepositTitle": "Refundable deposit",
+    "highlightDepositText": "It is handed over in person and returned at the end of the rental if everything is in order.",
+    "selectPostalCode": "Select a postal code",
+    "fixedDeliveryHelp": "Home delivery is only available for these postal codes and has a fixed cost of 25 EUR.",
+    "onlineDownPayment": "Summary sent",
+    "remainingAtDelivery": "Estimated rental amount",
+    "refundableDeposit": "Refundable deposit",
+    "pickupTime": "Pickup time",
+    "pickupTimeHelp": "Return will take place on the day after the last day of use, at the same time.",
+    "pickupTimeRequired": "Please select a pickup time.",
+    "useDaysRange": "Usage days",
+    "selectedUsageDays": "Selected days",
+    "returnDateTime": "Estimated return",
+    "continueToPayment": "Continue on WhatsApp",
+    "termsKicker": "Rental terms",
+    "termsTitle": "Review and accept before sending",
+    "termsIntro": "By making a booking with FEO'S Renta Bike, the customer accepts the following basic conditions:",
+    "terms1": "The rider must be at least 21 years old, hold a valid driving licence and have sufficient experience to ride 125cc motorcycles.",
+    "terms2": "At the time of vehicle handover, the documentation will be checked to confirm that it is valid for riding the rented motorcycle. The booking may be subject to identity verification and motorcycle availability.",
+    "terms3": "The vehicle must be used responsibly and in accordance with current law. Riding under the influence of alcohol or drugs, subletting the vehicle, or allowing an unauthorised person to ride it is prohibited.",
+    "terms4": "The customer is responsible for damage, loss or theft of the vehicle and accessories during the rental period, as well as for fines or penalties arising from its use.",
+    "terms5": "The price includes third-party liability insurance. Other damage or incidents may be the customer's responsibility according to the contract.",
+    "terms6": "A 300 EUR security deposit must be paid and will be refunded at the end of the rental provided that the vehicle is returned in good condition and with no outstanding amounts pending.",
+    "terms7": "Payment for the rental, as well as any additional service such as shipping or home delivery, will be made according to the conditions agreed with FEO'S Renta Bike when confirming the booking.",
+    "terms8": "The vehicle is equipped with a GPS geolocation system, which the customer accepts during the rental period.",
+    "terms9": "By continuing with the booking, the customer declares that they have read and accepted the full contract, available at the time of signing the rental. By pressing \"Accept and continue\", the customer confirms that they have read and accept these terms.",
+    "cancel": "Cancel",
+    "redirectingToPayment": "Opening WhatsApp...",
+    "acceptAndContinue": "I accept and continue on WhatsApp"
   },
-
-  "statusHelp": {
-    "title": "What does the status mean?",
-    "holdTitle": "Pending / Hold",
-    "holdText": "received, under review.",
-    "paidTitle": "Paid",
-    "paidText": "payment confirmed.",
-    "assignedTitle": "Assigned",
-    "assignedText": "bike assigned and ready.",
-    "canceledTitle": "Canceled/Expired",
-    "canceledText": "won’t be fulfilled."
-  },
-
-  "help": {
-    "title": "Need help?",
-    "text": "For changes or cancellations, contact us via WhatsApp or phone. Keep your code handy: <b>#{{code}}</b>.",
-    "whatsapp": "WhatsApp",
-    "call": "Call"
-  },
-
-  "faq": {
-    "title": "Quick questions",
-    "q1": "How do I cancel?",
-    "a1": "Message us on WhatsApp and we’ll handle it with you.",
-    "q2": "When is the bike assigned?",
-    "a2": "After we verify payment and availability for your selected dates."
-  },
-
-  "empty": "Enter your code above to view your reservation.",
-
-  "errors": {
-    "enterCode": "Enter your reservation code.",
-    "notFound": "Reservation not found. Please check the code."
+  "tracking": {
+    "title": "My booking",
+    "subtitle": "Enter your code to see the status and details.",
+    "search": {
+      "label": "Booking code",
+      "placeholder": "Example: FEOS-8K2P3",
+      "button": "Search",
+      "loading": "Searching…",
+      "hint": "If you cannot find your booking, check the confirmation email or contact us."
+    },
+    "result": {
+      "codeLabel": "Code",
+      "model": "Model",
+      "dates": "Dates",
+      "pickupTime": "Pickup time",
+      "amount": "Amount",
+      "assignedBike": "Assigned bike"
+    },
+    "status": {
+      "paid": "Approved (paid)",
+      "assigned": "Approved (bike assigned)",
+      "hold": "Pending review",
+      "canceled": "Cancelled",
+      "expired": "Expired"
+    },
+    "statusHelp": {
+      "title": "What does the status mean?",
+      "holdTitle": "Pending / Hold",
+      "holdText": "Received, under review.",
+      "paidTitle": "Paid",
+      "paidText": "Payment confirmed.",
+      "assignedTitle": "Assigned",
+      "assignedText": "Bike assigned and ready.",
+      "canceledTitle": "Cancelled/Expired",
+      "canceledText": "Will not be completed."
+    },
+    "help": {
+      "title": "Need help?",
+      "text": "For changes or cancellations, contact us via WhatsApp or phone. Keep your code {{code}} ready.",
+      "whatsapp": "WhatsApp",
+      "call": "Call"
+    },
+    "faq": {
+      "title": "Quick questions",
+      "q1": "How do I cancel?",
+      "a1": "Send us a WhatsApp message and we will manage it with you.",
+      "q2": "When is the bike assigned?",
+      "a2": "After verifying payment and availability in your date range."
+    },
+    "empty": "Enter your code above to see your booking.",
+    "errors": {
+      "enterCode": "Enter your booking code.",
+      "notFound": "Booking not found. Check the code."
+    }
   }
-}
-
 }

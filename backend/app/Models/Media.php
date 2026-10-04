@@ -11,6 +11,7 @@ class Media extends Model
 
     public function getUrlAttribute(): string
     {
-        return asset('storage/'.$this->path);
+        $segments = array_map('rawurlencode', explode('/', ltrim((string) $this->path, '/')));
+        return url('/api/media/file/' . implode('/', $segments));
     }
 }

@@ -9,7 +9,7 @@ export const ROUTES_DATA: MotoRoute[] = [
     stops: [
       { name: 'Muelle / Marina de Valencia', address: 'Marina de València' },
       { name: 'Faro (zona portuaria)', address: 'Faro del puerto de Valencia' },
-      { name: 'Playa La Concha (ejemplo)', address: 'Playa de la Malvarrosa, Valencia' }, // ajusta a tu “Concha”
+      { name: 'Playa de la Malvarrosa', address: 'Playa de la Malvarrosa, Valencia' },
       { name: 'Restaurante Sicilia', address: 'Ristorante Sicilia, Valencia' },
     ],
     tags: ['Costa', 'Relax']

@@ -1,0 +1,137 @@
+<div class="clientes-page">
+  <div class="header">
+    <div>
+      <h2>Clientes</h2>
+      <p>Listado basico de clientes con sus datos de alquiler.</p>
+    </div>
+  </div>
+
+  <form class="toolbar card" (submit)="applyFilters(); $event.preventDefault()">
+    <input
+      class="input"
+      type="search"
+      placeholder="Buscar por nombre, correo o codigo..."
+      [value]="search()"
+      (input)="search.set(($any($event.target)).value)">
+    <button class="btn-primary" type="submit" [disabled]="loading()">Buscar</button>
+  </form>
+
+  <app-ui-loader
+    *ngIf="loading()"
+    [message]="'Cargando clientes...'">
+  </app-ui-loader>
+  <div *ngIf="error()" class="alert error">{{ error() }}</div>
+  <div *ngIf="!loading() && !items().length" class="muted">No hay clientes para mostrar.</div>
+
+  <div class="mobile-list" *ngIf="items().length">
+    <article class="card cliente-card" *ngFor="let item of items(); trackBy: trackById">
+      <div class="cliente-card__head">
+        <div>
+          <h3>{{ item.cliente_nombre || '-' }}</h3>
+          <p>{{ item.cliente_email || '-' }}</p>
+        </div>
+        <span class="chip">{{ estadoLabel(item.estado) }}</span>
+      </div>
+
+      <div class="cliente-card__body">
+        <p><strong>Telefono:</strong> {{ item.cliente_tel || '-' }}</p>
+        <p><strong>Modelo:</strong> {{ item.modelo?.marca }} {{ item.modelo?.nombre }}</p>
+        <p><strong>Moto:</strong> {{ motoLabel(item) }}</p>
+        <p><strong>Inicio:</strong> {{ fmtFecha(item.fecha_inicio) }}</p>
+        <p><strong>Fin:</strong> {{ fmtFecha(item.fecha_fin) }}</p>
+      </div>
+
+      <div class="cliente-card__actions">
+        <button class="btn outline" type="button" (click)="abrirDetalle(item)">Ver detalles</button>
+      </div>
+    </article>
+  </div>
+
+  <div class="table-wrap desktop-only" *ngIf="items().length">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Cliente</th>
+          <th>Correo</th>
+          <th>Telefono</th>
+          <th>Modelo</th>
+          <th>Moto asignada</th>
+          <th>Inicio</th>
+          <th>Fin</th>
+          <th>Estado</th>
+          <th>Detalles</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of items(); trackBy: trackById">
+          <td>{{ item.cliente_nombre || '-' }}</td>
+          <td>{{ item.cliente_email || '-' }}</td>
+          <td>{{ item.cliente_tel || '-' }}</td>
+          <td>{{ item.modelo?.marca }} {{ item.modelo?.nombre }}</td>
+          <td>{{ motoLabel(item) }}</td>
+          <td>{{ fmtFecha(item.fecha_inicio) }}</td>
+          <td>{{ fmtFecha(item.fecha_fin) }}</td>
+          <td><span class="chip">{{ estadoLabel(item.estado) }}</span></td>
+          <td><button class="btn outline" type="button" (click)="abrirDetalle(item)">Ver detalles</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pagination" *ngIf="data() && (data()!.last_page ?? 1) > 1">
+    <button class="btn outline" (click)="prev()" [disabled]="!canPrev()">Anterior</button>
+    <span>Pagina {{ data()!.current_page || 1 }} de {{ data()!.last_page || 1 }}</span>
+    <button class="btn outline" (click)="next()" [disabled]="!canNext()">Siguiente</button>
+  </div>
+
+  @if (detalleOpen()) {
+    <div class="modal-backdrop fancy" (click)="cerrarDetalle()"></div>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="cliente-detalle-title">
+      <div class="modal-card card" (click)="$event.stopPropagation()">
+        <div class="modal-head">
+          <div>
+            <h3 id="cliente-detalle-title">Detalle de cliente</h3>
+            <p>
+              {{ detalleOpen()!.cliente_nombre || '-' }} |
+              {{ detalleOpen()!.modelo?.marca }} {{ detalleOpen()!.modelo?.nombre }}
+            </p>
+          </div>
+          <button class="modal-close" type="button" aria-label="Cerrar" (click)="cerrarDetalle()">X</button>
+        </div>
+
+        <div class="detail-grid">
+          <div class="detail-block">
+            <h4>Datos personales</h4>
+            <p><strong>Nombre:</strong> {{ detalleOpen()!.cliente_nombre || '-' }}</p>
+            <p><strong>Correo:</strong> {{ detalleOpen()!.cliente_email || '-' }}</p>
+            <p><strong>Telefono:</strong> {{ detalleOpen()!.cliente_tel || '-' }}</p>
+            <p><strong>DNI/NIE/Pasaporte:</strong> {{ detalleOpen()!.cliente_documento || '-' }}</p>
+            <p><strong>Nacionalidad:</strong> {{ detalleOpen()!.cliente_nacionalidad || '-' }}</p>
+          </div>
+
+          <div class="detail-block">
+            <h4>Direcciones</h4>
+            <p><strong>Pais de origen:</strong> {{ detalleOpen()!.cliente_direccion_origen || '-' }}</p>
+            <p><strong>Hospedaje:</strong> {{ detalleOpen()!.cliente_direccion_hospedaje || '-' }}</p>
+            <p><strong>Entrega:</strong> {{ detalleOpen()!.direccion_entrega || 'Recogida en tienda' }}</p>
+            <p><strong>Codigo postal:</strong> {{ detalleOpen()!.codigo_postal || '-' }}</p>
+          </div>
+
+          <div class="detail-block">
+            <h4>Alquiler</h4>
+            <p><strong>Modelo:</strong> {{ detalleOpen()!.modelo?.marca }} {{ detalleOpen()!.modelo?.nombre }}</p>
+            <p><strong>Moto:</strong> {{ motoLabel(detalleOpen()!) }}</p>
+            <p><strong>Inicio:</strong> {{ fmtFecha(detalleOpen()!.fecha_inicio) }}</p>
+            <p><strong>Fin:</strong> {{ fmtFecha(detalleOpen()!.fecha_fin) }}</p>
+            <p><strong>Estado:</strong> {{ estadoLabel(detalleOpen()!.estado) }}</p>
+            <p><strong>Notas:</strong> {{ detalleOpen()!.notas || '-' }}</p>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn outline" type="button" (click)="cerrarDetalle()">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

@@ -12,7 +12,7 @@
   padding-bottom: 32px;
 
   @media (min-width: 768px) {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 48px;
   }
 }
@@ -59,6 +59,10 @@
   &:hover {
     color: var(--color-accent-2); // hover en verde agua
   }
+}
+
+.footer-legal a {
+  word-break: break-word;
 }
 
 .footer-social .social-icons {

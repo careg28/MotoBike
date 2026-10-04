@@ -28,7 +28,6 @@ export class ListadoMotos {
   toDelete   = signal<AdminMotoVM | null>(null);
   deleting   = signal(false);
   deleteError= signal<string | null>(null);
-  hardDelete = signal(false);
 
   // ⬅️ vuelve a cargar al entrar
   ngOnInit() {
@@ -72,7 +71,7 @@ export class ListadoMotos {
   }
 
   editar(m: AdminMotoVM)   { this.router.navigateByUrl(`/admin/motos/editar/${m.slug}`); }
-  reservar(m: AdminMotoVM) { this.router.navigateByUrl(`/admin/reservas/nueva?moto=${m.slug}`); }
+  reservar(m: AdminMotoVM) { this.router.navigateByUrl('/admin/reservas'); }
 
   onSearchInput(ev: Event)       { this.search.set((ev.target as HTMLInputElement).value); }
   onEstadoChange(value: string)  { this.estado.set(value as Estado | 'todos'); }
@@ -83,7 +82,6 @@ export class ListadoMotos {
   askDelete(m: AdminMotoVM) {
     this.toDelete.set(m);
     this.deleteError.set(null);
-    this.hardDelete.set(false);
   }
   cancelDelete() {
     if (!this.deleting()) this.toDelete.set(null);
@@ -94,11 +92,7 @@ export class ListadoMotos {
     this.deleting.set(true);
     this.deleteError.set(null);
 
-    const req$ = this.hardDelete()
-      ? this.api.removeHard(m.id)
-      : this.api.remove(m.id);
-
-    req$.subscribe({
+    this.api.remove(m.id).subscribe({
       next: () => {
         this.deleting.set(false);
         this.toDelete.set(null);

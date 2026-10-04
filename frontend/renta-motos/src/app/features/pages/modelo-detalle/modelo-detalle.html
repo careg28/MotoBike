@@ -1,5 +1,10 @@
-<div class="container mx-auto p-4 space-y-4" *ngIf="ready()">
-  <ng-container *ngIf="modelo() as m; else errTpl">
+<div class="container mx-auto p-4 space-y-4">
+  <app-ui-loader
+    *ngIf="!ready()"
+    [message]="'Cargando detalles del modelo...'">
+  </app-ui-loader>
+
+  <ng-container *ngIf="ready() && modelo() as m; else errTpl">
 
     <!-- Cabecera -->
     <header class="hero">
@@ -28,7 +33,7 @@
             {{ 'modelDetail.whatsapp' | translate }}
           </a>
 
-          <a class="btn outline" href="tel:+34XXXXXXXXX">
+          <a class="btn outline" href="tel:+34624473220">
             {{ 'modelDetail.call' | translate }}
           </a>
         </div>
@@ -93,6 +98,8 @@
   </ng-container>
 
   <ng-template #errTpl>
+    <ng-container *ngIf="ready()">
     <div class="card">{{ err() || ('modelDetail.loadError' | translate) }}</div>
+    </ng-container>
   </ng-template>
 </div>

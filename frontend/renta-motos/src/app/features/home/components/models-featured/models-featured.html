@@ -9,7 +9,7 @@
     </div>
 
     <div class="mf__grid">
-      <article class="mf__card" *ngFor="let m of models()">
+      <article class="mf__card" *ngFor="let m of displayModels(); let i = index; trackBy: trackByCard">
         <a
           [routerLink]="modelLink(m)"
           class="mf__img-wrap"

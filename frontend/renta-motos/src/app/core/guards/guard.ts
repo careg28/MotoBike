@@ -1,12 +1,23 @@
 import { inject } from '@angular/core';
-import { CanActivateFn, Router } from '@angular/router';
+import { CanActivateFn, Router, UrlTree } from '@angular/router';
+import { of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { Auth } from '../auth';
 
 export const authGuard: CanActivateFn = () => {
   const router = inject(Router);
-  const hasToken = !!localStorage.getItem('feos_token');
+  const auth = inject(Auth);
+  const hasToken = !!auth.token;
+
   if (!hasToken) {
-    router.navigateByUrl('/login');
-    return false;
+    return router.createUrlTree(['/login']);
   }
-  return true;
+
+  return auth.fetchMe().pipe(
+    map(() => true),
+    catchError(() => {
+      auth.clearSession();
+      return of(router.createUrlTree(['/login']) as boolean | UrlTree);
+    })
+  );
 };

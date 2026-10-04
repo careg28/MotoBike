@@ -6,6 +6,8 @@ export type ReservaEstado =
   | 'hold' | 'paid' | 'assigned' | 'canceled' | 'expired'
   | 'pendiente' | 'confirmada' | 'recogida';
 
+export type TipoEntrega = 'pickup' | 'delivery';
+
 export interface Reserva {
   id: number;
   codigo: string;
@@ -13,16 +15,31 @@ export interface Reserva {
   moto_id?: number | null;
   fecha_inicio: string; // YYYY-MM-DD
   fecha_fin: string;    // YYYY-MM-DD (exclusivo)
+  hora_recogida?: string | null;
   precio_total?: number | string | null;
   deposito?: number | string | null;
   moneda?: string | null;
   estado: ReservaEstado;
+
   cliente_nombre?: string | null;
   cliente_email?: string | null;
   cliente_tel?: string | null;
+  cliente_documento?: string | null;
+  cliente_nacionalidad?: string | null;
+  cliente_direccion_origen?: string | null;
+  cliente_direccion_hospedaje?: string | null;
+  payment_intent_id?: string | null;
+  payment_status?: string | null;
   notas?: string | null;
+
+  tipo_entrega?: TipoEntrega | null;
+  direccion_entrega?: string | null;
+  codigo_postal?: string | null;
+  coste_entrega?: number | string | null;
+
   created_at?: string;
   updated_at?: string;
+
   // si el backend carga relaciones:
   modelo?: { id:number; slug:string; marca:string; nombre:string } | null;
   moto?: { id:number; slug:string; matricula?:string|null } | null;
@@ -33,14 +50,26 @@ export interface CreateReservaPayload {
   moto_id?: number | null;
   fecha_inicio: string; // YYYY-MM-DD
   fecha_fin: string;    // YYYY-MM-DD (checkout exclusivo)
+  hora_recogida?: string;
+
   cliente_nombre: string;
   cliente_email: string;
-  cliente_tel?: string;
-  notas?: string;
+  cliente_tel: string;
+  cliente_documento: string;
+  cliente_nacionalidad: string;
+  cliente_direccion_origen: string;
+  cliente_direccion_hospedaje: string;
+  notas: string;
+
   precio_total?: number;
   deposito?: number;
   moneda?: string;
   client_key?: string;
+
+  tipo_entrega?: TipoEntrega;
+  direccion_entrega?: string;
+  codigo_postal?: string;
+  coste_entrega?: number;
 }
 
 // respuesta paginada genérica
@@ -61,9 +90,16 @@ export interface PublicLookupReserva {
   estado: ReservaEstado | string;
   fecha_inicio: string;
   fecha_fin: string;
+  hora_recogida?: string | null;
   precio_total?: number | string | null;
   deposito?: number | string | null;
   moneda?: string | null;
+
+  tipo_entrega?: TipoEntrega | null;
+  direccion_entrega?: string | null;
+  codigo_postal?: string | null;
+  coste_entrega?: number | string | null;
+
   modelo?: { id:number; slug:string; marca:string; nombre:string } | null;
   puede_cancelar?: boolean;
 }
@@ -79,6 +115,19 @@ export class ReservaApi {
   create(body: CreateReservaPayload) {
     return this.http.post<Reserva>(this.base, body);
   }
+
+  /** Stripe Checkout */
+checkout(body: CreateReservaPayload) {
+  return this.http.post<{
+    reserva_id: number;
+    codigo: string;
+    checkout_url: string;
+    precio_total: number;
+    anticipo: number;
+    restante: number;
+    deposito: number;
+  }>(`${this.base}/checkout`, body);
+}
 
   /** Listar reservas (admin) */
   list(params: {
@@ -103,7 +152,11 @@ export class ReservaApi {
   }
 
   /** Actualizar (admin) */
-  update(id: number, patch: Partial<CreateReservaPayload & { estado: ReservaEstado }>) {
+  update(id: number, patch: Partial<CreateReservaPayload & {
+    estado: ReservaEstado;
+    payment_status: string;
+    payment_intent_id: string | null;
+  }>) {
     return this.http.patch<Reserva>(`${this.base}/${id}`, patch);
   }
 
@@ -142,4 +195,35 @@ export class ReservaApi {
       modelo?: { id:number; slug:string; marca:string; nombre:string } | null;
     }>(`${environment.apiUrl}/public/reservas/${code}/cancel`, {});
   }
+
+  getStripeSessionDetails(sessionId: string) {
+  return this.http.get<{
+    id: number;
+    codigo: string;
+    estado: string;
+    fecha_inicio: string;
+    fecha_fin: string;
+    hora_recogida?: string | null;
+    precio_total?: number | string | null;
+    deposito?: number | string | null;
+    anticipo_stripe?: number | string | null;
+    restante_entrega?: number | string | null;
+    fianza_entrega?: number | string | null;
+    moneda?: string | null;
+    tipo_entrega?: 'pickup' | 'delivery' | null;
+    direccion_entrega?: string | null;
+    codigo_postal?: string | null;
+    coste_entrega?: number | string | null;
+    cliente_nombre?: string | null;
+    cliente_email?: string | null;
+    cliente_tel?: string | null;
+    cliente_documento?: string | null;
+    cliente_nacionalidad?: string | null;
+    cliente_direccion_origen?: string | null;
+    cliente_direccion_hospedaje?: string | null;
+    modelo?: { id:number; slug:string; marca:string; nombre:string } | null;
+  }>(`${environment.apiUrl}/stripe/session/${encodeURIComponent(sessionId)}`);
+}
+
+  
 }

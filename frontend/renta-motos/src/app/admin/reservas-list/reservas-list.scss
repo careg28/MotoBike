@@ -1,4 +1,4 @@
-.container { max-width: 1100px; }
+.container { max-width: none; }
 /* —— Backdrop con blur y animación ———————————————— */
 .modal-backdrop.fancy{
   position: fixed;
@@ -16,17 +16,21 @@
   position: fixed; inset: 0; z-index: 1001;
   display: grid; place-items: center;
   padding: 20px;
+  overflow-y: auto;
 }
 
 /* —— Tarjeta del modal ———————————————— */
 .modal-card{
   width: 100%;
   max-width: 620px;
+  max-height: calc(100vh - 40px);
   background: #fff;
   border: 1px solid #eef0f2;
   border-radius: 16px;
   box-shadow: 0 24px 60px rgba(0,0,0,.18);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
   transform: translateY(6px) scale(.98);
   opacity: 0;
   animation: popIn .18s ease-out .02s both;
@@ -35,7 +39,15 @@
   to { transform: translateY(0) scale(1); opacity: 1; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .modal-backdrop.fancy, .modal-card { animation: none; }
+  .modal-backdrop.fancy,
+  .modal-card {
+    animation: none;
+  }
+
+  .modal-card {
+    transform: none;
+    opacity: 1;
+  }
 }
 
 /* —— Header ———————————————— */
@@ -77,6 +89,7 @@
 .modal-bd{
   padding: 14px 16px 4px;
   display: grid; gap: 10px;
+  overflow-y: auto;
 }
 .fld-label{ font-weight: 600; font-size: .95rem; }
 .fld-select{
@@ -106,6 +119,36 @@
   display: flex; justify-content: flex-end; gap: 8px;
   padding: 12px 16px 16px;
   border-top: 1px solid #f1f3f5;
+}
+
+.detail-grid{
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.detail-block{
+  border: 1px solid #eef0f2;
+  border-radius: 12px;
+  padding: 12px;
+  background: #fafafa;
+}
+
+.detail-block h4{
+  margin: 0 0 10px;
+  font-size: 15px;
+}
+
+.detail-block p{
+  margin: 0 0 8px;
+}
+
+.detail-alert{
+  grid-column: 1 / -1;
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+  padding: .75rem 1rem;
+  border-radius: .75rem;
 }
 
 /* —— Dark mode base (opcional) ———————————————— */
@@ -149,8 +192,16 @@
 
 .table-wrap { overflow-x:auto; }
 .table { width:100%; border-collapse:collapse; }
-.table th, .table td { border-bottom:1px solid #eee; padding:.75rem 1rem; vertical-align:top; }
-.table thead th { font-weight:700; }
+.table th, .table td {
+  border-bottom:1px solid #eee;
+  padding:.75rem 1rem;
+  vertical-align:middle;
+  text-align:left;
+}
+.table thead th {
+  font-weight:700;
+  vertical-align:middle;
+}
 .table .actions-col { white-space:nowrap; }
 
 .t { font-weight:600; }
@@ -160,6 +211,7 @@
   display:inline-flex; align-items:center; justify-content:center;
   height:34px; padding:0 .8rem; border-radius:10px; font-weight:600; border:1px solid transparent; cursor:pointer;
 }
+.btn-primary.sm, .btn-danger.sm { height: 30px; padding: 0 .65rem; font-size: .85rem; }
 .btn-primary { background:#111; color:#fff; }
 .btn-primary.outline { background:#fff; color:#111; border-color:#111; }
 .btn-danger { background:#ef4444; color:#fff; }
@@ -171,4 +223,5 @@
 @media (max-width: 640px) {
   .mobile-only { display:grid; }
   .desktop-only { display:none; }
+  .detail-grid { grid-template-columns: 1fr; }
 }

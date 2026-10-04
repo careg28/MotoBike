@@ -1,0 +1,86 @@
+.cookies-page {
+  padding: 3rem 0 4rem;
+  background:
+    radial-gradient(circle at top left, rgba(255, 196, 0, .12), transparent 32%),
+    linear-gradient(180deg, #fff8e6 0%, #ffffff 22%);
+}
+
+.cookies-shell {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.cookies-hero {
+  max-width: 760px;
+}
+
+.cookies-kicker {
+  display: inline-flex;
+  align-items: center;
+  padding: .35rem .7rem;
+  border-radius: 999px;
+  background: #111827;
+  color: #fff;
+  font-size: .82rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.cookies-hero h1 {
+  margin: .8rem 0 .6rem;
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  line-height: 1.05;
+}
+
+.cookies-hero p {
+  margin: 0;
+  max-width: 60ch;
+  color: #4b5563;
+  font-size: 1.02rem;
+  line-height: 1.7;
+}
+
+.cookies-card {
+  background: #fff;
+  border: 1px solid rgba(17, 24, 39, .08);
+  border-radius: 24px;
+  padding: 1.5rem;
+  box-shadow: 0 28px 70px rgba(15, 23, 42, .08);
+}
+
+.cookies-intro,
+.cookies-section {
+  display: grid;
+  gap: .9rem;
+}
+
+.cookies-section + .cookies-section {
+  margin-top: 1.75rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid #eceff3;
+}
+
+.cookies-section h2 {
+  margin: 0;
+  font-size: 1.12rem;
+  line-height: 1.4;
+}
+
+.cookies-intro p,
+.cookies-section p {
+  margin: 0;
+  color: #1f2937;
+  line-height: 1.75;
+}
+
+@media (max-width: 640px) {
+  .cookies-page {
+    padding: 2rem 0 3rem;
+  }
+
+  .cookies-card {
+    padding: 1rem;
+    border-radius: 18px;
+  }
+}

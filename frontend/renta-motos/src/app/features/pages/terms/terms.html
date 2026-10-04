@@ -1,0 +1,22 @@
+<section class="terms-page">
+  <div class="container terms-shell">
+    <header class="terms-hero">
+      <span class="terms-kicker">Legal</span>
+      <h1>Términos y condiciones</h1>
+      <p>
+        Condiciones generales del contrato de alquiler de vehículo de FEO'S Renta Bike.
+      </p>
+    </header>
+
+    <article class="terms-card">
+      <div class="terms-intro">
+        <p *ngFor="let paragraph of intro">{{ paragraph }}</p>
+      </div>
+
+      <section class="terms-section" *ngFor="let section of sections">
+        <h2>{{ section.title }}</h2>
+        <p *ngFor="let paragraph of section.paragraphs">{{ paragraph }}</p>
+      </section>
+    </article>
+  </div>
+</section>

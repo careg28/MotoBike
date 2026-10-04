@@ -7,6 +7,8 @@ use App\Http\Controllers\Api\ClienteController;
 use App\Http\Controllers\Api\MediaController;
 use App\Http\Controllers\Api\ModeloController;
 use App\Http\Controllers\Api\ReservaController;
+use App\Http\Controllers\Api\ContactController;
+use App\Http\Controllers\Api\FrontendLogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,19 +18,30 @@ use App\Http\Controllers\Api\ReservaController;
 Route::get('/motos', [MotoController::class, 'index']);
 Route::get('/motos/{slug}', [MotoController::class, 'show']);
 Route::get('/motos/{slug}/precio', [MotoController::class, 'price']);
+   Route::get('/modelos/admin-list', [ModeloController::class, 'adminList']);          // <-- FIJA primero
+    Route::get('/modelos/{slug}/availability', [ModeloController::class, 'availability']); // <-- FIJA también
+    Route::get   ('/modelos',        [ModeloController::class, 'index']);
+    Route::get   ('/modelos/{slug}', [ModeloController::class, 'show']);
 
 Route::get('/clientes', [ClienteController::class, 'index']);
 Route::get('/clientes/{id}', [ClienteController::class, 'show']);
-
+Route::post('/contact', [ContactController::class, 'send'])
+    ->middleware('throttle:3,1'); // 
+Route::post('/front-log', [FrontendLogController::class, 'store'])
+    ->middleware('throttle:20,1');
+Route::get('/media/file/{path}', [MediaController::class, 'file'])->where('path', '.*');
 /* Disponibilidad y presupuesto (públicas) */
 Route::get ('/modelos/{modelo:slug}/availability', [ModeloController::class, 'availability']);
 Route::post('/modelos/{modelo:slug}/quote',        [ModeloController::class, 'quote']);
 Route::get('/catalog/modelos', [ModeloController::class, 'catalog']);
 /* Crear reserva (público, estado HOLD) */
-Route::post('/reservas', [ReservaController::class, 'store']);
+Route::post('/reservas', [ReservaController::class, 'store'])->middleware('throttle:5,1');
+Route::post('/reservas/checkout', [ReservaController::class, 'checkout'])->middleware('throttle:5,1');
 Route::get('/reservas/lookup/{codigo}', [ReservaController::class, 'lookup']);
 Route::post('/reservas/{codigo}/cancel', [ReservaController::class, 'cancelByCode']);
 
+Route::post('/stripe/webhook', [ReservaController::class, 'stripeWebhook']);
+Route::get('/stripe/session/{sessionId}', [ReservaController::class, 'stripeSessionDetails']);
 Route::prefix('public')->group(function () {
     // Tracking / seguimiento
     Route::get('/reservas/lookup/{codigo}', [ReservaController::class, 'lookup']);
@@ -43,6 +56,7 @@ Route::prefix('public')->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::post('/login', [AuthController::class, 'login']);
+
 
 /*
 |--------------------------------------------------------------------------
@@ -72,10 +86,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/media/{id}', [MediaController::class, 'destroy']);
 
     // Modelos (admin)
-    Route::get('/modelos/admin-list', [ModeloController::class, 'adminList']);          // <-- FIJA primero
-    Route::get('/modelos/{slug}/availability', [ModeloController::class, 'availability']); // <-- FIJA también
-    Route::get   ('/modelos',        [ModeloController::class, 'index']);
-    Route::get   ('/modelos/{slug}', [ModeloController::class, 'show']);
+ 
     Route::post  ('/modelos',        [ModeloController::class, 'store']);
     Route::put   ('/modelos/{id}',   [ModeloController::class, 'update']);
     Route::delete('/modelos/{id}',   [ModeloController::class, 'destroy']);

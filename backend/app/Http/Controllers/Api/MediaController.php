@@ -10,6 +10,17 @@ use Illuminate\Support\Facades\Storage;
 
 class MediaController extends Controller
 {
+    public function file(string $path)
+    {
+        $path = ltrim($path, '/');
+
+        if (str_contains($path, '..') || !Storage::disk('public')->exists($path)) {
+            abort(404);
+        }
+
+        return response()->file(Storage::disk('public')->path($path));
+    }
+
     // GET /api/media
     public function index(Request $r)
     {

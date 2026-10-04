@@ -23,6 +23,7 @@ class Reserva extends Model
         'moto_id',
         'fecha_inicio',
         'fecha_fin',
+        'hora_recogida',
         'precio_total',
         'deposito',
         'moneda',
@@ -30,9 +31,17 @@ class Reserva extends Model
         'cliente_nombre',
         'cliente_email',
         'cliente_tel',
+        'cliente_documento',
+        'cliente_nacionalidad',
+        'cliente_direccion_origen',
+        'cliente_direccion_hospedaje',
         'payment_intent_id',
         'payment_status',
         'notas',
+        'tipo_entrega',
+        'direccion_entrega',
+        'codigo_postal',
+        'coste_entrega',
     ];
 
     protected $casts = [
@@ -40,6 +49,7 @@ class Reserva extends Model
         'fecha_fin'    => 'date',
         'precio_total' => 'decimal:2',
         'deposito'     => 'decimal:2',
+        'coste_entrega' => 'decimal:2',
     ];
 
     protected static function booted(): void

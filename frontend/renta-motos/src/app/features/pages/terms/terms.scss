@@ -1,0 +1,86 @@
+.terms-page {
+  padding: 3rem 0 4rem;
+  background:
+    radial-gradient(circle at top left, rgba(255, 196, 0, .12), transparent 32%),
+    linear-gradient(180deg, #fff8e6 0%, #ffffff 22%);
+}
+
+.terms-shell {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.terms-hero {
+  max-width: 760px;
+}
+
+.terms-kicker {
+  display: inline-flex;
+  align-items: center;
+  padding: .35rem .7rem;
+  border-radius: 999px;
+  background: #111827;
+  color: #fff;
+  font-size: .82rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.terms-hero h1 {
+  margin: .8rem 0 .6rem;
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  line-height: 1.05;
+}
+
+.terms-hero p {
+  margin: 0;
+  max-width: 60ch;
+  color: #4b5563;
+  font-size: 1.02rem;
+  line-height: 1.7;
+}
+
+.terms-card {
+  background: #fff;
+  border: 1px solid rgba(17, 24, 39, .08);
+  border-radius: 24px;
+  padding: 1.5rem;
+  box-shadow: 0 28px 70px rgba(15, 23, 42, .08);
+}
+
+.terms-intro,
+.terms-section {
+  display: grid;
+  gap: .9rem;
+}
+
+.terms-section + .terms-section {
+  margin-top: 1.75rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid #eceff3;
+}
+
+.terms-section h2 {
+  margin: 0;
+  font-size: 1.12rem;
+  line-height: 1.4;
+}
+
+.terms-intro p,
+.terms-section p {
+  margin: 0;
+  color: #1f2937;
+  line-height: 1.75;
+}
+
+@media (max-width: 640px) {
+  .terms-page {
+    padding: 2rem 0 3rem;
+  }
+
+  .terms-card {
+    padding: 1rem;
+    border-radius: 18px;
+  }
+}

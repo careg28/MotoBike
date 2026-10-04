@@ -144,15 +144,21 @@ class ModeloController extends Controller
     {
         $modelo = Modelo::findOrFail($id);
 
-        // Evitar borrar si hay motos asociadas
-        $enUso = Moto::where('modelo_id', $id)->exists();
-        if ($enUso) {
+        $tieneMotos = Moto::withTrashed()->where('modelo_id', $id)->exists();
+        if ($tieneMotos) {
             return response()->json([
                 'message' => 'No se puede eliminar: hay motos asociadas a este modelo.'
             ], 422);
         }
 
-        $modelo->delete();
+        $tieneReservas = Reserva::where('modelo_id', $id)->exists();
+        if ($tieneReservas) {
+            return response()->json([
+                'message' => 'No se puede eliminar: este modelo tiene reservas asociadas.'
+            ], 422);
+        }
+
+        $modelo->forceDelete();
         return response()->json(['deleted' => true]);
     }
 
@@ -324,6 +330,8 @@ class ModeloController extends Controller
     public function catalog(Request $req)
     {
         $limit = min((int) $req->query('limit', 24), 48);
+        $today = Carbon::today()->toDateString();
+        $blockStates = [Reserva::ESTADO_PAID, Reserva::ESTADO_ASSIGNED, 'pendiente','confirmada','recogida','reservada'];
 
         $select = ['id','marca','nombre','slug','categoria','precio_base','deposito_sugerido','imagenes'];
         if (Schema::hasColumn('modelos','specs'))  { $select[] = 'specs'; }
@@ -339,7 +347,25 @@ class ModeloController extends Controller
             ->take($limit)
             ->get($select);
 
-        $out = $items->map(function ($m) {
+        $modeloIds = $items->pluck('id')->all();
+
+        $activeCounts = Moto::query()
+            ->selectRaw('modelo_id, COUNT(*) as total')
+            ->whereIn('modelo_id', $modeloIds)
+            ->whereNotIn('estado', ['reservada','mantenimiento','baja','inactiva'])
+            ->groupBy('modelo_id')
+            ->pluck('total', 'modelo_id');
+
+        $occupiedCounts = Reserva::query()
+            ->selectRaw('modelo_id, COUNT(*) as total')
+            ->whereIn('modelo_id', $modeloIds)
+            ->whereIn('estado', $blockStates)
+            ->where('fecha_inicio', '<=', $today)
+            ->where('fecha_fin', '>', $today)
+            ->groupBy('modelo_id')
+            ->pluck('total', 'modelo_id');
+
+        $out = $items->map(function ($m) use ($activeCounts, $occupiedCounts) {
             // normalizador array/json-string
             $normalize = function ($v) {
                 if (is_array($v)) return $v;
@@ -360,34 +386,31 @@ class ModeloController extends Controller
                 $img = $imgsMoto[0] ?? null;
             }
             if ($img && !str_starts_with($img, 'http') && !str_starts_with($img, '/')) {
-                $img = Storage::disk('public')->url($img);
+                $segments = array_map('rawurlencode', explode('/', ltrim($img, '/')));
+                $img = url('/api/media/file/' . implode('/', $segments));
             }
 
             // Specs / badges fallback
             $specs  = $normalize($m->specs  ?? []);
             $badges = $normalize($m->badges ?? []);
-            if (empty($specs)  && $firstMoto) $specs  = $normalize($firstMoto->specs  ?? []);
-            if (empty($badges) && $firstMoto) $badges = $normalize($firstMoto->badges ?? []);
+            if ($firstMoto) {
+                $specs = array_replace(
+                    $normalize($firstMoto->specs ?? []),
+                    array_filter($specs, fn ($value) => $value !== null && $value !== '')
+                );
+
+                if (empty($badges)) {
+                    $badges = $normalize($firstMoto->badges ?? []);
+                }
+            }
 
             // Precio
             $price = (float)($m->precio_base ?? 0);
             if (!$price && $firstMoto?->precio_dia) $price = (float)$firstMoto->precio_dia;
 
             // Stock disponible HOY (agregado)
-            $activeCount = Moto::query()
-                ->where('modelo_id', $m->id)
-                ->whereNotIn('estado', ['reservada','mantenimiento','baja','inactiva'])
-                ->count();
-
-            $blockStates = [Reserva::ESTADO_PAID, Reserva::ESTADO_ASSIGNED, 'pendiente','confirmada','recogida','reservada'];
-
-            $today = Carbon::today()->toDateString();
-            $ocupadasHoy = Reserva::query()
-                ->where('modelo_id', $m->id)
-                ->whereIn('estado', $blockStates)
-                ->where('fecha_inicio', '<=', $today)
-                ->where('fecha_fin',    '>',  $today)
-                ->count();
+            $activeCount = (int) ($activeCounts[$m->id] ?? 0);
+            $ocupadasHoy = (int) ($occupiedCounts[$m->id] ?? 0);
 
             $stockHoy = max(0, $activeCount - $ocupadasHoy);
 

@@ -5,17 +5,19 @@
       <p class="mp__subtitle">{{ 'modelsPage.subtitle' | translate }}</p>
     </header>
 
+    <app-ui-loader
+      *ngIf="loading()"
+      [message]="'Cargando modelos disponibles...'">
+    </app-ui-loader>
+
     <!-- ... filtros ... -->
 
-    <div class="mp__list">
+    <div class="mp__list" *ngIf="!loading()">
       <article class="mp__item card" *ngFor="let m of models(); trackBy: trackBySlug">
         <a [routerLink]="modelLink(m)" class="mp__img">
           <img [src]="m.img || '/models/placeholder.jpg'" [alt]="m.name" loading="lazy" />
           <span class="badge">{{ m.tag }}</span>
 
-          <span class="badge badge--out" *ngIf="m.in_stock === false">
-            {{ 'modelsPage.outOfStock' | translate }}
-          </span>
         </a>
 
         <div class="mp__info">
@@ -73,13 +75,7 @@
           </dl>
 
           <div class="mp__actions">
-            <a
-              [routerLink]="m.in_stock ? reserveLink(m) : null"
-              class="btn-primary"
-              [class.btn-disabled]="m.in_stock === false"
-              [attr.aria-disabled]="m.in_stock === false ? 'true' : null"
-              (click)="m.in_stock ? null : sinStock()"
-            >
+            <a [routerLink]="reserveLink(m)" class="btn-primary">
               {{ 'modelsPage.reserve' | translate }}
             </a>
           </div>
@@ -88,7 +84,7 @@
     </div>
 
     <!-- Comparativa -->
-    <div class="mp__table card">
+    <div class="mp__table card" *ngIf="!loading() && models().length">
       <h3 class="mp__table-title">{{ 'modelsPage.compare.title' | translate }}</h3>
 
       <div class="table-scroll">

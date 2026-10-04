@@ -11,6 +11,7 @@ type LookupReserva = {
   estado: string;
   fecha_inicio: string;
   fecha_fin: string;
+  hora_recogida?: string | null;
   precio_total?: number | string | null;
   deposito?: number | string | null;
   moneda?: string | null;
@@ -40,11 +41,8 @@ export class SeguimientoReserva {
     const r = this.reserva();
     if (!r) return '';
 
-    // traducimos por key según estado del backend
     const key = `tracking.status.${r.estado}`;
     const translated = this.translate.instant(key);
-
-    // fallback: si no existe traducción, devuelve el estado crudo
     return translated === key ? r.estado : translated;
   });
 
@@ -85,7 +83,7 @@ export class SeguimientoReserva {
 
     this.api.lookupPublic(c).subscribe({
       next: (r) => {
-        this.reserva.set(r);
+        this.reserva.set(r as LookupReserva);
         this.loading.set(false);
       },
       error: (err) => {
@@ -95,15 +93,25 @@ export class SeguimientoReserva {
     });
   }
 
-  private pad(n: number) { return n < 10 ? '0' + n : '' + n; }
+  private pad(n: number) { return n < 10 ? `0${n}` : `${n}`; }
 
   fmtFecha(val: string | null | undefined): string {
-    if (!val) return '—';
+    if (!val) return '-';
     const d = new Date(String(val));
-    if (isNaN(d.getTime())) {
+    if (Number.isNaN(d.getTime())) {
       const s = String(val);
       return s.includes('T') ? s.split('T')[0].split('-').reverse().join('/') : s;
     }
+    return `${this.pad(d.getDate())}/${this.pad(d.getMonth() + 1)}/${d.getFullYear()}`;
+  }
+
+  ultimoDiaUso(val: string | null | undefined): string {
+    if (!val) return '-';
+    const d = new Date(String(val));
+    if (Number.isNaN(d.getTime())) {
+      return String(val);
+    }
+    d.setDate(d.getDate() - 1);
     return `${this.pad(d.getDate())}/${this.pad(d.getMonth() + 1)}/${d.getFullYear()}`;
   }
 }

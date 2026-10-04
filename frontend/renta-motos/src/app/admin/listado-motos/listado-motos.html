@@ -2,7 +2,7 @@
 
   <!-- Toolbar -->
   <form class="toolbar card" (submit)="applyFilters(); $event.preventDefault()">
-    <input class="input" type="search" placeholder="Buscar marca o modelo…"
+    <input class="input" type="search" placeholder="Buscar marca o modelo..."
            [value]="search()" (input)="onSearchInput($event)">
 
     <select class="select" [value]="estado()" #sel (change)="onEstadoChange(sel.value)">
@@ -21,9 +21,9 @@
     <button class="btn-primary" type="submit" [disabled]="loading()">Filtrar</button>
   </form>
 
-  <!-- Loading / vacío -->
+  <!-- Loading / vacio -->
   @if (loading()) {
-    <div class="muted">Cargando…</div>
+    <div class="muted">Cargando...</div>
   } @else if (!data().length) {
     <div class="muted">No hay motos que coincidan.</div>
   }
@@ -38,7 +38,7 @@
           } @else {
             <div class="ph">Sin imagen</div>
           }
-          @if (m.asignada) { <div class="lock">🔒</div> }
+          @if (m.asignada) { <div class="lock">Asignada</div> }
         </div>
 
         <div class="body">
@@ -48,13 +48,12 @@
           </div>
 
           <div class="row meta">
-            <span class="price">€{{ m.precio }} / día</span>
+            <span class="price">EUR {{ m.precio }} / dia</span>
             @if (m.asignada) { <small class="asig">Asignada ahora</small> }
           </div>
 
-          <!-- Matrícula en mobile -->
           <div class="row meta2">
-            <small class="plate">Matrícula: {{ m.matricula || '—' }}</small>
+            <small class="plate">Matricula: {{ m.matricula || '-' }}</small>
           </div>
 
           <div class="actions">
@@ -70,23 +69,22 @@
   <!-- Tabla (desktop) -->
   <div class="table-wrap">
     <table class="table">
-      <!-- Colgroup para alinear columnas -->
       <colgroup>
-        <col />                    <!-- Modelo -->
-        <col style="width:140px;" /><!-- Matrícula -->
-        <col style="width:150px;" /><!-- Estado -->
-        <col style="width:120px;" /><!-- Asignada -->
-        <col style="width:120px;" /><!-- Precio/día -->
-        <col style="width:240px;" /><!-- Acciones -->
+        <col />
+        <col style="width:140px;" />
+        <col style="width:150px;" />
+        <col style="width:120px;" />
+        <col style="width:120px;" />
+        <col style="width:240px;" />
       </colgroup>
 
       <thead>
         <tr>
           <th>Modelo</th>
-          <th>Matrícula</th>
+          <th>Matricula</th>
           <th>Estado</th>
           <th>Asignada</th>
-          <th class="num">Precio/día</th>
+          <th class="num">Precio/dia</th>
           <th class="actions-col">Acciones</th>
         </tr>
       </thead>
@@ -102,9 +100,7 @@
               </div>
             </td>
 
-            <td class="plate">
-              {{ m.matricula || '—' }}
-            </td>
+            <td class="plate">{{ m.matricula || '-' }}</td>
 
             <td><span [class]="badgeClass(m.estado)">{{ m.estado }}</span></td>
 
@@ -116,7 +112,7 @@
               }
             </td>
 
-            <td class="num">€{{ m.precio }}</td>
+            <td class="num">EUR {{ m.precio }}</td>
 
             <td class="actions-col">
               <button class="btn-primary outline sm" (click)="editar(m)">Editar</button>
@@ -142,20 +138,16 @@
         ?
       </p>
 
-      <!-- Toggle “definitivo” -->
-      <label class="hard-row">
-        <input type="checkbox"
-               [checked]="hardDelete()"
-               (change)="hardDelete.set(($any($event.target)).checked)">
-        Eliminar definitivamente (saltarse papelera)
-      </label>
+      <p class="muted">
+        Solo se puede eliminar si la moto no tiene reservas asociadas.
+      </p>
 
       @if (deleteError()) { <div class="alert error">{{ deleteError() }}</div> }
 
       <div class="modal-actions">
         <button class="btn-primary outline" type="button" (click)="cancelDelete()" [disabled]="deleting()">Cancelar</button>
         <button class="btn-danger" type="button" (click)="confirmDelete()" [disabled]="deleting()">
-          {{ deleting() ? 'Eliminando…' : (hardDelete() ? 'Sí, eliminar DEFINITIVO' : 'Sí, enviar a papelera') }}
+          {{ deleting() ? 'Eliminando...' : 'Si, eliminar' }}
         </button>
       </div>
     </div>

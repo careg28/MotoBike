@@ -1,17 +1,48 @@
+:host {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.cal {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+
 .cal {
     padding: 1rem;
 }
 
 .cal__head {
-    display: flex;
-    align-items: center;
-    gap: .5rem;
-    margin-bottom: .5rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  flex-wrap: wrap;
 }
 
 .cal__title {
     font-weight: 700;
     text-transform: capitalize;
+}
+
+.cal__head {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  flex-wrap: wrap;
+}
+
+.cal__title {
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: center;
+  font-weight: 700;
+  text-transform: capitalize;
 }
 
 .cal__grid {
@@ -196,3 +227,56 @@
 .dot.ok  { background: #fff; }
 .dot.no  { background: #ef4444; border-color: #ef4444; }
 .dot.sel { background: #fffbe6; border-color: #facc15; }
+.alert {
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  margin-top: 8px;
+}
+
+.alert.error {
+  background: #fff8cc;
+  border: 1px solid #facc15;
+  color: #92400e;
+}
+
+@media (max-width: 600px) {
+  .cal {
+    padding: .75rem;
+  }
+
+  .cal__head {
+    justify-content: center;
+  }
+
+  .cal__title {
+    order: -1;
+    width: 100%;
+    text-align: center;
+  }
+
+  .cal__grid {
+    gap: .25rem;
+  }
+
+  .cal__dow {
+    font-size: .72rem;
+  }
+
+  .cal__cell {
+    min-height: 38px;
+    padding: .2rem;
+    border-radius: 8px;
+  }
+
+  .cal__num {
+    font-size: .9rem;
+  }
+
+  .cal__legend {
+    gap: .5rem;
+    flex-wrap: wrap;
+    font-size: .8rem;
+  }
+
+}

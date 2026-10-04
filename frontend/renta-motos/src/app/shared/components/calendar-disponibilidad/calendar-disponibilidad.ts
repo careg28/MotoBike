@@ -35,7 +35,7 @@ export class CalendarDisponibilidad implements OnInit, OnChanges {
   /** si el padre incrementa esto → recargamos */
   @Input() refreshKey: number | string | null = null;
 
-  @Output() rangeChange = new EventEmitter<{ start: string; end: string }>();
+  @Output() rangeChange = new EventEmitter<{ start: string; end: string; returnDate: string; billableDays: number }>();
 
   viewDate = signal(new Date());
   daysMap  = signal<AvailabilityMap>({});
@@ -113,8 +113,21 @@ export class CalendarDisponibilidad implements OnInit, OnChanges {
     this.error.set(null);
 
     const v = this.viewDate();
-    const from = toISODateLocal(new Date(v.getFullYear(), v.getMonth(), 1));
-    const to   = toISODateLocal(new Date(v.getFullYear(), v.getMonth() + 1, 1)); // exclusivo
+    const viewMonthStart = new Date(v.getFullYear(), v.getMonth(), 1);
+    const viewMonthEnd = new Date(v.getFullYear(), v.getMonth() + 1, 1); // exclusivo
+
+    const start = this.startSel();
+    const startMonthStart = start
+      ? new Date(start.getFullYear(), start.getMonth(), 1)
+      : viewMonthStart;
+
+    const fromDate = startMonthStart < viewMonthStart ? startMonthStart : viewMonthStart;
+    const toDate = startMonthStart < viewMonthStart
+      ? viewMonthEnd
+      : new Date(startMonthStart.getFullYear(), startMonthStart.getMonth() + 1, 1);
+
+    const from = toISODateLocal(fromDate);
+    const to   = toISODateLocal(toDate);
 
     this.http.get<{ days: AvailabilityMap }>(
       `${environment.apiUrl}/modelos/${this.slug}/availability`,
@@ -135,16 +148,12 @@ export class CalendarDisponibilidad implements OnInit, OnChanges {
   prevMonth() {
     const v = this.viewDate();
     this.viewDate.set(new Date(v.getFullYear(), v.getMonth() - 1, 1));
-    this.startSel.set(null);
-    this.endSel.set(null);
     this.loadMonth(); // ✅ fuerza request
   }
 
   nextMonth() {
     const v = this.viewDate();
     this.viewDate.set(new Date(v.getFullYear(), v.getMonth() + 1, 1));
-    this.startSel.set(null);
-    this.endSel.set(null);
     this.loadMonth(); // ✅ fuerza request
   }
 
@@ -156,48 +165,73 @@ export class CalendarDisponibilidad implements OnInit, OnChanges {
     this.loadMonth(); // ✅ fuerza request
   }
 
-  pick(cell: { date: Date; iso: string; available: boolean; inMonth: boolean }) {
-    if (!cell.inMonth || !cell.available) return;
+pick(cell: { date: Date; iso: string; available: boolean; inMonth: boolean }) {
+  if (!cell.inMonth || !cell.available) return;
 
-    const s = this.startSel();
-    const e = this.endSel();
+  const s = this.startSel();
+  const e = this.endSel();
 
-    if (s && e) {
-      this.startSel.set(cell.date);
-      this.endSel.set(null);
-      return;
-    }
-
-    if (!s) {
-      this.startSel.set(cell.date);
-      return;
-    }
-
-    if (cell.date <= s) {
-      this.startSel.set(cell.date);
-      this.endSel.set(null);
-      return;
-    }
-
-    // validar rango completo [s, cell)
-    let ok = true;
-    let d = new Date(s.getFullYear(), s.getMonth(), s.getDate());
-    const map = this.daysMap();
-
-    while (d < cell.date) {
-      const iso = toISODateLocal(d);
-      const av = map[iso];
-      if (!av || !av.is_available || (av.available ?? 0) <= 0) { ok = false; break; }
-      d = addDays(d, 1);
-    }
-    if (!ok) return;
-
-    this.endSel.set(cell.date);
-    this.rangeChange.emit({
-      start: toISODateLocal(s),
-      end: toISODateLocal(cell.date),
-    });
+  if (s && e) {
+    this.startSel.set(cell.date);
+    this.endSel.set(null);
+    this.error.set(null);
+    return;
   }
+
+  if (!s) {
+    this.startSel.set(cell.date);
+    this.endSel.set(null);
+    this.error.set(null);
+    return;
+  }
+
+  if (cell.date <= s) {
+    this.startSel.set(cell.date);
+    this.endSel.set(null);
+    this.error.set(null);
+    return;
+  }
+
+  // mínimo 2 días de uso (inclusive)
+  const msPerDay = 1000 * 60 * 60 * 24;
+  const usageDays = Math.round((cell.date.getTime() - s.getTime()) / msPerDay) + 1;
+
+  if (usageDays < 2) {
+    this.error.set(this.translate.instant('reservation.minDays'));
+    return;
+  }
+
+  // validar rango completo de dias de uso [s, cell]
+  let ok = true;
+  let d = new Date(s.getFullYear(), s.getMonth(), s.getDate());
+  const map = this.daysMap();
+
+  while (d <= cell.date) {
+    const iso = toISODateLocal(d);
+    const av = map[iso];
+    if (!av || !av.is_available || (av.available ?? 0) <= 0) {
+      ok = false;
+      break;
+    }
+    d = addDays(d, 1);
+  }
+
+  if (!ok) {
+    this.error.set(this.translate.instant('calendar.rangeUnavailable'));
+    return;
+  }
+
+  this.error.set(null);
+
+  this.endSel.set(cell.date);
+  const returnDate = addDays(cell.date, 1);
+  this.rangeChange.emit({
+    start: toISODateLocal(s),
+    end: toISODateLocal(cell.date),
+    returnDate: toISODateLocal(returnDate),
+    billableDays: usageDays,
+  });
+}
 
   isStart(iso: string) { return !!this.startIso() && iso === this.startIso(); }
   isEnd(iso: string)   { return !!this.endIso()   && iso === this.endIso(); }

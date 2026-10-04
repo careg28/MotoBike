@@ -37,18 +37,18 @@ class MotoController extends Controller
 
         // ¿Ocupadas/libres ahora?
         if ($request->filled('asignada')) {
-            $bloq = ['pendiente','confirmada','recogida'];
+            $bloq = [Reserva::ESTADO_PAID, Reserva::ESTADO_ASSIGNED, 'pendiente','confirmada','recogida'];
             if ($request->boolean('asignada')) {
                 $q->whereHas('reservas', function ($r) use ($bloq) {
                     $r->whereIn('estado', $bloq)
-                      ->where('inicio', '<=', now())
-                      ->where('fin',    '>',  now());
+                      ->whereDate('fecha_inicio', '<=', now())
+                      ->whereDate('fecha_fin',    '>',  now());
                 });
             } else {
                 $q->whereDoesntHave('reservas', function ($r) use ($bloq) {
                     $r->whereIn('estado', $bloq)
-                      ->where('inicio', '<=', now())
-                      ->where('fin',    '>',  now());
+                      ->whereDate('fecha_inicio', '<=', now())
+                      ->whereDate('fecha_fin',    '>',  now());
                 })->where('estado', '!=', 'mantenimiento');
             }
         }
@@ -59,10 +59,10 @@ class MotoController extends Controller
                 'inicio' => ['required','date'],
                 'fin'    => ['required','date','after:inicio'],
             ]);
-            $bloq = ['pendiente','confirmada','recogida'];
+            $bloq = [Reserva::ESTADO_PAID, Reserva::ESTADO_ASSIGNED, 'pendiente','confirmada','recogida'];
             $idsOcup = Reserva::whereIn('estado', $bloq)
-                ->where('inicio', '<', $request->fin)
-                ->where('fin',    '>', $request->inicio)
+                ->whereDate('fecha_inicio', '<', $request->fin)
+                ->whereDate('fecha_fin',    '>', $request->inicio)
                 ->pluck('moto_id');
             $q->whereNotIn('id', $idsOcup)->where('estado','!=','mantenimiento');
         }
@@ -279,7 +279,15 @@ class MotoController extends Controller
     public function destroy(int $id)
     {
         $moto = Moto::findOrFail($id);
-        $moto->delete();
+
+        $tieneReservas = Reserva::where('moto_id', $id)->exists();
+        if ($tieneReservas) {
+            return response()->json([
+                'message' => 'No se puede eliminar: esta moto tiene reservas asociadas.'
+            ], 422);
+        }
+
+        $moto->forceDelete();
         return response()->json(['deleted' => true]);
     }
 

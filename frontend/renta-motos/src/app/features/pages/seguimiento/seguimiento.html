@@ -58,7 +58,17 @@
 
             <div class="row">
               <span>{{ 'tracking.result.dates' | translate }}</span>
-              <b>{{ fmtFecha(r.fecha_inicio) }} → {{ fmtFecha(r.fecha_fin) }}</b>
+              <b>{{ fmtFecha(r.fecha_inicio) }} -> {{ ultimoDiaUso(r.fecha_fin) }}</b>
+            </div>
+
+            <div class="row" *ngIf="r.hora_recogida">
+              <span>{{ 'tracking.result.pickupTime' | translate }}</span>
+              <b>{{ r.hora_recogida }}</b>
+            </div>
+
+            <div class="row" *ngIf="r.hora_recogida">
+              <span>{{ 'reservation.returnDateTime' | translate }}</span>
+              <b>{{ fmtFecha(r.fecha_fin) }} {{ r.hora_recogida }}</b>
             </div>
 
             <div class="row" *ngIf="r.precio_total !== null && r.precio_total !== undefined">
@@ -91,10 +101,10 @@
           </p>
 
           <div class="contact__actions">
-            <a class="btn-primary" href="https://wa.me/34TU_NUMERO" target="_blank" rel="noopener">
+            <a class="btn-primary" href="https://wa.me/34624473220" target="_blank" rel="noopener">
               {{ 'tracking.help.whatsapp' | translate }}
             </a>
-            <a class="btn-primary outline" href="tel:+34TU_NUMERO">
+            <a class="btn-primary outline" href="tel:+34624473220">
               {{ 'tracking.help.call' | translate }}
             </a>
           </div>

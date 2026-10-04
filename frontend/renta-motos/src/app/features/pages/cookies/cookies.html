@@ -1,0 +1,22 @@
+<section class="cookies-page">
+  <div class="container cookies-shell">
+    <header class="cookies-hero">
+      <span class="cookies-kicker">Legal</span>
+      <h1>Politica de cookies</h1>
+      <p>
+        Informacion sobre el uso de cookies en la web de FEO'S Renta Bike.
+      </p>
+    </header>
+
+    <article class="cookies-card">
+      <div class="cookies-intro">
+        <p *ngFor="let paragraph of intro">{{ paragraph }}</p>
+      </div>
+
+      <section class="cookies-section" *ngFor="let section of sections">
+        <h2>{{ section.title }}</h2>
+        <p *ngFor="let paragraph of section.paragraphs">{{ paragraph }}</p>
+      </section>
+    </article>
+  </div>
+</section>

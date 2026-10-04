@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
 
 // Layouts
-import { Shell } from './layout/shell/shell';             // ⬅️ tu <app-shell>
-import { Admin} from './layout/admin/admin';     // ⬅️ layout admin (ver Paso 3)
+import { Shell } from './layout/shell/shell';             
+import { Admin} from './layout/admin/admin';    
 
 // Páginas públicas
 import { Home } from './features/home/pages/home/home';
@@ -27,10 +27,18 @@ export const routes: Routes = [
       { path: 'modelos/:slug', loadComponent: () => import('./features/pages/modelo-detalle/modelo-detalle').then(m => m.ModeloDetalle) },
       { path: 'login', component: Login, canActivate: [guestGuard] },
       { path: 'reservar/:slug', loadComponent: () => import('./features/pages/reserva/reserva').then(m => m.Reserva) },
+      { path: 'terminos-condiciones', loadComponent: () => import('./features/pages/terms/terms').then(m => m.Terms) },
+      { path: 'politica-cookies', loadComponent: () => import('./features/pages/cookies/cookies').then(m => m.CookiesPolicy) },
+      { path: 'politicas', redirectTo: 'terminos-condiciones', pathMatch: 'full' },
+      // nuevas rutas de Stripe
+      { path: 'reserva/pago-ok', loadComponent: () => import('./features/pages/pago-ok/pago-ok').then(m => m.PagoOk) },
+      { path: 'reserva/pago-cancelado', loadComponent: () => import('./features/pages/pago-cancelado/pago-cancelado').then(m => m.PagoCancelado) },
        // ✅ Seguimiento de reserva (público)
     { path: 'seguimiento', loadComponent: () => import('./features/pages/seguimiento/seguimiento').then(m => m.SeguimientoReserva) },
     ]
   },
+
+  
 
   // Admin con su layout 
   {
@@ -46,10 +54,10 @@ export const routes: Routes = [
       { path: 'modelos', component: ModelosList },
       { path: 'modelos/nuevo',  loadComponent: () => import('./admin/modelos-form/modelos-form').then(m => m.ModelosForm) },
       { path: 'modelos/editar/:slug', loadComponent: () => import('./admin/modelos-form/modelos-form').then(m => m.ModelosForm) },
+      { path: 'clientes', loadComponent: () => import('./admin/clientes-list/clientes-list').then(m => m.ClientesList) },
       { path: 'reservas', loadComponent: () => import('./admin/reservas-list/reservas-list').then(m => m.ReservasList) }
       
-      // { path: 'clientes', loadComponent: ... }
-      // { path: 'reservas', loadComponent: ... }
+     
     ]
   },
 

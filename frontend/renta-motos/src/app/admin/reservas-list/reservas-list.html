@@ -1,10 +1,13 @@
 <div class="container p-4 space-y-4">
   <h2>Reservas</h2>
 
-  <!-- Toolbar -->
   <form class="toolbar card" (submit)="applyFilters(); $event.preventDefault()">
-    <input class="input" type="search" placeholder="Buscar por código, cliente o email…"
-           [value]="search()" (input)="search.set(($any($event.target)).value)">
+    <input
+      class="input"
+      type="search"
+      placeholder="Buscar por codigo, cliente o email..."
+      [value]="search()"
+      (input)="search.set(($any($event.target)).value)">
     <select class="select" [value]="estado()" (change)="estado.set(($any($event.target)).value); applyFilters()">
       <option value="">Todos</option>
       <option value="hold">En espera</option>
@@ -16,12 +19,13 @@
     <button class="btn-primary" type="submit" [disabled]="loading()">Aplicar</button>
   </form>
 
-  <!-- Estados -->
-  <div *ngIf="loading()" class="muted">Cargando…</div>
+  <app-ui-loader
+    *ngIf="loading()"
+    [message]="'Cargando reservas...'">
+  </app-ui-loader>
   <div *ngIf="error()" class="alert error">{{ error() }}</div>
   <div *ngIf="!loading() && !items().length" class="muted">No hay reservas.</div>
 
-  <!-- Cards (móvil) -->
   <div class="mobile-only cards" *ngIf="items().length">
     <div class="card reserva" *ngFor="let r of items(); trackBy: trackById">
       <div class="row head">
@@ -41,48 +45,61 @@
 
       <div class="row">
         <div>
-          <div class="s">Cliente: {{ r.cliente_nombre || '—' }}</div>
-          <div class="s">Email: {{ r.cliente_email || '—' }}</div>
-          <div class="s">Tel: {{ r.cliente_tel || '—' }}</div>
-          <div class="s">Notas: {{ short(r.notas) }}</div>
+          <div class="s">Cliente: {{ r.cliente_nombre || '-' }}</div>
+          <div class="s">Email: {{ r.cliente_email || '-' }}</div>
+          <div class="s">Tel: {{ r.cliente_tel || '-' }}</div>
         </div>
       </div>
 
       <div class="row">
+        <div>
+          <div class="s">Pago: <span [class]="paymentClass(r.payment_status)">{{ paymentLabel(r.payment_status) }}</span></div>
+          <div class="s">Total: {{ fmtMoney(r.precio_total, r.moneda) }}</div>
+        </div>
+      </div>
+
+      <div class="row actions-row">
+        <button class="btn-primary sm" (click)="abrirDetalle(r)">Ver detalles</button>
         <button class="btn-primary outline" (click)="abrirAsignar(r)">Asignar</button>
         <button class="btn-danger outline" (click)="finalizar(r)">Finalizar</button>
       </div>
     </div>
   </div>
 
-  <!-- Tabla (desktop) -->
   <div class="desktop-only table-wrap" *ngIf="items().length">
     <table class="table">
       <thead>
         <tr>
-          <th>Código</th>
+          <th>Codigo</th>
           <th>Modelo</th>
           <th>Rango</th>
           <th>Cliente</th>
           <th>Contacto</th>
-          <th>Notas</th>
+          <th>Pago</th>
           <th>Estado</th>
           <th class="actions-col">Acciones</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let r of items(); trackBy: trackById">
-          <td><strong>#{{ r.codigo }}</strong><div class="s">ID {{ r.id }}</div></td>
+          <td>
+            <strong>#{{ r.codigo }}</strong>
+            <div class="s">ID {{ r.id }}</div>
+          </td>
           <td>{{ r.modelo?.marca }} {{ r.modelo?.nombre }}</td>
           <td>{{ fmtRange(r) }}</td>
-          <td>{{ r.cliente_nombre || '—' }}</td>
+          <td>{{ r.cliente_nombre || '-' }}</td>
           <td>
-            <div class="s">{{ r.cliente_email || '—' }}</div>
-            <div class="s">{{ r.cliente_tel || '—' }}</div>
+            <div class="s">{{ r.cliente_email || '-' }}</div>
+            <div class="s">{{ r.cliente_tel || '-' }}</div>
           </td>
-          <td>{{ short(r.notas) }}</td>
+          <td>
+            <span [class]="paymentClass(r.payment_status)">{{ paymentLabel(r.payment_status) }}</span>
+            <div class="s">{{ fmtMoney(r.precio_total, r.moneda) }}</div>
+          </td>
           <td><span [class]="estadoClass(r.estado)">{{ labelEstado(r.estado) }}</span></td>
           <td class="actions-col">
+            <button class="btn-primary sm" (click)="abrirDetalle(r)">Ver detalles</button>
             <button class="btn-primary outline sm" (click)="abrirAsignar(r)">Asignar</button>
             <button class="btn-danger outline sm" (click)="finalizar(r)">Finalizar</button>
           </td>
@@ -91,33 +108,96 @@
     </table>
   </div>
 
-  <!-- Paginación -->
   <div class="pagination" *ngIf="data() && (data()!.last_page ?? 1) > 1">
-    <button class="btn outline" (click)="prev()" [disabled]="!canPrev()">«</button>
-    <span>Página {{ data()!.current_page || 1 }} de {{ data()!.last_page || 1 }}</span>
-    <button class="btn outline" (click)="next()" [disabled]="!canNext()">»</button>
+    <button class="btn outline" (click)="prev()" [disabled]="!canPrev()"><<</button>
+    <span>Pagina {{ data()!.current_page || 1 }} de {{ data()!.last_page || 1 }}</span>
+    <button class="btn outline" (click)="next()" [disabled]="!canNext()">>></button>
   </div>
 
-  <!-- ============= Modal Asignar ============= -->
+  @if (detalleOpen()) {
+    <div class="modal-backdrop fancy" (click)="cerrarDetalle()"></div>
+
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="detalle-title">
+      <div class="modal-card modal-card--detail" (click)="$event.stopPropagation()">
+        <header class="modal-hd">
+          <div class="modal-hd__icon">EUR</div>
+          <div class="modal-hd__meta">
+            <h3 id="detalle-title">Detalle de reserva</h3>
+            <p class="muted">
+              Reserva <b>{{ detalleOpen()!.codigo }}</b> |
+              {{ fmtFecha(detalleOpen()!.fecha_inicio) }} -> {{ fmtFecha(detalleOpen()!.fecha_fin) }}
+            </p>
+          </div>
+          <button class="modal-close" type="button" aria-label="Cerrar" (click)="cerrarDetalle()">X</button>
+        </header>
+
+        <section class="modal-bd detail-grid">
+          <div class="detail-block">
+            <h4>Cliente</h4>
+            <p><strong>Nombre:</strong> {{ detalleOpen()!.cliente_nombre || '-' }}</p>
+            <p><strong>Email:</strong> {{ detalleOpen()!.cliente_email || '-' }}</p>
+            <p><strong>Telefono:</strong> {{ detalleOpen()!.cliente_tel || '-' }}</p>
+            <p><strong>Modelo:</strong> {{ detalleOpen()!.modelo?.marca }} {{ detalleOpen()!.modelo?.nombre }}</p>
+          </div>
+
+          <div class="detail-block">
+            <h4>Entrega</h4>
+            <p><strong>Tipo:</strong> {{ entregaLabel(detalleOpen()!) }}</p>
+            <p><strong>Direccion:</strong> {{ entregaDireccion(detalleOpen()!) }}</p>
+            <p><strong>Coste entrega:</strong> {{ fmtMoney(detalleOpen()!.coste_entrega, detalleOpen()!.moneda) }}</p>
+          </div>
+
+          <div class="detail-block">
+            <h4>Pago</h4>
+            <p><strong>Estado:</strong> <span [class]="paymentClass(detalleOpen()!.payment_status)">{{ paymentLabel(detalleOpen()!.payment_status) }}</span></p>
+            <p><strong>Total reserva:</strong> {{ fmtMoney(detalleOpen()!.precio_total, detalleOpen()!.moneda) }}</p>
+            <p><strong>Pagado por Stripe:</strong> {{ fmtMoney(anticipoStripe(detalleOpen()!), detalleOpen()!.moneda) }}</p>
+            <p><strong>Resta por cobrar:</strong> {{ fmtMoney(restanteEntrega(detalleOpen()!), detalleOpen()!.moneda) }}</p>
+            <p><strong>Fianza:</strong> {{ fmtMoney(fianza(detalleOpen()!), detalleOpen()!.moneda) }}</p>
+            <p class="s">La fianza se cobra en persona y se devuelve al entregar la moto en buen estado.</p>
+          </div>
+
+          <div class="detail-block">
+            <h4>Reserva</h4>
+            <p><strong>Estado reserva:</strong> <span [class]="estadoClass(detalleOpen()!.estado)">{{ labelEstado(detalleOpen()!.estado) }}</span></p>
+            <p><strong>Moto asignada:</strong> {{ detalleOpen()!.moto?.matricula || detalleOpen()!.moto?.slug || 'Sin asignar' }}</p>
+            <p><strong>Notas:</strong> {{ detalleOpen()!.notas || '-' }}</p>
+          </div>
+
+          <div class="detail-alert" *ngIf="detalleError()">{{ detalleError() }}</div>
+        </section>
+
+        <footer class="modal-ft">
+          <button class="btn-primary outline" type="button" (click)="cerrarDetalle()" [disabled]="savingDetalle()">Cerrar</button>
+          <button
+            class="btn-primary"
+            type="button"
+            (click)="marcarPagoCompleto()"
+            [disabled]="savingDetalle() || detalleOpen()!.payment_status === 'paid_in_full'">
+            {{ savingDetalle() ? 'Guardando...' : (detalleOpen()!.payment_status === 'paid_in_full' ? 'Pago completo registrado' : 'Marcar pago completo') }}
+          </button>
+        </footer>
+      </div>
+    </div>
+  }
+
   @if (asignarOpen()) {
     <div class="modal-backdrop fancy" (click)="cerrarAsignar()"></div>
 
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="dlg-title">
       <div class="modal-card modal-card--assign" (click)="$event.stopPropagation()">
-        <!-- Header -->
         <header class="modal-hd">
-          <div class="modal-hd__icon">🏍️</div>
+          <div class="modal-hd__icon">M</div>
           <div class="modal-hd__meta">
             <h3 id="dlg-title">Asignar moto</h3>
             <p class="muted">
-              Reserva <b>{{ asignarOpen()!.codigo }}</b> ·
-              {{ fmtFecha(asignarOpen()!.fecha_inicio) }} → {{ fmtFecha(asignarOpen()!.fecha_fin) }}
+              Reserva <b>{{ asignarOpen()!.codigo }}</b> |
+              {{ fmtFecha(asignarOpen()!.fecha_inicio) }} -> {{ fmtFecha(asignarOpen()!.fecha_fin) }}
             </p>
           </div>
-          <button class="modal-close" type="button" aria-label="Cerrar" (click)="cerrarAsignar()">×</button>
+          <button class="modal-close" type="button" aria-label="Cerrar" (click)="cerrarAsignar()">X</button>
         </header>
 
-        <!-- Body -->
         <section class="modal-bd">
           @if (loadingAsignar()) {
             <div class="skeleton">
@@ -127,12 +207,13 @@
           } @else {
             <label class="fld-label">Moto disponible</label>
             <div class="fld">
-              <select class="fld-select"
-                      [disabled]="assigning()"
-                      (change)="selectedMotoId.set(+$any($event.target).value)">
-                <option value="" selected>— Elegir —</option>
+              <select
+                class="fld-select"
+                [disabled]="assigning()"
+                (change)="selectedMotoId.set(+$any($event.target).value)">
+                <option value="" selected>- Elegir -</option>
                 <option *ngFor="let m of freeMotos()" [value]="m.id">
-                  {{ m.matricula || m.slug }} · {{ m.color || '—' }}
+                  {{ m.matricula || m.slug }} | {{ m.color || '-' }}
                 </option>
               </select>
             </div>
@@ -143,13 +224,14 @@
           }
         </section>
 
-        <!-- Footer -->
         <footer class="modal-ft">
           <button class="btn-primary outline" type="button" (click)="cerrarAsignar()" [disabled]="assigning()">Cancelar</button>
-          <button class="btn-primary" type="button"
-                  (click)="confirmarAsignar()"
-                  [disabled]="assigning() || !selectedMotoId()">
-            {{ assigning() ? 'Asignando…' : 'Asignar' }}
+          <button
+            class="btn-primary"
+            type="button"
+            (click)="confirmarAsignar()"
+            [disabled]="assigning() || !selectedMotoId()">
+            {{ assigning() ? 'Asignando...' : 'Asignar' }}
           </button>
         </footer>
       </div>

@@ -1,0 +1,49 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,.04);
+}
+
+.success h1 {
+  color: #0a7a35;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.summary {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  background: #fafafa;
+}
+
+.summary p {
+  margin: .4rem 0;
+}
+
+.actions {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.btn {
+  background: #111;
+  color: #fff;
+  border: 0;
+  border-radius: 10px;
+  padding: .7rem 1rem;
+  text-decoration: none;
+}
+
+.err {
+  color: #b00020;
+}

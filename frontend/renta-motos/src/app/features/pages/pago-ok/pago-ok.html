@@ -1,0 +1,114 @@
+<div class="container">
+  <div class="card success" *ngIf="!loading() && !error() && reserva() as r">
+    <h1>{{ 'payment.successTitle' | translate }}</h1>
+
+    <p>{{ 'payment.successText' | translate }}</p>
+
+    <div class="summary">
+      <p><strong>{{ 'payment.bookingCode' | translate }}:</strong> {{ r.codigo }}</p>
+
+      <p *ngIf="r.modelo">
+        <strong>{{ 'payment.model' | translate }}:</strong>
+        {{ r.modelo.marca }} {{ r.modelo.nombre }}
+      </p>
+
+      <p>
+        <strong>{{ 'payment.dates' | translate }}:</strong>
+        {{ fmtFecha(r.fecha_inicio) }} -> {{ ultimoDiaUso(r.fecha_fin) }}
+      </p>
+
+      <p *ngIf="r.hora_recogida">
+        <strong>{{ 'reservation.pickupTime' | translate }}:</strong>
+        {{ r.hora_recogida }}
+      </p>
+
+      <p *ngIf="r.hora_recogida">
+        <strong>{{ 'reservation.returnDateTime' | translate }}:</strong>
+        {{ fmtFecha(r.fecha_fin) }} {{ r.hora_recogida }}
+      </p>
+
+      <p>
+        <strong>{{ 'payment.totalAmount' | translate }}:</strong>
+        {{ r.precio_total }} {{ r.moneda }}
+      </p>
+
+      <p>
+        <strong>{{ 'payment.totalPaid' | translate }}:</strong>
+        {{ r.anticipo_stripe }} {{ r.moneda }}
+      </p>
+
+      <p>
+        <strong>{{ 'payment.remainingAtDelivery' | translate }}:</strong>
+        {{ r.restante_entrega }} {{ r.moneda }}
+      </p>
+
+      <p>
+        <strong>{{ 'payment.securityDeposit' | translate }}:</strong>
+        {{ r.fianza_entrega }} {{ r.moneda }}
+      </p>
+
+      <p class="deposit-note">
+        {{ 'payment.securityDepositHelp' | translate }}
+      </p>
+
+      <p>
+        <strong>{{ 'payment.deliveryType' | translate }}:</strong>
+        {{
+          r.tipo_entrega === 'delivery'
+            ? ('reservation.delivery' | translate)
+            : ('reservation.pickup' | translate)
+        }}
+      </p>
+
+      <ng-container *ngIf="r.tipo_entrega === 'delivery'">
+        <p *ngIf="r.direccion_entrega">
+          <strong>{{ 'reservation.deliveryAddress' | translate }}:</strong>
+          {{ r.direccion_entrega }}
+        </p>
+
+        <p *ngIf="r.codigo_postal">
+          <strong>{{ 'reservation.postalCode' | translate }}:</strong>
+          {{ r.codigo_postal }}
+        </p>
+
+        <p *ngIf="r.coste_entrega != null">
+          <strong>{{ 'payment.deliveryCost' | translate }}:</strong>
+          {{ r.coste_entrega }} {{ r.moneda }}
+        </p>
+      </ng-container>
+
+      <ng-container *ngIf="r.tipo_entrega !== 'delivery'">
+        <p>
+          <strong>{{ 'payment.pickupAddress' | translate }}:</strong>
+          Calle del Doctor Olóriz & Avinguda Dr. Peset Aleixandre, La Saidia, 46009 Valencia
+        </p>
+
+        <p>
+          <strong>{{ 'payment.pickupReference' | translate }}:</strong>
+          Entre el restaurante Casa Comer Comer y la autoescuela Benlloch
+        </p>
+      </ng-container>
+    </div>
+
+    <div class="actions">
+      <a routerLink="/" class="btn">
+        {{ 'payment.backHome' | translate }}
+      </a>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="loading()">
+    <app-ui-loader [message]="'payment.loading' | translate" [compact]="true"></app-ui-loader>
+  </div>
+
+  <div class="card cancel" *ngIf="!loading() && error()">
+    <h1>{{ 'payment.successTitle' | translate }}</h1>
+    <p class="err">{{ error() }}</p>
+
+    <div class="actions">
+      <a routerLink="/" class="btn">
+        {{ 'payment.backHome' | translate }}
+      </a>
+    </div>
+  </div>
+</div>

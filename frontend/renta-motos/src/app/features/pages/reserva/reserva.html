@@ -1,20 +1,60 @@
 <div class="container" *ngIf="ready(); else loadingTpl">
-  <ng-container *ngIf="modelo() as m; else errorTpl">
+  <section class="card" *ngIf="reservationsPaused" role="status" aria-labelledby="paused-title">
+    <span class="terms-kicker">{{ 'bookingPause.label' | translate }}</span>
+    <h1 id="paused-title">{{ 'bookingPause.title' | translate }}</h1>
+    <p>{{ 'bookingPause.message' | translate }}</p>
+    <a class="btn" routerLink="/">{{ 'bookingPause.back' | translate }}</a>
+  </section>
 
-    <!-- Cabecera modelo -->
+  <ng-container *ngIf="!reservationsPaused">
+  <ng-container *ngIf="modelo() as m; else errorTpl">
     <header class="head">
       <h1 class="title">{{ m.marca | titlecase }} {{ m.nombre | titlecase }}</h1>
 
       <div class="sub">
         <span class="chip" *ngIf="m.categoria">{{ m.categoria }}</span>
         <span class="price">
-          {{ m.precio_base }}€ <small>/ {{ 'reservePage.day' | translate }}</small>
+          {{ m.precio_base }}EUR <small>/ {{ 'reservePage.day' | translate }}</small>
         </span>
       </div>
     </header>
 
+    <div class="info card">
+      <div class="info__intro">
+        <div>
+          <span class="info__eyebrow">Proceso de reserva</span>
+          <h3>{{ 'reservation.instructionsTitle' | translate }}</h3>
+          <p>
+            {{ 'reservation.bookingIntro' | translate }}
+          </p>
+        </div>
+        <div class="info__badge">{{ 'reservation.securePayment' | translate }}</div>
+      </div>
+
+      <div class="info__highlights">
+        <article class="info-pill">
+          <strong>{{ 'reservation.highlightDownPaymentTitle' | translate }}</strong>
+          <span>{{ 'reservation.highlightDownPaymentText' | translate }}</span>
+        </article>
+        <article class="info-pill">
+          <strong>{{ 'reservation.highlightRemainingTitle' | translate }}</strong>
+          <span>{{ 'reservation.highlightRemainingText' | translate }}</span>
+        </article>
+        <article class="info-pill">
+          <strong>{{ 'reservation.highlightDepositTitle' | translate }}</strong>
+          <span>{{ 'reservation.highlightDepositText' | translate }}</span>
+        </article>
+      </div>
+
+      <ol>
+        <li>{{ 'reservation.step1' | translate }}</li>
+        <li>{{ 'reservation.step2' | translate }}</li>
+        <li>{{ 'reservation.step3' | translate }}</li>
+        <li>{{ 'reservation.step4' | translate }}</li>
+      </ol>
+    </div>
+
     <div class="grid">
-      <!-- Calendario -->
       <section class="card">
         <h2 class="sec">{{ 'reservePage.selectDates' | translate }}</h2>
 
@@ -25,19 +65,27 @@
         </app-calendar-disponibilidad>
 
         <div class="range" *ngIf="rangeText()">
-          <b>{{ 'reservePage.range' | translate }}:</b> {{ rangeText() }}
+          <p><b>{{ 'reservation.useDaysRange' | translate }}:</b> {{ rangeText() }}</p>
+          <p><b>{{ 'reservation.selectedUsageDays' | translate }}:</b> {{ rentalDays() }}</p>
+        </div>
+
+        <div class="field field--time">
+          <label>{{ 'reservation.pickupTime' | translate }} *</label>
+          <select [ngModel]="horaRecogida()" (ngModelChange)="horaRecogida.set($event)" name="hora_recogida" required>
+            <option *ngFor="let hour of pickupTimeOptions" [value]="hour">{{ hour }}</option>
+          </select>
+          <p class="help">{{ 'reservation.pickupTimeHelp' | translate }}</p>
+        </div>
+
+        <div class="range" *ngIf="returnText()">
+          <p><b>{{ 'reservation.returnDateTime' | translate }}:</b> {{ returnText() }}</p>
         </div>
       </section>
 
-      <!-- Formulario -->
       <section class="card">
         <h2 class="sec">{{ 'reservePage.yourDetails' | translate }}</h2>
 
-        <form (ngSubmit)="submit()"
-              #f="ngForm"
-              novalidate
-              [attr.aria-busy]="submitting() ? 'true' : null">
-
+        <form (ngSubmit)="submit()" #f="ngForm" novalidate [attr.aria-busy]="submitting() ? 'true' : null">
           <div class="field">
             <label>{{ 'reservePage.form.fullName' | translate }} *</label>
             <input type="text" [(ngModel)]="form.nombre" name="nombre" required />
@@ -49,39 +97,203 @@
           </div>
 
           <div class="field">
-            <label>{{ 'reservePage.form.phone' | translate }}</label>
-            <input type="tel" [(ngModel)]="form.tel" name="tel" />
+            <label>{{ 'reservePage.form.phone' | translate }} *</label>
+            <input type="tel" [(ngModel)]="form.tel" name="tel" required />
           </div>
 
           <div class="field">
-            <label>{{ 'reservePage.form.notes' | translate }}</label>
-            <textarea rows="3"
-                      [(ngModel)]="form.notas"
-                      name="notas"
-                      [attr.placeholder]="'reservePage.form.notesPlaceholder' | translate"></textarea>
+            <label>{{ 'reservePage.form.documentId' | translate }} *</label>
+            <input type="text" [(ngModel)]="form.documento" name="documento" required />
+          </div>
+
+          <div class="field">
+            <label>{{ 'reservePage.form.nationality' | translate }} *</label>
+            <input type="text" [(ngModel)]="form.nacionalidad" name="nacionalidad" required />
+          </div>
+
+          <div class="field">
+            <label>{{ 'reservePage.form.originAddress' | translate }} *</label>
+            <input type="text" [(ngModel)]="form.direccion_origen" name="direccion_origen" required />
+          </div>
+
+          <div class="field">
+            <label>{{ 'reservePage.form.stayAddress' | translate }} *</label>
+            <input type="text" [(ngModel)]="form.direccion_hospedaje" name="direccion_hospedaje" required />
+          </div>
+
+          <div class="field">
+            <label>{{ 'reservation.deliveryType' | translate }} *</label>
+            <select [ngModel]="tipoEntrega()" (ngModelChange)="setTipoEntrega($event)" name="tipo_entrega" required>
+              <option value="pickup">{{ 'reservation.pickup' | translate }}</option>
+              <option value="delivery">{{ 'reservation.delivery' | translate }}</option>
+            </select>
+          </div>
+
+          <div *ngIf="tipoEntrega() === 'delivery'">
+            <div class="field">
+              <label>{{ 'reservation.deliveryAddress' | translate }} *</label>
+              <input
+                type="text"
+                [(ngModel)]="form.direccion_entrega"
+                name="direccion_entrega"
+                [required]="tipoEntrega() === 'delivery'"
+                [attr.placeholder]="'reservation.deliveryAddressPlaceholder' | translate" />
+            </div>
+
+            <div class="field">
+              <label>{{ 'reservation.postalCode' | translate }} *</label>
+              <select [ngModel]="codigoPostal()" (ngModelChange)="codigoPostal.set($event)" name="codigo_postal" [required]="tipoEntrega() === 'delivery'">
+                <option value="">{{ 'reservation.selectPostalCode' | translate }}</option>
+                <option *ngFor="let cp of deliveryPostalCodes" [value]="cp">{{ cp }}</option>
+              </select>
+            </div>
+
+            <p class="help">
+              {{ 'reservation.fixedDeliveryHelp' | translate }}
+            </p>
+          </div>
+
+          <div class="price-box" *ngIf="inicio() && fin()">
+            <p>
+              <strong>{{ 'reservation.selectedUsageDays' | translate }}:</strong>
+              {{ rentalDays() }}
+            </p>
+
+            <p>
+              <strong>{{ 'reservation.rentalSubtotal' | translate }}:</strong>
+              {{ rentalSubtotal() }}EUR
+            </p>
+
+            <p *ngIf="tipoEntrega() === 'pickup'">
+              <strong>{{ 'reservation.storePickup' | translate }}:</strong>
+              {{ 'reservation.pickup' | translate }} (0EUR)
+            </p>
+
+            <p *ngIf="tipoEntrega() === 'delivery'">
+              <strong>{{ 'reservation.deliveryCost' | translate }}:</strong>
+              +{{ deliveryFee() }}EUR
+            </p>
+
+            <p>
+              <strong>{{ 'reservation.remainingAtDelivery' | translate }}:</strong>
+              {{ estimatedTotal().toFixed(2) }}EUR
+            </p>
+
+            <p>
+              <strong>{{ 'reservation.refundableDeposit' | translate }}:</strong>
+              300.00EUR
+            </p>
+
+            <p class="total">
+              <strong>{{ 'reservation.estimatedTotal' | translate }}:</strong>
+              {{ estimatedTotal() }}EUR
+            </p>
+          </div>
+
+          <div class="field">
+            <label>{{ 'reservePage.form.notes' | translate }} *</label>
+            <textarea
+              rows="3"
+              [(ngModel)]="form.notas"
+              name="notas"
+              required
+              [attr.placeholder]="'reservePage.form.notesPlaceholder' | translate"></textarea>
           </div>
 
           <div class="actions">
             <button class="btn" type="submit" [disabled]="submitting()">
-              {{ submitting() ? ('reservePage.sending' | translate) : ('reservePage.submit' | translate) }}
+              {{ submitting() ? ('reservePage.sending' | translate) : ('reservation.continueToPayment' | translate) }}
             </button>
           </div>
 
           <p class="err" *ngIf="error()">{{ error() }}</p>
-
           <p class="ok" *ngIf="ok()">
             {{ 'reservePage.success' | translate:{ code: ok() } }}
           </p>
         </form>
       </section>
     </div>
-
   </ng-container>
+  </ng-container>
+
+  <section class="card contact-help">
+    <h3>{{ 'reservation.needHelp' | translate }}</h3>
+    <p>{{ 'reservation.contactHelpText' | translate }}</p>
+    <app-contact></app-contact>
+  </section>
+
+  <div class="terms-backdrop" *ngIf="termsOpen()" (click)="closeTerms()"></div>
+  <div class="terms-modal" *ngIf="termsOpen()">
+    <div class="terms-card">
+      <div class="terms-head">
+        <div>
+          <span class="terms-kicker">{{ 'reservation.termsKicker' | translate }}</span>
+          <h3>{{ 'reservation.termsTitle' | translate }}</h3>
+        </div>
+        <button class="terms-close" type="button" (click)="closeTerms()">X</button>
+      </div>
+
+      <div class="terms-body">
+        <p>
+          {{ 'reservation.termsIntro' | translate }}
+        </p>
+
+        <ul class="terms-list">
+          <li>{{ 'reservation.terms1' | translate }}</li>
+          <li>{{ 'reservation.terms2' | translate }}</li>
+          <li>{{ 'reservation.terms3' | translate }}</li>
+          <li>{{ 'reservation.terms4' | translate }}</li>
+          <li>{{ 'reservation.terms5' | translate }}</li>
+          <li>{{ 'reservation.terms6' | translate }}</li>
+          <li>{{ 'reservation.terms7' | translate }}</li>
+          <li>{{ 'reservation.terms8' | translate }}</li>
+          <li>{{ 'reservation.terms9' | translate }}</li>
+        </ul>
+      </div>
+
+      <div class="terms-actions">
+        <button class="btn btn-outline" type="button" (click)="closeTerms()" [disabled]="submitting()">{{ 'reservation.cancel' | translate }}</button>
+        <button class="btn" type="button" (click)="confirmTerms()" [disabled]="submitting()">
+          {{ submitting() ? ('reservation.redirectingToPayment' | translate) : ('reservation.acceptAndContinue' | translate) }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="terms-backdrop" *ngIf="reservationCreatedOpen()" (click)="closeReservationCreated()"></div>
+  <div class="terms-modal" *ngIf="reservationCreatedOpen()">
+    <div class="terms-card reservation-finish-card">
+      <div class="terms-head">
+        <div>
+          <span class="terms-kicker">Reserva creada</span>
+          <h3>Hemos realizado tu reserva</h3>
+        </div>
+        <button class="terms-close" type="button" (click)="closeReservationCreated()">X</button>
+      </div>
+
+      <div class="terms-body">
+        <p>
+          Para terminar con el pago y confirmar todos los detalles, contactanos por WhatsApp.
+        </p>
+        <p class="reservation-finish-number">
+          <strong>WhatsApp:</strong> +34 624 47 32 20
+        </p>
+        <p *ngIf="ok()">
+          <strong>Codigo de reserva:</strong> {{ ok() }}
+        </p>
+      </div>
+
+      <div class="terms-actions reservation-finish-actions">
+        <button class="btn btn-outline" type="button" (click)="closeReservationCreated()">Cerrar</button>
+        <button class="btn" type="button" (click)="openWhatsappReservation()">Abrir WhatsApp</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <ng-template #loadingTpl>
   <div class="container">
-    <p>{{ 'reservePage.loading' | translate }}</p>
+    <app-ui-loader [message]="'reservePage.loadingReservationData' | translate"></app-ui-loader>
   </div>
 </ng-template>
 

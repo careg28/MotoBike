@@ -5,11 +5,12 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { ModeloApi, Modelo } from '../../../core/modelo-api';
 import { environment } from '../../../enviroments/enviroment';
+import { UiLoader } from '../../../shared/components/ui-loader/ui-loader';
 
 @Component({
   standalone: true,
   selector: 'app-modelo-detalle',
-  imports: [CommonModule, RouterModule, TranslateModule],
+  imports: [CommonModule, RouterModule, TranslateModule, UiLoader],
   templateUrl: './modelo-detalle.html',
   styleUrl: './modelo-detalle.scss'
 })
@@ -83,7 +84,7 @@ export class ModeloDetalle {
 
   // Construye URL pública para imágenes del backend:
   // - si viene ya con http/https o empieza por '/', la usamos tal cual
-  // - si es una ruta tipo 'uploads/xxx.jpg', la resolvemos bajo el host del API en /storage/
+  // - si es una ruta relativa del disco público, la resolvemos por la API
   private toImgUrl(path: string | null | undefined): string | null {
     if (!path) return null;
     if (path.startsWith('http') || path.startsWith('/')) return path;
@@ -94,7 +95,7 @@ export class ModeloDetalle {
     } catch {
       origin = '';
     }
-    return `${origin}/storage/${path}`;
+    return `${origin}/api/media/file/${path.split('/').map(encodeURIComponent).join('/')}`;
   }
 
   selectImg(i: number) {
@@ -111,7 +112,7 @@ export class ModeloDetalle {
     const msg = this.translate.instant('modelDetail.whatsappMessage', {
       name: this.nombreLargo() || ''
     });
-    return `https://wa.me/34XXXXXXXXX?text=${encodeURIComponent(msg)}`;
+    return `https://wa.me/34624473220?text=${encodeURIComponent(msg)}`;
   }
 
   trackUrl = (_: number, url: string) => url;

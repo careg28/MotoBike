@@ -11,13 +11,13 @@ return [
         'http://localhost:4200',
         'http://127.0.0.1:4200',
         'http://frontend-feos.test',
-        // 'https://www.tudominio.com',
-        // 'https://admin.tudominio.com',
+        'https://feosvalencia.com',
+        'https://www.feosvalencia.com',
     ],
 
     
     'allowed_origins_patterns' => [
-        // '#^https://([a-z0-9-]+\.)?tudominio\.com$#i',
+        '#^https://([a-z0-9-]+\.)?feosvalencia\.com$#i',
     ],
 
     // Headers permitidos 
